@@ -24,7 +24,7 @@ body {
 
 /* --- HEADER AND NAVBAR --- */
 header {
-    background-color: #333;
+    background-color: #000000;
     color: white;
     padding: 0; 
     width: 100%;
@@ -33,27 +33,32 @@ header {
 header .header-content {
     padding-top: 10px;
     padding-bottom: 10px;
+    /* Used to vertically align items inside the header row */
+    display: flex; 
+    align-items: center;
 }
 
-header h1 {
-    margin: 5px 0;
-    font-size: 24px;
+/* LOGO STYLES */
+.logo-link {
+    display: block; /* Ensures anchor wraps image correctly */
 }
 
-header h1 a {
-    text-decoration: none;
-    color: white;
+.site-logo {
+    max-height: 40px; /* Restrict height to fit navbar */
+    width: auto;      /* Maintain aspect ratio */
+    display: block;
 }
 
 header nav {
     overflow: hidden;
+    width: 100%; /* Ensure nav takes remaining space */
 }
 
 /* Navbar Elements */
 .nav-left, .nav-right {
     list-style-type: none;
     padding: 0;
-    margin: 5px 0 0 0;
+    margin: 0; /* Reset margin for flex alignment */
 }
 
 .nav-left { float: left; }
@@ -84,7 +89,6 @@ header nav {
 .search-container {
     float: left;
     margin-left: 15px;
-    margin-top: 5px;
 }
 
 .search-container input[type=text] {
@@ -227,7 +231,7 @@ header nav {
 .score-none { background-color: #ccc; }          /* No Score */
 
 footer {
-    background-color: #333;
+    background-color: #000000;
     color: white;
     text-align: center;
     padding: 20px 0;
@@ -241,6 +245,11 @@ footer {
         width: 100%;
     }
     
+    header .header-content {
+        display: block; /* Stack elements on mobile */
+        text-align: center;
+    }
+
     .nav-left, .nav-right, .search-container {
         float: none;
         text-align: center;
@@ -252,8 +261,8 @@ footer {
         margin-left: 0;
     }
     
-    header h1 {
-        text-align: center;
+    .site-logo {
+        margin: 0 auto 10px auto; /* Center logo on mobile */
     }
     
     .game-card {

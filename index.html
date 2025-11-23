@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Critic - Homepage</title>
+    <title>GameJoint - Homepage</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -12,7 +12,9 @@
         <div class="container">
             <div class="row header-content">
                 <div class="col-2">
-                    <h1><a href="index.html">Critic</a></h1>
+                    <a href="index.html" class="logo-link">
+                        <img src="assets/images/logo.png" alt="GameJoint Logo" class="site-logo">
+                    </a>
                 </div>
 
                 <div class="col-10">
@@ -119,55 +121,57 @@
             <!-- Card 1: BALDUR'S GATE 3 -->
             <div class="col-3">
                 <div class="game-card">
+                    <!-- Ensure image is in assets/images/ -->
                     <img src="assets/images/baldursgate3.png" alt="Baldur's Gate 3" class="card-img">
                     <div class="card-content">
                         <h3>Baldur's Gate 3</h3>
                         <p class="platform-tag">PC, PS5</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
+                            <!-- JS will color this -->
                             <div class="metascore">96</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2 (Empty) -->
+            <!-- Card 2 (Placeholder with score) -->
             <div class="col-3">
-                <div class="game-card empty-card">
+                <div class="game-card">
                     <div class="card-image-placeholder">Empty</div>
                     <div class="card-content">
                         <h3>Game Title</h3>
                         <div class="meta-footer">
                             <span>Metascore</span>
-                            <div class="metascore">45</div> 
+                            <div class="metascore">45</div> <!-- Example Bad Score -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 3 (Empty) -->
+            <!-- Card 3 (Placeholder with score) -->
             <div class="col-3">
-                <div class="game-card empty-card">
+                <div class="game-card">
                     <div class="card-image-placeholder">Empty</div>
                     <div class="card-content">
                         <h3>Game Title</h3>
                         <div class="meta-footer">
                             <span>Metascore</span>
-                            <div class="metascore">70</div> 
+                            <div class="metascore">70</div> <!-- Example Mid Score -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 4 (Empty) -->
+            <!-- Card 4 (Placeholder with score) -->
             <div class="col-3">
-                <div class="game-card empty-card">
+                <div class="game-card">
                     <div class="card-image-placeholder">Empty</div>
                     <div class="card-content">
                         <h3>Game Title</h3>
                         <div class="meta-footer">
                             <span>Metascore</span>
-                            <div class="metascore">85</div> 
+                            <div class="metascore">85</div> <!-- Example Good Score -->
                         </div>
                     </div>
                 </div>
@@ -178,9 +182,11 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Game Critic.</p>
+            <p>&copy; 2024 GameJoint.</p>
         </div>
     </footer>
+
+    <!-- Link JS -->
     <script src="assets/js/main.js"></script>
 
 </body>

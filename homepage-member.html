@@ -1,52 +1,194 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oyun Kritik - Üye Paneli</title>
+    <title>GameJoint - Member Panel</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
     <header>
-        <div class="row">
-            <div class="col-2">
-                <h1><a href="homepage-member.html">Kritik</a></h1>
-            </div>
+        <div class="container">
+            <div class="row header-content">
+                <div class="col-2">
+                    <!-- LOGO IMAGE REPLACEMENT -->
+                    <a href="homepage-member.html" class="logo-link">
+                        <img src="assets/images/logo.png" alt="GameJoint Logo" class="site-logo">
+                    </a>
+                </div>
 
-            <div class="col-10">
-                <nav>
-                    <ul class="nav-left">
-                        <li><a href="#">Oyunlar</a></li>
-                    </ul>
-                    <div class="search-container">
-                        <form action="#">
-                            <input type="text" placeholder="Oyun ara..." name="search">
-                            <button type="submit">Ara</button>
-                        </form>
-                    </div>
-                    <ul class="nav-right">
-                        <li><a href="profile.html">Profilim (Ahmet)</a></li>
-                        <li><a href="index.html" style="color: #ff6b6b;">Çıkış Yap</a></li>
-                    </ul>
-                </nav>
+                <div class="col-10">
+                    <nav>
+                        <ul class="nav-left">
+                            <li><a href="#">Games</a></li>
+                        </ul>
+
+                        <div class="search-container">
+                            <form action="#">
+                                <input type="text" placeholder="Search games..." name="search">
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+
+                        <ul class="nav-right">
+                            <li><a href="profile.html">My Profile (Ahmet)</a></li>
+                            <li><a href="index.html" style="color: #ff6b6b;">Logout</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </header>
 
-    <div class="row">
-        <section class="col-8">
-            <h2>Hoşgeldin, Ahmet!</h2>
-        </section>
-        <aside class="col-4">
-            <h3>Senin Listelerin</h3>
-            <p>İçerik yakında...</p>
-        </aside>
+    <!-- MAIN LAYOUT CONTAINER -->
+    <div class="container main-content">
+        
+        <!-- SECTION 1: NEW RELEASES -->
+        <div class="row section-header">
+            <div class="col-12">
+                <h2>New Releases</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Card 1 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 1</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 2</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 3</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 4</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+        <!-- SECTION 2: POPULAR GAMES -->
+        <div class="row section-header">
+            <div class="col-12">
+                <h2>Popular Games</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Card 1: BALDUR'S GATE 3 -->
+            <div class="col-3">
+                <div class="game-card">
+                    <!-- Ensure image is in assets/images/ -->
+                    <img src="assets/images/baldursgate3.png" alt="Baldur's Gate 3" class="card-img">
+                    <div class="card-content">
+                        <h3>Baldur's Gate 3</h3>
+                        <p class="platform-tag">PC, PS5</p>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <!-- JS will color this -->
+                            <div class="metascore">96</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 (Placeholder with score) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Empty</div>
+                    <div class="card-content">
+                        <h3>Game Title</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">45</div> <!-- Example Bad Score -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 (Placeholder with score) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Empty</div>
+                    <div class="card-content">
+                        <h3>Game Title</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">70</div> <!-- Example Mid Score -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 (Placeholder with score) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Empty</div>
+                    <div class="card-content">
+                        <h3>Game Title</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">85</div> <!-- Example Good Score -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <footer>
-        <p>&copy; 2024 Oyun Kritik.</p>
+        <div class="container">
+            <p>&copy; 2024 GameJoint.</p>
+        </div>
     </footer>
+
+    <!-- Link JS -->
+    <script src="assets/js/main.js"></script>
 
 </body>
 </html>

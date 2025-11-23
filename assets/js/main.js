@@ -1,15 +1,14 @@
 // Wait for the DOM to load before running the script
 document.addEventListener("DOMContentLoaded", function() {
     
-    // Select all elements with the class 'metascore'
+
     const scores = document.querySelectorAll('.metascore');
 
-    // Loop through each score element
     scores.forEach(scoreElement => {
         // Get the text content (number) and convert to integer
         const scoreValue = parseInt(scoreElement.innerText);
 
-        // Check if it's a valid number (not '--')
+        // Apply color coding based on score ranges
         if (!isNaN(scoreValue)) {
             if (scoreValue >= 90) {
                 scoreElement.classList.add('score-dark-green'); // 90-100
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 scoreElement.classList.add('score-red');        // 0-49
             }
         } else {
-            // If no score (e.g., '--'), add a gray color
             scoreElement.classList.add('score-none');
         }
     });
