@@ -1,14 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Critic - Homepage</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    
+
+    <header>
+        <div class="container">
+            <div class="row header-content">
+                <div class="col-2">
+                    <h1><a href="index.html">Critic</a></h1>
+                </div>
+
+                <div class="col-10">
+                    <nav>
+                        <ul class="nav-left">
+                            <li><a href="#">Games</a></li>
+                        </ul>
+
+                        <div class="search-container">
+                            <form action="#">
+                                <input type="text" placeholder="Search games..." name="search">
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+
+                        <ul class="nav-right">
+                            <li><a href="login.html" class="btn-login">Login</a></li>
+                            <li><a href="register.html" class="btn-register">Register</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN LAYOUT CONTAINER -->
+    <div class="container main-content">
+        
+        <!-- SECTION 1: NEW RELEASES -->
+        <div class="row section-header">
+            <div class="col-12">
+                <h2>New Releases</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Card 1 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 1</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 2</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 3</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 (Placeholder) -->
+            <div class="col-3">
+                <div class="game-card">
+                    <div class="card-image-placeholder">Image</div>
+                    <div class="card-content">
+                        <h3>Upcoming Game 4</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+        <!-- SECTION 2: POPULAR GAMES -->
+        <div class="row section-header">
+            <div class="col-12">
+                <h2>Popular Games</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Card 1: BALDUR'S GATE 3 -->
+            <div class="col-3">
+                <div class="game-card">
+                    <!-- Make sure to put the image in assets/images/ -->
+                    <img src="assets/images/baldursgate3.png" alt="Baldur's Gate 3" class="card-img">
+                    <div class="card-content">
+                        <h3>Baldur's Gate 3</h3>
+                        <p class="platform-tag">PC, PS5</p>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <!-- This number will be colored by JS -->
+                            <div class="metascore">96</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 (Empty) -->
+            <div class="col-3">
+                <div class="game-card empty-card">
+                    <div class="card-image-placeholder">Empty</div>
+                    <div class="card-content">
+                        <h3>Game Title</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">45</div> <!-- Example Bad Score -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 (Empty) -->
+            <div class="col-3">
+                <div class="game-card empty-card">
+                    <div class="card-image-placeholder">Empty</div>
+                    <div class="card-content">
+                        <h3>Game Title</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">70</div> <!-- Example Mid Score -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 (Empty) -->
+            <div class="col-3">
+                <div class="game-card empty-card">
+                    <div class="card-image-placeholder">Empty</div>
+                    <div class="card-content">
+                        <h3>Game Title</h3>
+                        <div class="meta-footer">
+                            <span>Metascore</span>
+                            <div class="metascore">85</div> <!-- Example Good Score -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Game Critic.</p>
+        </div>
+    </footer>
+
+    <!-- Link to our JavaScript file -->
+    <script src="assets/js/main.js"></script>
+
 </body>
 </html>

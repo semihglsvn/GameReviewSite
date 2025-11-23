@@ -1,0 +1,262 @@
+/* Week 5: Box Sizing prevents padding issues */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f2f2f2;
+}
+
+/* --- LAYOUT CONTAINER --- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-content {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+/* --- HEADER AND NAVBAR --- */
+header {
+    background-color: #333;
+    color: white;
+    padding: 0; 
+    width: 100%;
+}
+
+header .header-content {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+header h1 {
+    margin: 5px 0;
+    font-size: 24px;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: white;
+}
+
+header nav {
+    overflow: hidden;
+}
+
+/* Navbar Elements */
+.nav-left, .nav-right {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+
+.nav-left { float: left; }
+.nav-right { float: right; }
+
+.nav-left li, .nav-right li {
+    display: inline-block;
+}
+
+.nav-left li a, .nav-right li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-left li a:hover {
+    background-color: #555;
+    border-radius: 4px;
+}
+
+.nav-right li a.btn-login { background-color: #4CAF50; border-radius: 4px; }
+.nav-right li a.btn-register { background-color: #2196F3; border-radius: 4px; margin-left: 5px; }
+
+/* Search Bar */
+.search-container {
+    float: left;
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+.search-container input[type=text] {
+    padding: 6px;
+    font-size: 13px;
+    border: none;
+    border-radius: 4px;
+    width: 180px;
+}
+
+.search-container button {
+    padding: 6px 10px;
+    margin-left: 4px;
+    background: #ddd;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.search-container button:hover { background: #ccc; }
+
+/* --- GRID SYSTEM --- */
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-12 {width: 100%;}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* --- CARD STYLING (Metacritic Style) --- */
+.game-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden; /* Ensures image respects border radius */
+    height: 100%; /* Make cards equal height in a row */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Image Styles */
+.card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensures image doesn't stretch weirdly */
+    display: block;
+}
+
+.card-image-placeholder {
+    width: 100%;
+    height: 200px;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-weight: bold;
+}
+
+/* Card Text Content */
+.card-content {
+    padding: 15px;
+}
+
+.card-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    line-height: 1.2;
+    height: 38px; /* Fixed height for 2 lines of text */
+    overflow: hidden;
+}
+
+.platform-tag {
+    font-size: 11px;
+    color: #888;
+    border: 1px solid #ddd;
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+/* Meta Footer (Label + Score Box) */
+.meta-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.meta-footer span {
+    font-size: 12px;
+    color: #666;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* SCORE BOX STYLES */
+.metascore {
+    width: 35px;
+    height: 35px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 4px;
+}
+
+/* JS will apply these classes */
+.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
+.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
+.score-green { background-color: #66cc33; }      /* Good: 75-89 */
+.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
+.score-none { background-color: #ccc; }          /* No Score */
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    clear: both;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media only screen and (max-width: 900px) {
+    [class*="col-"] {
+        width: 100%;
+    }
+    
+    .nav-left, .nav-right, .search-container {
+        float: none;
+        text-align: center;
+        margin-bottom: 10px;
+        display: block;
+    }
+    
+    .search-container {
+        margin-left: 0;
+    }
+    
+    header h1 {
+        text-align: center;
+    }
+    
+    .game-card {
+        margin-bottom: 15px;
+    }
+}
