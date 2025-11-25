@@ -3,10 +3,17 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%; /* Ensure full height */
+    margin: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
     background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    min-height: 100vh; /* Minimum height is full viewport height */
 }
 
 /* --- LAYOUT CONTAINER --- */
@@ -17,14 +24,17 @@ body {
     padding-right: 15px;
 }
 
+/* Allow main content to grow and fill space, pushing footer down */
 .main-content {
     padding-top: 20px;
     padding-bottom: 40px;
+    flex: 1; /* This is the key line for sticky footer */
+    width: 100%; /* Ensure it takes full width within flex context */
 }
 
 /* --- HEADER AND NAVBAR --- */
 header {
-    background-color: #000000;
+    background-color: #000000; /* CHANGED TO BLACK */
     color: white;
     padding: 0; 
     width: 100%;
@@ -33,32 +43,31 @@ header {
 header .header-content {
     padding-top: 10px;
     padding-bottom: 10px;
-    /* Used to vertically align items inside the header row */
     display: flex; 
     align-items: center;
 }
 
 /* LOGO STYLES */
 .logo-link {
-    display: block; /* Ensures anchor wraps image correctly */
+    display: block;
 }
 
 .site-logo {
-    max-height: 40px; /* Restrict height to fit navbar */
-    width: auto;      /* Maintain aspect ratio */
+    max-height: 50px;
+    width: auto;
     display: block;
 }
 
 header nav {
     overflow: hidden;
-    width: 100%; /* Ensure nav takes remaining space */
+    width: 100%;
 }
 
 /* Navbar Elements */
 .nav-left, .nav-right {
     list-style-type: none;
     padding: 0;
-    margin: 0; /* Reset margin for flex alignment */
+    margin: 0;
 }
 
 .nav-left { float: left; }
@@ -78,7 +87,7 @@ header nav {
 }
 
 .nav-left li a:hover {
-    background-color: #555;
+    background-color: #333; /* Slightly lighter black on hover */
     border-radius: 4px;
 }
 
@@ -135,13 +144,13 @@ header nav {
     display: table;
 }
 
-/* --- CARD STYLING (Metacritic Style) --- */
+/* --- CARD STYLING --- */
 .game-card {
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
-    overflow: hidden; /* Ensures image respects border radius */
-    height: 100%; /* Make cards equal height in a row */
+    overflow: hidden;
+    height: 100%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: transform 0.2s;
 }
@@ -151,11 +160,10 @@ header nav {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Image Styles */
 .card-img {
     width: 100%;
     height: 200px;
-    object-fit: cover; /* Ensures image doesn't stretch weirdly */
+    object-fit: cover;
     display: block;
 }
 
@@ -170,7 +178,6 @@ header nav {
     font-weight: bold;
 }
 
-/* Card Text Content */
 .card-content {
     padding: 15px;
 }
@@ -179,7 +186,7 @@ header nav {
     margin: 0 0 10px 0;
     font-size: 16px;
     line-height: 1.2;
-    height: 38px; /* Fixed height for 2 lines of text */
+    height: 38px;
     overflow: hidden;
 }
 
@@ -194,7 +201,6 @@ header nav {
     text-transform: uppercase;
 }
 
-/* Meta Footer (Label + Score Box) */
 .meta-footer {
     display: flex;
     justify-content: space-between;
@@ -231,12 +237,13 @@ header nav {
 .score-none { background-color: #ccc; }          /* No Score */
 
 footer {
-    background-color: #000000;
+    background-color: #000000; /* CHANGED TO BLACK */
     color: white;
     text-align: center;
     padding: 20px 0;
-    margin-top: 20px;
+    margin-top: auto; /* Ensures margin pushes it down if flex fails slightly */
     clear: both;
+    width: 100%;
 }
 
 /* --- MOBILE RESPONSIVENESS --- */
@@ -245,11 +252,6 @@ footer {
         width: 100%;
     }
     
-    header .header-content {
-        display: block; /* Stack elements on mobile */
-        text-align: center;
-    }
-
     .nav-left, .nav-right, .search-container {
         float: none;
         text-align: center;
@@ -261,8 +263,13 @@ footer {
         margin-left: 0;
     }
     
+    header .header-content {
+        display: block;
+        text-align: center;
+    }
+    
     .site-logo {
-        margin: 0 auto 10px auto; /* Center logo on mobile */
+        margin: 0 auto 10px auto;
     }
     
     .game-card {
