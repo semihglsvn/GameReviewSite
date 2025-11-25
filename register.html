@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - GameJoint</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="row header-content">
+                <div class="col-2">
+                    <!-- LOGO IMAGE REPLACEMENT (Acts as Home Link) -->
+                    <a href="index.html" class="logo-link">
+                        <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
+                    </a>
+                </div>
+                <div class="col-10">
+                    <nav>
+                        <!-- Nav Left is empty as requested, logo handles home -->
+                        <ul class="nav-left">
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 'main-content' class ensures sticky footer works correctly -->
+    <div class="container main-content">
+        <div class="row">
+            <div class="col-12">
+                <section style="max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
+                    <h2 style="text-align: center;">Register</h2>
+                    
+                    <!-- Added onsubmit event to trigger validation -->
+                    <form action="homepage-member.html" onsubmit="return validatePassword()">
+                        
+                        <!-- Added Username Field -->
+                        <div style="margin-bottom: 15px;">
+                            <label for="username" style="display: block; margin-bottom: 5px;">Username:</label>
+                            <input type="text" id="username" name="username" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label for="email" style="display: block; margin-bottom: 5px;">E-Mail:</label>
+                            <input type="email" id="email" name="email" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label for="dob" style="display: block; margin-bottom: 5px;">Date of Birth:</label>
+                            <input type="date" id="dob" name="dob" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label for="password" style="display: block; margin-bottom: 5px;">Password:</label>
+                            <input type="password" id="password" name="password" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label for="confirm-password" style="display: block; margin-bottom: 5px;">Confirm Password:</label>
+                            <input type="password" id="confirm-password" name="confirm-password" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
+                            <!-- Error message container -->
+                            <span id="password-error" style="color: red; font-size: 12px; display: none;">Passwords do not match!</span>
+                        </div>
+                        
+                        <button type="submit" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">Register</button>
+                    </form>
+                    
+                    <p style="text-align: center; margin-top: 15px;">
+                        Already have an account? <a href="login.html">Login</a>
+                    </p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GameJoint.</p>
+        </div>
+    </footer>
+
+    <!-- Inline Script for Password Validation -->
+    <!-- 
+    <script>
+        function validatePassword() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            var errorMsg = document.getElementById("password-error");
+
+            if (password !== confirmPassword) {
+                errorMsg.style.display = "block"; // Show error message
+                return false; // Prevent form submission
+            } else {
+                errorMsg.style.display = "none"; // Hide error message
+                return true; // Allow form submission
+            }
+        }
+    </script>
+    -->
+
+</body>
+</html>
