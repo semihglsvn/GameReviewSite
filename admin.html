@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - GameJoint</title>
+    <!-- Link Main CSS for basic resets if needed, but Admin CSS handles layout -->
+    <link rel="stylesheet" href="assets/css/style.css"> 
+    <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin-body">
+
+    <div class="admin-container">
+        
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <h3>Admin Panel</h3>
+            <hr>
+            <a href="admin.html" class="active">Dashboard</a>
+            <a href="admin-games.html">Manage Games</a>
+            <a href="admin-users.html">Manage Users</a>
+            <a href="admin-reports.html">Reported Reviews</a>
+            <a href="index.html" class="logout-link">Logout</a>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="admin-content">
+            
+            <div class="admin-header">
+                <h2>Dashboard Overview</h2>
+            </div>
+            
+            <!-- Stats Row -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">1,204</span>
+                    <span class="stat-label">Total Users</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">58</span>
+                    <span class="stat-label">New Reviews</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">Pending Reports</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">340</span>
+                    <span class="stat-label">Games Listed</span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3 style="margin-top:0;">Pending Reports</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Comment Snippet</th>
+                            <th>Report Reason</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>BadGamer99</strong></td>
+                            <td>"This game is trash..."</td>
+                            <td>Hate Speech</td>
+                            <td>2024-05-10</td>
+                            <td>
+                                <button class="btn-sm btn-approve">Ignore</button>
+                                <button class="btn-sm btn-delete">Delete</button>
+                                <button class="btn-sm btn-ban">Ban User</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>TrollMaster</strong></td>
+                            <td>[Spam Link Removed]</td>
+                            <td>Spam</td>
+                            <td>2024-05-11</td>
+                            <td>
+                                <button class="btn-sm btn-approve">Ignore</button>
+                                <button class="btn-sm btn-delete">Delete</button>
+                                <button class="btn-sm btn-ban">Ban User</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

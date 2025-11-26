@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Games - Admin Panel</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin-body">
+
+    <div class="admin-container">
+        
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <h3>Admin Panel</h3>
+            <hr>
+            <a href="admin.html">Dashboard</a>
+            <a href="admin-games.html" class="active">Manage Games</a>
+            <a href="admin-users.html">Manage Users</a>
+            <a href="admin-reports.html">Reported Reviews</a>
+            <a href="index.html" class="logout-link">Logout</a>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="admin-content">
+            
+            <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Manage Games</h2>
+                <button class="btn-sm btn-approve" style="font-size: 14px; padding: 10px 20px;">+ Add New Game</button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Game Title</th>
+                            <th>Platform</th>
+                            <th>Metascore</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#101</td>
+                            <td><strong>Baldur's Gate 3</strong></td>
+                            <td>PC, PS5</td>
+                            <td><span style="color: green; font-weight: bold;">96</span></td>
+                            <td>
+                                <button class="btn-sm btn-edit">Edit</button>
+                                <button class="btn-sm btn-delete">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#102</td>
+                            <td><strong>Elden Ring</strong></td>
+                            <td>PC, PS5, Xbox</td>
+                            <td><span style="color: green; font-weight: bold;">96</span></td>
+                            <td>
+                                <button class="btn-sm btn-edit">Edit</button>
+                                <button class="btn-sm btn-delete">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#103</td>
+                            <td><strong>Redfall</strong></td>
+                            <td>PC, Xbox</td>
+                            <td><span style="color: red; font-weight: bold;">56</span></td>
+                            <td>
+                                <button class="btn-sm btn-edit">Edit</button>
+                                <button class="btn-sm btn-delete">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
