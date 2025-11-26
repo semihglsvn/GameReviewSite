@@ -206,7 +206,7 @@ header nav {
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-    border-top: 1px solid #eee;
+    border-top: 10px solid #eee;
     padding-top: 10px;
 }
 
@@ -275,4 +275,35 @@ footer {
     .game-card {
         margin-bottom: 15px;
     }
+
+    /* Turn the square input box into a circle */
+.my-score-input {
+    width: 50px;       /* Fixed width */
+    height: 50px;      /* Fixed height */
+    border-radius: 50%; /* 50% radius makes it a perfect circle */
+    
+    border: 2px solid #ccc; /* Gray border */
+    text-align: center;     /* Number goes in the middle */
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+    margin: 0 auto 10px auto; /* Center it in the sidebar */
+    outline: none;     /* Removes the default blue glow */
+    transition: all 0.3s ease;
+}
+
+/* When you click inside it to type */
+.my-score-input:focus {
+    border-color: #4CAF50; /* Turns green */
+    color: #4CAF50;        /* Text becomes green */
+    background-color: #f9fff9; /* Very light green background */
+}
+
+/* Hide the little up/down arrows on number inputs (optional, makes it cleaner) */
+.my-score-input::-webkit-inner-spin-button, 
+.my-score-input::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
 }
