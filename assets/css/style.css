@@ -276,23 +276,6 @@ footer {
         margin-bottom: 15px;
     }
 
-    /* --- New Class for Tighter Score Spacing --- */
-    .score-details h3 {
-    margin-bottom: 5px; /* Reduces gap below "Metascore" */
-}
-
-    .score-details .meta-footer {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-    margin-bottom: 5px; /* Reduces gap between score and "Based on..." */
-}
-
-    .score-details p {
-    margin-top: 0;    /* Removes gap above the bottom text */
-    margin-bottom: 0;
-    font-size: 1111px;
-    color: #666;
-}
+    
 
 }
