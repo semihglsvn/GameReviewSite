@@ -59,6 +59,8 @@
                     <div class="card-image-placeholder">Image</div>
                     <div class="card-content">
                         <h3>Upcoming Game 1</h3>
+                        <!-- Added empty tag to maintain height -->
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
                             <div class="metascore">--</div>
@@ -73,6 +75,7 @@
                     <div class="card-image-placeholder">Image</div>
                     <div class="card-content">
                         <h3>Upcoming Game 2</h3>
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
                             <div class="metascore">--</div>
@@ -87,6 +90,7 @@
                     <div class="card-image-placeholder">Image</div>
                     <div class="card-content">
                         <h3>Upcoming Game 3</h3>
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
                             <div class="metascore">--</div>
@@ -101,6 +105,7 @@
                     <div class="card-image-placeholder">Image</div>
                     <div class="card-content">
                         <h3>Upcoming Game 4</h3>
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
                             <div class="metascore">--</div>
@@ -120,21 +125,21 @@
         </div>
 
         <div class="row">
-            <!-- Card 1: BALDUR'S GATE 3 -->
+            <!-- Card 1: BALDUR'S GATE 3 (LINKED) -->
             <div class="col-3">
-                <div class="game-card">
-                    <!-- Ensure image is in assets/images/ -->
-                    <img src="assets/images/baldursgate3.png" alt="Baldur's Gate 3" class="card-img">
-                    <div class="card-content">
-                        <h3>Baldur's Gate 3</h3>
-                        <p class="platform-tag">PC, PS5</p>
-                        <div class="meta-footer">
-                            <span>Metascore</span>
-                            <!-- JS will color this -->
-                            <div class="metascore">96</div>
+                <a href="game-details.html" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                    <div class="game-card">
+                        <img src="assets/images/baldursgate3.png" alt="Baldur's Gate 3" class="card-img">
+                        <div class="card-content">
+                            <h3>Baldur's Gate 3</h3>
+                            <p class="platform-tag">PC, PS5</p>
+                            <div class="meta-footer">
+                                <span>Metascore</span>
+                                <div class="metascore">96</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Card 2 (Placeholder with score) -->
@@ -143,9 +148,11 @@
                     <div class="card-image-placeholder">Empty</div>
                     <div class="card-content">
                         <h3>Game Title</h3>
+                        <!-- Added placeholder tag -->
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
-                            <div class="metascore">45</div> <!-- Example Bad Score -->
+                            <div class="metascore">45</div>
                         </div>
                     </div>
                 </div>
@@ -157,9 +164,10 @@
                     <div class="card-image-placeholder">Empty</div>
                     <div class="card-content">
                         <h3>Game Title</h3>
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
-                            <div class="metascore">70</div> <!-- Example Mid Score -->
+                            <div class="metascore">70</div>
                         </div>
                     </div>
                 </div>
@@ -171,9 +179,10 @@
                     <div class="card-image-placeholder">Empty</div>
                     <div class="card-content">
                         <h3>Game Title</h3>
+                        <p class="platform-tag">-</p>
                         <div class="meta-footer">
                             <span>Metascore</span>
-                            <div class="metascore">85</div> <!-- Example Good Score -->
+                            <div class="metascore">85</div>
                         </div>
                     </div>
                 </div>
