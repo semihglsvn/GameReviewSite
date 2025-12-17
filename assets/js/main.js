@@ -1,40 +1,173 @@
 document.addEventListener("DOMContentLoaded", function() {
     
-    // 1. Select all elements with the class 'metascore' or 'detailmetascore'
-    // You used 'detailmetascore' in your HTML for the User Score, so we include it.
+    // --- SCORE COLORING LOGIC ---
     const scores = document.querySelectorAll('.metascore, .detailmetascore');
 
-    // 2. Loop through each score element
     scores.forEach(scoreElement => {
-        // Get the text content
         const scoreText = scoreElement.innerText;
-        
-        // Convert to float to handle decimals like "9.2"
         const scoreValue = parseFloat(scoreText);
 
-        // 3. Apply color based on the number
         if (!isNaN(scoreValue)) {
-            // For User Scores (usually 0-10), we need to normalize or check range
-            // Assuming User Scores > 10 are effectively Metascores (0-100)
             let effectiveScore = scoreValue;
-            
-            // If score is small (like 9.2), treat it as out of 10 -> multiply by 10 for color logic
             if (scoreValue <= 10) {
                 effectiveScore = scoreValue * 10;
             }
 
             if (effectiveScore >= 90) {
-                scoreElement.classList.add('score-dark-green'); // 90-100 (or 9.0-10.0)
+                scoreElement.classList.add('score-dark-green');
             } else if (effectiveScore >= 75) {
-                scoreElement.classList.add('score-green');      // 75-89 (or 7.5-8.9)
+                scoreElement.classList.add('score-green');
             } else if (effectiveScore >= 50) {
-                scoreElement.classList.add('score-yellow');     // 50-74 (or 5.0-7.4)
+                scoreElement.classList.add('score-yellow');
             } else {
-                scoreElement.classList.add('score-red');        // 0-49 (or 0-4.9)
+                scoreElement.classList.add('score-red');
             }
         } else {
-            // If text is '--' or empty, make it gray
             scoreElement.classList.add('score-none');
         }
     });
+
+
+    // --- SLIDER LOGIC ---
+    const sliders = document.querySelectorAll('.slider-section-wrapper');
+
+    sliders.forEach(container => {
+        const track = container.querySelector('.slider-track');
+        const prevBtn = container.querySelector('.prev-btn');
+        const nextBtn = container.querySelector('.next-btn');
+        
+        const totalSlides = 4;
+        let currentSlide = 0;
+
+        function updateSlider() {
+            // Check if track exists to prevent errors on pages without sliders
+            if(track) {
+                track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                prevBtn.style.opacity = currentSlide === 0 ? "0.5" : "1";
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.style.opacity = currentSlide === totalSlides - 1 ? "0.5" : "1";
+                nextBtn.disabled = currentSlide === totalSlides - 1;
+            }
+        }
+
+        if(nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    updateSlider();
+                }
+            });
+        }
+
+        if(prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlider();
+                }
+            });
+        }
+
+        updateSlider();
+    });
+
+
+    // --- ADVANCED SEARCH FILTERING & SORTING LOGIC ---
+    const searchBtn = document.getElementById('main-search-btn');
+    const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+    let gameItems = Array.from(document.querySelectorAll('.game-item')); // Convert NodeList to Array for sorting
+    
+    // UI Elements
+    const initialMsg = document.getElementById('initial-search-message');
+    const noResultsMsg = document.getElementById('no-results');
+    const gamesGrid = document.getElementById('games-grid'); // This is the .row container
+    const clearBtn = document.getElementById('clear-filters');
+    const sortSelect = document.getElementById('sort-select');
+
+    // Only run if we are on the search page
+    if (searchBtn) {
+
+        function filterAndSortGames() {
+            // 1. Hide Initial Message, Show Grid Container
+            if(initialMsg) initialMsg.style.display = 'none';
+            if(gamesGrid) gamesGrid.style.display = 'block';
+
+            // 2. Get all checked values
+            const checkedGenres = Array.from(document.querySelectorAll('input[data-filter-type="genre"]:checked')).map(cb => cb.value);
+            const checkedPlatforms = Array.from(document.querySelectorAll('input[data-filter-type="platform"]:checked')).map(cb => cb.value);
+            const checkedPlayers = Array.from(document.querySelectorAll('input[data-filter-type="players"]:checked')).map(cb => cb.value);
+            const checkedFeatures = Array.from(document.querySelectorAll('input[data-filter-type="feature"]:checked')).map(cb => cb.value);
+
+            // 3. Filter items
+            let visibleItems = [];
+            
+            gameItems.forEach(item => {
+                // Get data attributes from the HTML
+                const itemGenres = item.getAttribute('data-genre').split(' ');
+                const itemPlatforms = item.getAttribute('data-platform').split(' ');
+                const itemPlayers = item.getAttribute('data-players') ? item.getAttribute('data-players').split(' ') : [];
+                const itemFeatures = item.getAttribute('data-feature') ? item.getAttribute('data-feature').split(' ') : [];
+
+                const genreMatch = (checkedGenres.length === 0) || checkedGenres.some(g => itemGenres.includes(g));
+                const platformMatch = (checkedPlatforms.length === 0) || checkedPlatforms.some(p => itemPlatforms.includes(p));
+                const playerMatch = (checkedPlayers.length === 0) || checkedPlayers.some(p => itemPlayers.includes(p));
+                const featureMatch = (checkedFeatures.length === 0) || checkedFeatures.some(f => itemFeatures.includes(f));
+
+                if (genreMatch && platformMatch && playerMatch && featureMatch) {
+                    item.style.display = 'block'; // Show visually
+                    visibleItems.push(item);
+                } else {
+                    item.style.display = 'none'; // Hide
+                }
+            });
+
+            // 4. Sort visible items
+            const sortValue = sortSelect.value;
+            
+            visibleItems.sort((a, b) => {
+                const ratingA = parseFloat(a.getAttribute('data-rating'));
+                const ratingB = parseFloat(b.getAttribute('data-rating'));
+                const dateA = new Date(a.getAttribute('data-date'));
+                const dateB = new Date(b.getAttribute('data-date'));
+
+                if (sortValue === 'rating-desc') return ratingB - ratingA;
+                if (sortValue === 'rating-asc') return ratingA - ratingB;
+                if (sortValue === 'date-desc') return dateB - dateA;
+                if (sortValue === 'date-asc') return dateA - dateB;
+                return 0;
+            });
+
+            // 5. Re-append sorted items to the grid container
+            // (Note: This moves the DOM elements, effectively reordering them visually)
+            visibleItems.forEach(item => {
+                gamesGrid.appendChild(item);
+            });
+
+            // 6. Show/Hide "No Results" message
+            if (visibleItems.length === 0) {
+                noResultsMsg.style.display = 'block';
+            } else {
+                noResultsMsg.style.display = 'none';
+            }
+        }
+
+        // Trigger filter ONLY on Search Button Click
+        searchBtn.addEventListener('click', filterAndSortGames);
+
+        // Clear Filters Button
+        if(clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                // Uncheck all boxes
+                filterCheckboxes.forEach(cb => cb.checked = false);
+                // Reset Sort
+                sortSelect.value = 'rating-desc';
+                
+                // Reset UI to initial state
+                if(initialMsg) initialMsg.style.display = 'block';
+                if(gamesGrid) gamesGrid.style.display = 'none';
+                if(noResultsMsg) noResultsMsg.style.display = 'none';
+            });
+        }
+    }
+
 });
