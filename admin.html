@@ -4,9 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - GameJoint</title>
-    <!-- Link Main CSS for basic resets if needed, but Admin CSS handles layout -->
     <link rel="stylesheet" href="assets/css/style.css"> 
     <link rel="stylesheet" href="assets/css/admin.css">
+    <style>
+        /* Simple utility to hide tab content by default */
+        .tab-content {
+            display: none;
+        }
+        /* Show the active tab */
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 500px; /* Slightly wider for game form */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body class="admin-body">
 
@@ -16,81 +68,378 @@
         <nav class="sidebar">
             <h3>Admin Panel</h3>
             <hr>
-            <a href="admin.html" class="active">Dashboard</a>
-            <a href="admin-games.html">Manage Games</a>
-            <a href="admin-users.html">Manage Users</a>
-            <a href="admin-reports.html">Reported Reviews</a>
+            <!-- Added 'onclick' handlers to switch tabs -->
+            <a href="#" class="nav-link active" onclick="openTab(event, 'dashboard')">Dashboard</a>
+            <a href="#" class="nav-link" onclick="openTab(event, 'games')">Manage Games</a>
+            <a href="#" class="nav-link" onclick="openTab(event, 'users')">Manage Users</a>
+            <a href="#" class="nav-link" onclick="openTab(event, 'reports')">Reported Reviews</a>
             <a href="index.html" class="logout-link">Logout</a>
         </nav>
 
-        <!-- MAIN CONTENT -->
+        <!-- MAIN CONTENT AREA -->
         <main class="admin-content">
             
-            <div class="admin-header">
-                <h2>Dashboard Overview</h2>
-            </div>
-            
-            <!-- Stats Row -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number">1,204</span>
-                    <span class="stat-label">Total Users</span>
+            <!-- TAB 1: DASHBOARD -->
+            <div id="dashboard" class="tab-content active">
+                <div class="admin-header">
+                    <h2>Dashboard Overview</h2>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-number">58</span>
-                    <span class="stat-label">New Reviews</span>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">1,204</span>
+                        <span class="stat-label">Total Users</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">58</span>
+                        <span class="stat-label">New Reviews</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Pending Reports</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">340</span>
+                        <span class="stat-label">Games Listed</span>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-number">12</span>
-                    <span class="stat-label">Pending Reports</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">340</span>
-                    <span class="stat-label">Games Listed</span>
+
+                <!-- Replaced 'Recent Activity' with 'System Status' -->
+                <div class="table-container">
+                    <h3 style="margin-top:0;">System Status</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Last Check</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Database</strong></td>
+                                <td><span style="color:green; font-weight:bold;">Online</span></td>
+                                <td>Just now</td>
+                            </tr>
+                            <tr>
+                                <td><strong>File Storage</strong></td>
+                                <td><span style="color:green; font-weight:bold;">Online</span></td>
+                                <td>Just now</td>
+                            </tr>
+                            <tr>
+                                <td><strong>API Connection</strong></td>
+                                <td><span style="color:orange; font-weight:bold;">Latency High</span></td>
+                                <td>1 min ago</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="table-container">
-                <h3 style="margin-top:0;">Pending Reports</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Comment Snippet</th>
-                            <th>Report Reason</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>BadGamer99</strong></td>
-                            <td>"This game is trash..."</td>
-                            <td>Hate Speech</td>
-                            <td>2024-05-10</td>
-                            <td>
-                                <button class="btn-sm btn-approve">Ignore</button>
-                                <button class="btn-sm btn-delete">Delete</button>
-                                <button class="btn-sm btn-ban">Ban User</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>TrollMaster</strong></td>
-                            <td>[Spam Link Removed]</td>
-                            <td>Spam</td>
-                            <td>2024-05-11</td>
-                            <td>
-                                <button class="btn-sm btn-approve">Ignore</button>
-                                <button class="btn-sm btn-delete">Delete</button>
-                                <button class="btn-sm btn-ban">Ban User</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- TAB 2: MANAGE GAMES -->
+            <div id="games" class="tab-content">
+                <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Manage Games</h2>
+                    <button class="btn-sm btn-approve" style="font-size: 14px; padding: 10px 20px;" onclick="openGameModal()">+ Add New Game</button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Game Title</th>
+                                <th>Platform</th>
+                                <th>Metascore</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#101</td>
+                                <td><strong>Baldur's Gate 3</strong></td>
+                                <td>PC, PS5</td>
+                                <td><span style="color: green; font-weight: bold;">96</span></td>
+                                <td>
+                                    <button class="btn-sm btn-edit">Edit</button>
+                                    <button class="btn-sm btn-delete">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#102</td>
+                                <td><strong>Elden Ring</strong></td>
+                                <td>PC, PS5, Xbox</td>
+                                <td><span style="color: green; font-weight: bold;">96</span></td>
+                                <td>
+                                    <button class="btn-sm btn-edit">Edit</button>
+                                    <button class="btn-sm btn-delete">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#103</td>
+                                <td><strong>Redfall</strong></td>
+                                <td>PC, Xbox</td>
+                                <td><span style="color: red; font-weight: bold;">56</span></td>
+                                <td>
+                                    <button class="btn-sm btn-edit">Edit</button>
+                                    <button class="btn-sm btn-delete">Delete</button>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>#104</td>
+                                <td><strong>Starfield</strong></td>
+                                <td>PC, Xbox</td>
+                                <td><span style="color: orange; font-weight: bold;">83</span></td>
+                                <td>
+                                    <button class="btn-sm btn-edit">Edit</button>
+                                    <button class="btn-sm btn-delete">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: MANAGE USERS -->
+            <div id="users" class="tab-content">
+                <div class="admin-header">
+                    <h2>Manage Users</h2>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#U001</td>
+                                <td><strong>Admin</strong></td>
+                                <td>admin@gamejoint.com</td>
+                                <td><span style="background:#2c3e50; color:white; padding:2px 6px; border-radius:3px; font-size:11px;">ADMIN</span></td>
+                                <td>Active</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>#U002</td>
+                                <td><strong>GamerKing99</strong></td>
+                                <td>gamer@email.com</td>
+                                <td>User</td>
+                                <td>Active</td>
+                                <td>
+                                    <button class="btn-sm btn-ban" onclick="openBanModal('GamerKing99')">Ban</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#U003</td>
+                                <td><strong>TrollMaster</strong></td>
+                                <td>troll@email.com</td>
+                                <td>User</td>
+                                <td style="color:red;">Banned</td>
+                                <td>
+                                    <button class="btn-sm btn-approve">Unban</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 4: REPORTED REVIEWS -->
+            <div id="reports" class="tab-content">
+                <div class="admin-header">
+                    <h2>Reported Reviews</h2>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reported User</th>
+                                <th>Reason</th>
+                                <th>Date</th>
+                                <th>Review</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>BadGamer99</strong></td>
+                                <td>Hate Speech</td>
+                                <td>2024-05-10</td>
+                                <td>
+                                    <!-- View Full Review Button -->
+                                    <button class="btn-sm" style="background-color:#95a5a6;" onclick="alert('Full Review:\n\nThis game is trash and everyone who likes it is [CENSORED]...\n\n(Review ID: 4421)')">View Full Review</button>
+                                </td>
+                                <td>
+                                    <button class="btn-sm btn-approve">Ignore</button>
+                                    <button class="btn-sm btn-delete">Delete Review</button>
+                                    <button class="btn-sm btn-ban" onclick="openBanModal('BadGamer99')">Ban User</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>SpamBot2000</strong></td>
+                                <td>Spam</td>
+                                <td>2024-05-11</td>
+                                <td>
+                                    <button class="btn-sm" style="background-color:#95a5a6;" onclick="alert('Full Review:\n\nClick here for free robux: http://scam.link\n\n(Review ID: 4425)')">View Full Review</button>
+                                </td>
+                                <td>
+                                    <button class="btn-sm btn-approve">Ignore</button>
+                                    <button class="btn-sm btn-delete">Delete Review</button>
+                                    <button class="btn-sm btn-ban" onclick="openBanModal('SpamBot2000')">Ban User</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </main>
     </div>
+
+    <!-- BAN MODAL -->
+    <div id="banModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeBanModal()">&times;</span>
+            <h3 style="margin-top:0;">Ban User</h3>
+            <p>Select ban duration for <strong id="banUsername">User</strong>:</p>
+            
+            <form>
+                <div style="margin-bottom: 10px;">
+                    <input type="radio" id="ban24h" name="banDuration" value="24h">
+                    <label for="ban24h">24 Hours</label>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <input type="radio" id="ban7d" name="banDuration" value="7d">
+                    <label for="ban7d">7 Days</label>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <input type="radio" id="banPerm" name="banDuration" value="perm">
+                    <label for="banPerm" style="color:red; font-weight:bold;">Permanent</label>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="banReason" style="display:block; margin-bottom:5px;">Reason (Optional):</label>
+                    <textarea id="banReason" rows="3" style="width:100%; border:1px solid #ccc; border-radius:4px;"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-sm" onclick="closeBanModal()" style="background-color:#95a5a6;">Cancel</button>
+                    <button type="button" class="btn-sm btn-ban" onclick="confirmBan()">Confirm Ban</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD GAME MODAL -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeGameModal()">&times;</span>
+            <h3 style="margin-top:0;">Add New Game</h3>
+            
+            <form>
+                <div style="margin-bottom: 15px;">
+                    <label for="gameTitle" style="display:block; margin-bottom:5px;">Game Title:</label>
+                    <input type="text" id="gameTitle" style="width:100%; padding:8px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="gamePlatform" style="display:block; margin-bottom:5px;">Platform(s):</label>
+                    <input type="text" id="gamePlatform" placeholder="e.g. PC, PS5, Xbox" style="width:100%; padding:8px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="gameScore" style="display:block; margin-bottom:5px;">Metascore (0-100):</label>
+                    <input type="number" id="gameScore" min="0" max="100" style="width:100%; padding:8px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="gameImage" style="display:block; margin-bottom:5px;">Cover Image URL:</label>
+                    <input type="text" id="gameImage" placeholder="assets/images/..." style="width:100%; padding:8px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="gameDescription" style="display:block; margin-bottom:5px;">Description:</label>
+                    <textarea id="gameDescription" rows="3" style="width:100%; border:1px solid #ccc; border-radius:4px; padding:8px; box-sizing:border-box;"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-sm" onclick="closeGameModal()" style="background-color:#95a5a6;">Cancel</button>
+                    <button type="button" class="btn-sm btn-approve" onclick="addGame()">Add Game</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- INLINE SCRIPTS -->
+    <script>
+        // Tab Switching Logic
+        function openTab(evt, tabName) {
+            evt.preventDefault();
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+                tabContents[i].classList.remove("active");
+            }
+            var tabLinks = document.getElementsByClassName("nav-link");
+            for (var i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Ban Modal Logic
+        var banModal = document.getElementById("banModal");
+        var userSpan = document.getElementById("banUsername");
+
+        function openBanModal(username) {
+            userSpan.innerText = username;
+            banModal.style.display = "block";
+        }
+
+        function closeBanModal() {
+            banModal.style.display = "none";
+        }
+
+        function confirmBan() {
+            alert("User " + userSpan.innerText + " has been banned.");
+            closeBanModal();
+        }
+
+        // Add Game Modal Logic
+        var gameModal = document.getElementById("gameModal");
+
+        function openGameModal() {
+            gameModal.style.display = "block";
+        }
+
+        function closeGameModal() {
+            gameModal.style.display = "none";
+        }
+
+        function addGame() {
+            var title = document.getElementById("gameTitle").value;
+            if(title) {
+                alert("Game '" + title + "' added successfully!");
+                closeGameModal();
+            } else {
+                alert("Please enter a game title.");
+            }
+        }
+
+        // Close modals if user clicks outside of them
+        window.onclick = function(event) {
+            if (event.target == banModal) {
+                closeBanModal();
+            }
+            if (event.target == gameModal) {
+                closeGameModal();
+            }
+        }
+    </script>
 
 </body>
 </html>
