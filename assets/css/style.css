@@ -523,3 +523,162 @@ footer {
 .score-green { background-color: #66cc33; }      /* Good: 75-89 */
 .score-dark-green { background-color: #44aa00; } /* Great: 90+ */
 .score-none { background-color: #ccc; }          /* No Score */
+
+/* --- NEW ADDITIONS FOR REVIEWS ONLY --- */
+.dist-bar-container {
+    height: 8px;
+    width: 100%;
+    display: flex;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.btn-read-more {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.btn-read-more:hover { background-color: #000; }
+
+/* --- READ MORE / READ LESS STYLES --- */
+/* --- READ MORE / READ LESS STYLES --- */
+.text-collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    /* NEW ADDTIONS FOR UNIFORM SIZE */
+    min-height: 55px; /* Forces height to match ~3 lines of text */
+    line-height: 1.4; /* Ensures consistent text spacing */
+}
+
+.text-expanded {
+    display: block; 
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+    
+    /* Reset height so it can grow when expanded */
+    height: auto; 
+    min-height: 55px;
+    line-height: 1.4;
+}
+/* --- SHOW MORE FUNCTIONALITY --- */
+.review-hidden {
+    display: none;
+}
+
+.btn-show-more {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #eee;
+    border-radius: 4px;
+}
+
+.btn-show-more:hover {
+    background-color: #535353;
+}
+/* --- UNIFIED TEXT SIZING --- */
+/* Apply the exact same rules to BOTH lists */
+#critic-list .text-collapsed,
+#user-list .text-collapsed {
+    min-height: 63px;      /* Exact height for 3 lines of text */
+    line-clamp: 3;         /* Limit both to 3 lines */
+    -webkit-line-clamp: 3; /* For Safari/Chrome */
+    margin-bottom: 10px;
+    
+    /* Ensure text behaves cleanly */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Ensure the cards themselves are rigid */
+#critic-list .game-card, 
+#user-list .game-card {
+    height: 250px !important; /* Fixed outer height */
+    display: flex;
+    flex-direction: column;
+}
+
+#critic-list .card-content, 
+#user-list .card-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push footer to bottom */
+#critic-list .card-content > div:last-child,
+#user-list .card-content > div:last-child {
+    margin-top: auto; 
+}
+
+/* Ensure hidden cards stay hidden */
+#critic-list .game-card.review-hidden,
+#user-list .game-card.review-hidden {
+    display: none !important;
+}
+/* --- FIX FOR READ MORE CLICK --- */
+/* This overrides the 3-line limit when you click "Read More" */
+#critic-list .text-expanded,
+#user-list .text-expanded {
+    -webkit-line-clamp: unset !important; /* Allow infinite lines */
+    line-clamp: unset !important;
+    overflow: visible !important;
+    display: block !important; /* disables the box-clamping layout */
+    height: auto !important;
+}
+/* --- FOOTER LINK ALIGNMENT --- */
+
+/* Target both the "Full Review" and "Report" links */
+#critic-list .card-content > div:last-child a,
+#user-list .card-content > div:last-child a {
+    /* 1. Flexbox centering to handle icons vs text */
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 100% !important; /* Fill the footer height */
+    
+    /* 2. Text Styling */
+    font-size: 11px !important;
+    font-weight: bold !important;
+    color: #555 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important; /* Remove underline */
+    letter-spacing: 0.5px;
+}
+
+/* Hover effect for both */
+#critic-list .card-content > div:last-child a:hover,
+#user-list .card-content > div:last-child a:hover {
+    color: #000 !important;
+    text-decoration: underline !important;
+}
+
+/* Target the "Switch 2" text on the right */
+#critic-list .card-content > div:last-child span,
+#user-list .card-content > div:last-child span {
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    
+    font-size: 10px !important;
+    font-weight: bold !important;
+    color: #999 !important;
+}
