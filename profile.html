@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Ahmet Yilmaz</title>
+    <title>Profile - GameJoint</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* game-details.html metin stilleri */
+        .text-collapsed {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .text-expanded {
+            -webkit-line-clamp: unset;
+            display: block;
+        }
+        .card-content a { text-decoration: none; color: inherit; }
+        
+        /* Eleştirmen Puan Kutusu (Kare) Stili */
+        .metascore {
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 4px; /* Kare olması için */
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 
@@ -13,27 +41,23 @@
         <div class="container">
             <div class="row header-content">
                 <div class="col-2">
-                    <!-- LOGO IMAGE REPLACEMENT -->
                     <a href="homepage-member.html" class="logo-link">
                         <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
                     </a>
                 </div>
-
                 <div class="col-10">
                     <nav>
                         <ul class="nav-left">
                             <li><a href="#">Games</a></li>
                         </ul>
-
                         <div class="search-container">
                             <form action="#">
                                 <input type="text" placeholder="Search games..." name="search">
                                 <button type="submit">Search</button>
                             </form>
                         </div>
-
                         <ul class="nav-right">
-                            <li><a href="profile.html">My Profile (Ahmet)</a></li>
+                            <li><a href="profile.html">My Profile (GameJoint)</a></li>
                             <li><a href="index.html" style="color: #ff6b6b;">Logout</a></li>
                         </ul>
                     </nav>
@@ -46,95 +70,204 @@
         
         <div class="row">
             <div class="col-12">
-                <h1 style="margin-bottom: 5px; font-size: 32px;">Ahmet Yilmaz</h1>
-                <span style="color: #666; font-size: 12px; font-weight: bold; text-transform: uppercase;">
-                    Level 12 Member • Since March 2023
-                </span>
-                <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+                <h1>GameJoint</h1>
+                <span class="release-date">Since March 2023</span>
             </div>
         </div>
+        <hr>
+
+        <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="col-12">
+                <h4 class="font-weight-bold" style="margin-bottom: 15px;">Publication Overview in Games</h4>
+                <div class="game-card" style="display: flex; flex-wrap: wrap; padding: 0; overflow: hidden; border: 1px solid #ddd;">
+                    <div style="background-color: #333; color: white; padding: 40px; text-align: center; flex: 1; min-width: 200px; display: flex; flex-direction: column; justify-content: center;">
+                        <div id="avg-score" style="font-size: 80px; font-weight: bold; line-height: 1;">-</div>
+                        <div style="font-size: 12px; text-transform: uppercase; margin-top: 10px; letter-spacing: 1px;">Avg. Score</div>
+                    </div>
+                    <div style="flex: 3; padding: 25px; background-color: white; min-width: 300px;">
+                        <h6 style="font-weight: bold; text-transform: uppercase; font-size: 13px; margin-top: 0;">Score Distribution</h6>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <span style="width: 70px; font-size: 12px;">Positive</span>
+                                <div style="flex-grow: 1; height: 10px; background-color: #eee; margin: 0 15px;">
+                                    <div id="pos-bar" style="width: 0%; height: 100%; background-color: #66cc33;"></div>
+                                </div>
+                                <span id="pos-count" style="font-size: 12px; font-weight: bold;">0</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <span style="width: 70px; font-size: 12px;">Mixed</span>
+                                <div style="flex-grow: 1; height: 10px; background-color: #eee; margin: 0 15px;">
+                                    <div id="mixed-bar" style="width: 0%; height: 100%; background-color: #ffcc33;"></div>
+                                </div>
+                                <span id="mixed-count" style="font-size: 12px; font-weight: bold;">0</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <span style="width: 70px; font-size: 12px;">Negative</span>
+                                <div style="flex-grow: 1; height: 10px; background-color: #eee; margin: 0 15px;">
+                                    <div id="neg-bar" style="width: 0%; height: 100%; background-color: #ff4d4d;"></div>
+                                </div>
+                                <span id="neg-count" style="font-size: 12px; font-weight: bold;">0</span>
+                            </div>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                        <div class="row">
+                            <div class="col-6">
+                                <span style="font-size: 11px; text-transform: uppercase; color: #777;">Highest Score</span>
+                                <div style="display: flex; align-items: center; margin-top: 5px;">
+                                    <div id="highest-score-val" class="metascore mr-2" style="width: 30px; height: 30px; line-height: 30px; font-size: 14px;">-</div>
+                                    <b id="highest-game-name" style="font-size: 13px;">-</b>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <span style="font-size: 11px; text-transform: uppercase; color: #777;">Lowest Score</span>
+                                <div style="display: flex; align-items: center; margin-top: 5px;">
+                                    <div id="lowest-score-val" class="metascore mr-2" style="width: 30px; height: 30px; line-height: 30px; font-size: 14px;">-</div>
+                                    <b id="lowest-game-name" style="font-size: 13px;">-</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
 
         <div class="row">
             <div class="col-12">
-                <div class="game-card" style="height: 100%; min-height: 300px;">
-                    <div class="card-image-placeholder" style="height: 150px; background-color: #222; color: #FFCC33; font-size: 50px;">
-                        A
-                    </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px;">
+                    <h3 style="margin:0;">My Reviews</h3>
                     
-                    <div class="card-content">
-                        <h3>About</h3>
-                        <p style="font-size: 14px; line-height: 1.6; color: #444;">
-                            Hello! I'm Ahmet. I am a Hardcore RPG and Strategy games enthusiast. 
-                            I generally review games with deep storytelling. 
-                            Favorite games: <strong>Baldur's Gate 3</strong>, <strong>Elden Ring</strong>, and <strong>Cyberpunk 2077</strong>.
-                            Atmosphere and music are everything to me in games.
-                        </p>
-                        
-                        <div style="margin-top: 20px;">
-                            <span class="platform-tag">PC GAMER</span>
-                            <span class="platform-tag">RPG FAN</span>
-                            <span class="platform-tag">REVIEWER</span>
-                        </div>
+                    <div style="display: flex; gap: 10px;">
+                        <select onchange="filterReviews('profile-review-list', this.value)" style="padding: 5px;">
+                            <option value="all">Show All</option>
+                            <option value="green">Positive (Green)</option>
+                            <option value="yellow">Mixed (Yellow)</option>
+                            <option value="red">Negative (Red)</option>
+                        </select>
+
+                        <select onchange="sortReviews('profile-review-list', this.value)" style="padding: 5px;">
+                            <option value="desc">Best Score</option>
+                            <option value="asc">Worst Score</option>
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            
-            </div>
 
-        <div class="row">
-            <div class="col-12">
-                <h2 style="margin-top: 40px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Recent Reviews</h2>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <div class="game-card" style="height: auto; margin-bottom: 15px;">
-                    <div class="row">
-                        <div class="col-1">
-                            <div class="metascore score-green" style="width: 50px; height: 50px; line-height: 50px; font-size: 20px; margin: 0 auto;">10</div>
-                        </div>
-                        <div class="col-11">
-                            <div class="card-content" style="padding-top: 0;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                    <h3 style="margin: 0; color: #000;">Baldur's Gate 3</h3>
-                                    <span style="font-size: 12px; color: #888;">Oct 24, 2023</span>
-                                </div>
-                                <p style="font-size: 14px; color: #444; margin: 0; line-height: 1.4;">
-                                    A masterpiece in the gaming world. Storytelling, character depth, and freedom are at an incredible level. 
-                                    Definitely a classic that must be played.
-                                </p>
+                <div id="profile-review-list">
+                    
+                    <div class="game-card review-item" data-score="95" style="margin-bottom: 20px; height: auto;">
+                        <div class="card-content">
+                            <div class="review-date-text" style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 12, 2023</div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div class="metascore" style="margin-right: 10px;">95</div>
+                                <span class="review-game-title" style="font-weight:bold; font-size: 18px; color: #2a2a2a; text-decoration: underline;">God of War Ragnarök</span>
+                            </div>
+                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                                An absolute masterpiece of storytelling and combat. Kratos and Atreus' journey is emotional, the worlds are stunningly beautiful, and the gameplay is refined to perfection. A fitting end to the Norse saga.
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
+                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
+                                <span style="font-size: 10px; font-weight: bold; color: #999;">PS5</span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="game-card" style="height: auto; margin-bottom: 15px;">
-                    <div class="row">
-                        <div class="col-1">
-                            <div class="metascore score-yellow" style="width: 50px; height: 50px; line-height: 50px; font-size: 20px; margin: 0 auto; color: #333;">6</div>
-                        </div>
-                        <div class="col-11">
-                            <div class="card-content" style="padding-top: 0;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                    <h3 style="margin: 0; color: #000;">Starfield</h3>
-                                    <span style="font-size: 12px; color: #888;">Sep 15, 2023</span>
-                                </div>
-                                <p style="font-size: 14px; color: #444; margin: 0; line-height: 1.4;">
-                                    Fell short of my expectations. The sense of space exploration is weak and there are too many loading screens. 
-                                    Not bad, but I expected better from Bethesda.
-                                </p>
+                    <div class="game-card review-item" data-score="98" style="margin-bottom: 20px; height: auto;">
+                        <div class="card-content">
+                            <div class="review-date-text" style="font-size: 10px; color: #999; margin-bottom: 10px;">MAY 15, 2023</div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div class="metascore" style="margin-right: 10px;">98</div>
+                                <span class="review-game-title" style="font-weight:bold; font-size: 18px; color: #2a2a2a; text-decoration: underline;">The Legend of Zelda: Tears of the Kingdom</span>
+                            </div>
+                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                                Nintendo has done it again. The freedom to build and explore is unparalleled. Every corner of Hyrule feels alive with secrets. The new Ultrahand ability changes everything we know about puzzle solving.
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
+                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
+                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH</span>
                             </div>
                         </div>
                     </div>
+
+                    <div class="game-card review-item" data-score="80" style="margin-bottom: 20px; height: auto;">
+                        <div class="card-content">
+                            <div class="review-date-text" style="font-size: 10px; color: #999; margin-bottom: 10px;">SEP 06, 2023</div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div class="metascore" style="margin-right: 10px;">80</div>
+                                <span class="review-game-title" style="font-weight:bold; font-size: 18px; color: #2a2a2a; text-decoration: underline;">Starfield</span>
+                            </div>
+                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                                Ambitious in scale but hindered by outdated mechanics and frequent loading screens. Space exploration feels disjointed. However, the ship building and faction quests are quite engaging if you have the patience.
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
+                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
+                                <span style="font-size: 10px; font-weight: bold; color: #999;">PC, XBOX</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-card review-item" data-score="90" style="margin-bottom: 20px; height: auto;">
+                        <div class="card-content">
+                            <div class="review-date-text" style="font-size: 10px; color: #999; margin-bottom: 10px;">FEB 24, 2024</div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div class="metascore" style="margin-right: 10px;">90</div>
+                                <span class="review-game-title" style="font-weight:bold; font-size: 18px; color: #2a2a2a; text-decoration: underline;">Hollow Knight</span>
+                            </div>
+                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                                A masterclass in atmosphere and level design. The combat is tight, responsive, and challenging. Hallownest is a joy to get lost in, filled with melancholic beauty and tough bosses.
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
+                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
+                                <span style="font-size: 10px; font-weight: bold; color: #999;">MULTI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-card review-item" data-score="35" style="margin-bottom: 20px; height: auto;">
+                        <div class="card-content">
+                            <div class="review-date-text" style="font-size: 10px; color: #999; margin-bottom: 10px;">MAY 25, 2023</div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div class="metascore" style="margin-right: 10px;">35</div>
+                                <span class="review-game-title" style="font-weight:bold; font-size: 18px; color: #2a2a2a; text-decoration: underline;">The Lord of the Rings: Gollum</span>
+                            </div>
+                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                                A tragic waste of a great license. Controls are clunky, graphics look dated, and the story adds nothing meaningful to the lore. Avoid at all costs.
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
+                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
+                                <span style="font-size: 10px; font-weight: bold; color: #999;">PC, PS5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="text-center mt-3">
+                    <button class="btn-show-more" data-target="profile-review-list" style="width: auto; padding: 10px 40px;">Show More Reviews</button>
                 </div>
             </div>
         </div>
+    </div>
 
+    <div id="full-review-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align: left; max-width: 600px; width: 90%;">
+            <span class="close-full-review-btn" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <div style="display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <div id="modal-review-score" class="metascore" style="margin-right: 15px; width:50px; height:50px; line-height:50px; font-size:22px;"></div>
+                <h3 id="modal-review-author" style="margin: 0;">Game Title</h3>
+            </div>
+            <p id="modal-review-text" style="line-height: 1.6; color: #333; font-size: 15px;">Review text...</p>
+            <div style="text-align: right; margin-top: 20px;">
+                <button id="close-full-review-btn" class="btn-cancel" style="background: #333;">Close</button>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -143,5 +276,113 @@
         </div>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            updateOverviewStats();
+            
+            if (typeof window.sortReviews === "function") {
+                window.sortReviews('profile-review-list', 'date-desc');
+            }
+            
+            const selects = document.querySelectorAll('select');
+            selects.forEach(sel => {
+                sel.addEventListener('change', () => {
+                    setTimeout(updateOverviewStats, 100);
+                });
+            });
+            
+            initReadMoreButtons();
+        });
+
+        // Puan Renklendirme (Overview ve Modal için)
+        function applyColorToEl(el, score) {
+            el.classList.remove('score-none', 'score-dark-green', 'score-green', 'score-yellow', 'score-red');
+            let effective = score <= 10 ? score * 10 : score;
+            if (effective >= 90) el.classList.add('score-dark-green');
+            else if (effective >= 75) el.classList.add('score-green');
+            else if (effective >= 50) el.classList.add('score-yellow');
+            else el.classList.add('score-red');
+        }
+
+        // Overview Hesaplama (Kare puan kutuları için .metascore kullanıldı)
+        function updateOverviewStats() {
+            const reviews = document.querySelectorAll('.review-item');
+            
+            let total = 0, pos = 0, mixed = 0, neg = 0, hi = -1, lo = 101, hiG = "-", loG = "-";
+            let validCount = 0;
+
+            reviews.forEach(r => {
+                const s = parseInt(r.querySelector('.metascore').innerText);
+                const tElement = r.querySelector('.review-game-title');
+                const t = tElement ? tElement.innerText : "-";
+                
+                if (!isNaN(s)) {
+                    total += s;
+                    validCount++;
+                    if (s >= 75) pos++; else if (s >= 50) mixed++; else neg++;
+                    if (s > hi) { hi = s; hiG = t; }
+                    if (s < lo) { lo = s; loG = t; }
+                }
+            });
+
+            if (validCount > 0) {
+                document.getElementById('avg-score').innerText = Math.round(total / validCount);
+                document.getElementById('pos-count').innerText = pos;
+                document.getElementById('mixed-count').innerText = mixed;
+                document.getElementById('neg-count').innerText = neg;
+                document.getElementById('pos-bar').style.width = (pos/validCount*100)+'%';
+                document.getElementById('mixed-bar').style.width = (mixed/validCount*100)+'%';
+                document.getElementById('neg-bar').style.width = (neg/validCount*100)+'%';
+                
+                const hiEl = document.getElementById('highest-score-val');
+                const loEl = document.getElementById('lowest-score-val');
+                hiEl.innerText = hi; loEl.innerText = lo;
+                document.getElementById('highest-game-name').innerText = hiG;
+                document.getElementById('lowest-game-name').innerText = loG;
+
+                applyColorToEl(hiEl, hi);
+                applyColorToEl(loEl, lo);
+            }
+        }
+
+        function initReadMoreButtons() {
+            const modal = document.getElementById('full-review-modal');
+            const modalAuthor = document.getElementById('modal-review-author');
+            const modalScore = document.getElementById('modal-review-score');
+            const modalText = document.getElementById('modal-review-text');
+
+            document.querySelectorAll('.btn-read-more').forEach(btn => {
+                const p = btn.previousElementSibling;
+                if (p.scrollHeight > p.clientHeight + 2) {
+                    btn.style.display = 'inline-block';
+                } else {
+                    btn.style.display = 'none';
+                }
+
+                btn.onclick = function(e) {
+                    e.preventDefault();
+                    const card = btn.closest('.game-card');
+                    const title = card.querySelector('.review-game-title').textContent;
+                    const score = card.querySelector('.metascore').textContent;
+
+                    modalAuthor.textContent = title;
+                    modalText.textContent = p.textContent.trim();
+                    modalScore.textContent = score;
+                    applyColorToEl(modalScore, parseInt(score));
+                    modal.style.display = 'flex';
+                };
+            });
+
+            const close = () => modal.style.display = 'none';
+            document.querySelector('.close-full-review-btn').onclick = close;
+            document.getElementById('close-full-review-btn').onclick = close;
+            window.onclick = (e) => { if (e.target == modal) close(); };
+        }
+    </script>
 </body>
 </html>
