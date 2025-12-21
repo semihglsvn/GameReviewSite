@@ -135,12 +135,21 @@
             <div class="col-6">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px;">
                     <h3 style="margin:0;">Critic Reviews</h3>
-                    <select onchange="sortReviews('critic-list', this.value)" style="padding: 5px;">
-                        <option value="desc">Best Score</option>
-                        <option value="asc">Worst Score</option>
-                    </select>
-                </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <select onchange="filterReviews('critic-list', this.value)" style="padding: 5px;">
+                            <option value="all">Show All</option>
+                            <option value="green">Positive (Green)</option>
+                            <option value="yellow">Mixed (Yellow)</option>
+                            <option value="red">Negative (Red)</option>
+                        </select>
 
+                        <select onchange="sortReviews('critic-list', this.value)" style="padding: 5px;">
+                            <option value="desc">Best Score</option>
+                            <option value="asc">Worst Score</option>
+                        </select>
+                    </div>
+                </div>
                 
 
                 <div id="critic-list">
@@ -204,12 +213,21 @@
             <div class="col-6">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px;">
                     <h3 style="margin:0;">User Reviews</h3>
-                    <select onchange="sortReviews('user-list', this.value)" style="padding: 5px;">
-                        <option value="desc">Best Score</option>
-                        <option value="asc">Worst Score</option>
-                    </select>
-                </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <select onchange="filterReviews('user-list', this.value)" style="padding: 5px;">
+                            <option value="all">Show All</option>
+                            <option value="green">Positive (Green)</option>
+                            <option value="yellow">Mixed (Yellow)</option>
+                            <option value="red">Negative (Red)</option>
+                        </select>
 
+                        <select onchange="sortReviews('user-list', this.value)" style="padding: 5px;">
+                            <option value="desc">Best Score</option>
+                            <option value="asc">Worst Score</option>
+                        </select>
+                    </div>
+                </div>
                 
 
                 <div id="user-list">
@@ -338,7 +356,7 @@
             </div>
         </div>
     </div>
-    
+
     <footer>
         <div class="container">
             <p>&copy; 2024 GameJoint.</p>

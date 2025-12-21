@@ -682,3 +682,7 @@ footer {
     font-weight: bold !important;
     color: #999 !important;
 }
+/* --- FILTER UTILITY --- */
+.review-filtered-hide {
+    display: none !important;
+}

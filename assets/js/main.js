@@ -392,4 +392,63 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+    // --- REVIEW FILTERING LOGIC ---
+    window.filterReviews = function(listId, color) {
+        const list = document.getElementById(listId);
+        const items = list.querySelectorAll('.review-item');
+        const showMoreBtn = document.querySelector(`button[data-target="${listId}"]`);
+
+        // If "Show All" is selected, just reset everything using the sort function
+        if (color === 'all') {
+            // Remove our special filter class
+            items.forEach(item => item.classList.remove('review-filtered-hide'));
+            
+            // Re-run the sort logic to restore the "Top 2 visible" state
+            // (We assume default sort is Descending, or you could grab the current sort value if needed)
+            window.sortReviews(listId, 'desc'); 
+            return;
+        }
+
+        // --- APPLY COLOR FILTER ---
+        let matchCount = 0;
+
+        items.forEach(item => {
+            const score = parseFloat(item.getAttribute('data-score'));
+            
+            // Normalize score (User scores 0-10 -> 0-100 scale)
+            let effective = score <= 10 ? score * 10 : score;
+
+            let isMatch = false;
+            
+            if (color === 'green' && effective >= 75) isMatch = true;
+            else if (color === 'yellow' && effective >= 50 && effective < 75) isMatch = true;
+            else if (color === 'red' && effective < 50) isMatch = true;
+
+            if (isMatch) {
+                // Show it!
+                item.classList.remove('review-filtered-hide'); // Un-filter it
+                item.classList.remove('review-hidden');        // Reveal it from "Show More" stack
+                matchCount++;
+            } else {
+                // Hide it!
+                item.classList.add('review-filtered-hide');
+            }
+        });
+
+        // --- UPDATE SHOW MORE BUTTON ---
+        // When filtering, we show ALL matches immediately, so the "Show More" button is useless.
+        if (showMoreBtn) {
+            showMoreBtn.style.display = 'none';
+        }
+        
+        // Optional: Message if no reviews match
+        if (matchCount === 0) {
+            // You could show a "No reviews found" message here if you wanted
+        }
+        
+        // Re-initialize read more buttons for the newly revealed items
+        if (typeof window.initReadMoreButtons === "function") {
+            window.initReadMoreButtons();
+        }
+    };
 });
