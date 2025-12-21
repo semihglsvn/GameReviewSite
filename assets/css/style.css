@@ -242,13 +242,6 @@ header nav {
     display: inline-block;
 }
 
-/* JS will apply these classes */
-.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
-.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
-.score-green { background-color: #66cc33; }      /* Good: 75-89 */
-.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
-.score-none { background-color: #ccc; }          /* No Score */
-
 footer {
     background-color: #000000; /* CHANGED TO BLACK */
     color: white;
@@ -411,4 +404,548 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+/* --- USER REVIEW STYLES --- */
+.interactive-bar {
+    display: flex;
+    gap: 4px;
+    cursor: pointer;
+    height: 15px;
+    margin-bottom: 5px;
+}
+
+.bar-seg {
+    flex: 1;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+}
+
+/* Review Form */
+.review-textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.submit-review-btn {
+    background-color: #44aa00;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.submit-review-btn:hover {
+    background-color: #66cc33;
+}
+/* --- POPUP MODAL STYLES --- */
+
+/* The dark background overlay */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stays in place when scrolling */
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    z-index: 9999; /* Sit on top of everything */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+/* The actual white box */
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 400px; /* Width of the popup */
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.modal-score-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#review-text {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Disable manual resizing */
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-cancel {
+    background-color: #5a6268;
+    color: white;
+    margin-right: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-cancel:hover { background-color: #6c757d; }
+.btn-submit:hover { background-color: #0056b3; }
+
+/* JS will apply these classes */
+.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
+.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
+.score-green { background-color: #66cc33; }      /* Good: 75-89 */
+.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
+.score-none { background-color: #ccc; }          /* No Score */
+
+/* --- NEW ADDITIONS FOR REVIEWS ONLY --- */
+.dist-bar-container {
+    height: 8px;
+    width: 100%;
+    display: flex;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.btn-read-more {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.btn-read-more:hover { background-color: #000; }
+
+/* --- READ MORE / READ LESS STYLES --- */
+.text-collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 55px; 
+    line-height: 1.4; 
+}
+
+.text-expanded {
+    display: block; 
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+    
+    /* Reset height so it can grow when expanded */
+    height: auto; 
+    min-height: 55px;
+    line-height: 1.4;
+}
+/* --- SHOW MORE  --- */
+.review-hidden {
+    display: none;
+}
+
+.btn-show-more {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #eee;
+    border-radius: 4px;
+}
+
+.btn-show-more:hover {
+    background-color: #535353;
+}
+/* --- UNIFIED TEXT SIZING --- */
+
+#critic-list .text-collapsed,
+#user-list .text-collapsed {
+    min-height: 63px;      /* Exact height for 3 lines of text */
+    line-clamp: 3;         /* Limit both to 3 lines */
+    -webkit-line-clamp: 3; /* For Safari/Chrome */
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Ensure the cards themselves are rigid */
+#critic-list .game-card, 
+#user-list .game-card {
+    height: 250px !important; /* Fixed outer height */
+    display: flex;
+    flex-direction: column;
+}
+
+#critic-list .card-content, 
+#user-list .card-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push footer to bottom */
+#critic-list .card-content > div:last-child,
+#user-list .card-content > div:last-child {
+    margin-top: auto; 
+}
+
+/* Ensure hidden cards stay hidden */
+#critic-list .game-card.review-hidden,
+#user-list .game-card.review-hidden {
+    display: none !important;
+}
+/* --- FIX FOR READ MORE CLICK --- */
+/* This overrides the 3-line limit when you click "Read More" */
+#critic-list .text-expanded,
+#user-list .text-expanded {
+    -webkit-line-clamp: unset !important; /* Allow infinite lines */
+    line-clamp: unset !important;
+    overflow: visible !important;
+    display: block !important; /* disables the box-clamping layout */
+    height: auto !important;
+}
+
+/* Target both the "Full Review" and "Report" links */
+#critic-list .card-content > div:last-child a,
+#user-list .card-content > div:last-child a {
+    /* 1. Flexbox centering to handle icons vs text */
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 100% !important; /* Fill the footer height */
+    
+    /* 2. Text Styling */
+    font-size: 11px !important;
+    font-weight: bold !important;
+    color: #555 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important; /* Remove underline */
+    letter-spacing: 0.5px;
+}
+
+/* Hover effect for both */
+#critic-list .card-content > div:last-child a:hover,
+#user-list .card-content > div:last-child a:hover {
+    color: #000 !important;
+    text-decoration: underline !important;
+}
+
+/* Target the "Switch 2" text on the right */
+#critic-list .card-content > div:last-child span,
+#user-list .card-content > div:last-child span {
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    
+    font-size: 10px !important;
+    font-weight: bold !important;
+    color: #999 !important;
+}
+/* --- FILTER UTILITY --- */
+.review-filtered-hide {
+    display: none !important;
+}
+
+/* --- EXTRACTED INLINE STYLES (Refactor) --- */
+
+/* Utility Spacing & Display */
+.d-inline-block { display: inline-block; }
+.display-block { display: block; }
+.mr-10 { margin-right: 10px; }
+.ml-10 { margin-left: 10px; }
+.mr-15 { margin-right: 15px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-0 { margin-top: 0 !important; }
+.mt-5 { margin-top: 5px; }
+.mt-15 { margin-top: 15px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.p-0 { padding: 0 !important; }
+
+/* Text Utilities */
+.text-meta-small { font-size: 12px; color: #666; }
+.text-sub-grey { font-size: 11px; color: #666; }
+.text-date-grey { font-size: 10px; color: #999; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.font-bold { font-weight: bold; }
+.pointer { cursor: pointer; }
+
+/* Component: Dividers */
+.divider-light { 
+    border: 0; 
+    border-top: 1px solid #eee; 
+    margin: 15px 0; 
+}
+
+/* Component: Rating/Score Area */
+.rate-header-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+.rate-msg-text { 
+    font-weight: bold; 
+    color: #333; 
+}
+#review-input-container {
+    display: none; 
+    margin-top: 15px;
+}
+
+/* Component: List Headers & Filters */
+.section-title-row {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 3px solid #333; 
+    margin-bottom: 15px; 
+    padding-bottom: 10px;
+}
+.h3-nomargin { margin: 0; }
+
+.filter-group { display: flex; gap: 10px; }
+.filter-select { padding: 5px; }
+
+/* Component: Review Cards in List */
+/* Override the ID rule that enforces 250px height when needed */
+.h-auto-imp { height: auto !important; } 
+
+.review-item-header { 
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.metascore-large {
+    margin-right: 10px; 
+    width: 40px; 
+    height: 40px; 
+    line-height: 40px; 
+    font-size: 18px;
+}
+
+.review-body-text { 
+    font-size: 13px; 
+    margin-bottom: 15px; 
+}
+
+.card-footer-flex {
+    border-top: 1px solid #eee; 
+    margin-top: 5px; 
+    padding-top: 10px; 
+    display: flex; 
+    justify-content: space-between;
+}
+
+/* Component: Modals */
+.modal-close-right { 
+    float: right; 
+    font-size: 28px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+.modal-label-block { display: block; margin-bottom: 8px; cursor: pointer; }
+.modal-checkbox { margin-right: 10px; }
+.modal-submit-btn { border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+.modal-width-limited { max-width: 600px; width: 90%; }
+.modal-review-header { display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.modal-text-content { line-height: 1.6; color: #333; font-size: 15px; }
+
+/* --- PROFILE & OVERVIEW STYLES (New) --- */
+
+/* Overview Card Container */
+.overview-card {
+    display: flex; 
+    flex-wrap: wrap; 
+    padding: 0; 
+    overflow: hidden; 
+    border: 1px solid #ddd;
+}
+
+/* Overview: Left Side (Dark Box) */
+.overview-left {
+    background-color: #333; 
+    color: white; 
+    padding: 40px; 
+    text-align: center; 
+    flex: 1; 
+    min-width: 200px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+}
+
+.overview-score-large {
+    font-size: 80px; 
+    font-weight: bold; 
+    line-height: 1;
+}
+
+.overview-label {
+    font-size: 12px; 
+    text-transform: uppercase; 
+    margin-top: 10px; 
+    letter-spacing: 1px;
+}
+
+/* Overview: Right Side (White Box) */
+.overview-right {
+    flex: 3; 
+    padding: 25px; 
+    background-color: white; 
+    min-width: 300px;
+}
+
+.overview-title {
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 13px; 
+    margin-top: 0;
+}
+
+/* Distribution Bars */
+.dist-row {
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 8px;
+}
+
+.dist-label {
+    width: 70px; 
+    font-size: 12px;
+}
+
+.dist-track {
+    flex-grow: 1; 
+    height: 10px; 
+    background-color: #eee; 
+    margin: 0 15px;
+}
+
+.dist-fill {
+    height: 100%;
+}
+.bg-pos { background-color: #66cc33; }
+.bg-mix { background-color: #ffcc33; }
+.bg-neg { background-color: #ff4d4d; }
+
+.dist-count {
+    font-size: 12px; 
+    font-weight: bold;
+}
+
+/* High/Low Score Section */
+.high-low-label {
+    font-size: 11px; 
+    text-transform: uppercase; 
+    color: #777;
+}
+
+.high-low-row {
+    display: flex; 
+    align-items: center; 
+    margin-top: 5px;
+}
+
+.metascore-mini {
+    width: 30px !important; 
+    height: 30px !important; 
+    line-height: 30px !important; 
+    font-size: 14px !important;
+    margin-right: 0.5rem;
+}
+
+.game-name-small {
+    font-size: 13px;
+}
+
+/* Review List Items (Profile Specific) */
+.review-item-auto {
+    margin-bottom: 20px; 
+    height: auto !important; /* Overrides fixed height if present */
+}
+
+.review-date-small {
+    font-size: 10px; 
+    color: #999; 
+    margin-bottom: 10px;
+}
+
+.review-title-large {
+    font-weight: bold; 
+    font-size: 18px; 
+    color: #2a2a2a; 
+    text-decoration: underline;
+}
+
+.card-footer-profile {
+    border-top: 1px solid #eee; 
+    margin-top: 5px; 
+    padding-top: 10px; 
+    display: flex; 
+    justify-content: space-between;
+}
+
+.footer-link-small {
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #555;
+}
+
+.footer-tag-small {
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #999;
+}
+
+/* Logout Link */
+.nav-logout {
+    color: #ff6b6b !important;
+}
+
+/* Modal Specifics */
+.modal-content-profile {
+    text-align: left; 
+    max-width: 600px; 
+    width: 90%;
 }
