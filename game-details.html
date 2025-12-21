@@ -49,15 +49,15 @@
             <div class="col-12">
                 <h2>Baldur's Gate 3</h2>
                 <div class="col-8">
-                    <p class="platform-tag" style="display:inline-block; margin-right: 10px;">PC</p>
-                    <p class="platform-tag" style="display:inline-block; margin-right: 10px;">RPG</p>
-                    <span style="font-size: 12px; color: #666;">Released On: Aug 3, 2023</span>
+                    <p class="platform-tag d-inline-block mr-10">PC</p>
+                    <p class="platform-tag d-inline-block mr-10">RPG</p>
+                    <span class="text-meta-small">Released On: Aug 3, 2023</span>
                 </div>
                 <div class="col-4">
-                    <p class="platform-tag" style="display:inline-block; margin-left: 10px;">DEV</p>
-                    <span style="font-size: 12px; color: #666;">Larien Studios</span>
-                    <p class="platform-tag" style="display:inline-block; margin-left: 10px;">PUB</p>
-                    <span style="font-size: 12px; color: #666;">Larien Studios</span>
+                    <p class="platform-tag d-inline-block ml-10">DEV</p>
+                    <span class="text-meta-small">Larien Studios</span>
+                    <p class="platform-tag d-inline-block ml-10">PUB</p>
+                    <span class="text-meta-small">Larien Studios</span>
                 </div>
             </div>
         </div>
@@ -75,28 +75,28 @@
                 <div class="game-card">
                     <div class="card-content">
                         <h3>Metascore</h3>
-                        <div class="meta-footer" style="border: none; margin-top: 0;">
+                        <div class="meta-footer no-border mt-0">
                             <span>Universal Acclaim</span>
                             <div class="metascore score-dark-green">96</div>
                         </div>
-                        <p style="font-size: 11px; color: #666; margin-top: 5px;">Based on 112 Critic Reviews</p>
+                        <p class="text-sub-grey mt-5">Based on 112 Critic Reviews</p>
 
-                        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                        <hr class="divider-light">
 
                         <h3>User Score</h3>
-                        <div class="meta-footer" style="border: none; margin-top: 0;">
+                        <div class="meta-footer no-border mt-0">
                             <span>Universal Acclaim</span>
                             <div class="detailmetascore score-green">9.2</div>
                         </div>
-                        <p style="font-size: 11px; color: #666; margin-top: 5px;">Based on 19,880 User Ratings</p>
+                        <p class="text-sub-grey mt-5">Based on 19,880 User Ratings</p>
                         
-                        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                        <hr class="divider-light">
                             
                         <h3>Add Your Review</h3>
-                        <div class="meta-footer no-border no-margin-top" style="display:block;">
+                        <div class="meta-footer no-border no-margin-top display-block">
                                 
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <span id="rate-msg" style="font-weight: bold; color: #333;">Rate this game</span>
+                            <div class="rate-header-row">
+                                <span id="rate-msg" class="rate-msg-text">Rate this game</span>
                                 <div id="my-score-circle" class="detailmetascore score-none">?</div>
                             </div>
 
@@ -113,7 +113,7 @@
                                 <div class="bar-seg" data-value="10"></div>
                             </div>
 
-                            <div id="review-input-container" style="display: none; margin-top: 15px;">
+                            <div id="review-input-container">
                                 <textarea placeholder="Write your review here..." class="review-textarea"></textarea>
                                 <button class="submit-review-btn">Post Review</button>
                             </div>
@@ -130,21 +130,21 @@
                 
         </div>
         
-        <div class="row" style="margin-top: 30px;">
+        <div class="row mt-30">
     
             <div class="col-6">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px;">
-                    <h3 style="margin:0;">Critic Reviews</h3>
+                <div class="section-title-row">
+                    <h3 class="h3-nomargin">Critic Reviews</h3>
                     
-                    <div style="display: flex; gap: 10px;">
-                        <select onchange="filterReviews('critic-list', this.value)" style="padding: 5px;">
+                    <div class="filter-group">
+                        <select onchange="filterReviews('critic-list', this.value)" class="filter-select">
                             <option value="all">Show All</option>
                             <option value="green">Positive (Green)</option>
                             <option value="yellow">Mixed (Yellow)</option>
                             <option value="red">Negative (Red)</option>
                         </select>
 
-                        <select onchange="sortReviews('critic-list', this.value)" style="padding: 5px;">
+                        <select onchange="sortReviews('critic-list', this.value)" class="filter-select">
                             <option value="desc">Best Score</option>
                             <option value="asc">Worst Score</option>
                             <option value="date-desc">Newest First</option>
@@ -155,56 +155,56 @@
                 
 
                 <div id="critic-list">
-                    <div class="game-card review-item" data-score="85" style="margin-bottom: 20px; height: auto;">
+                    <div class="game-card review-item h-auto-imp mb-20" data-score="85">
                         <div class="card-content">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 15, 2025</div>
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="metascore" style="margin-right: 10px; width: 40px; height: 40px; line-height: 40px; font-size: 18px;">85</div>
-                                <a href="profile-critic.html" style="margin: 0;">Hobby Consolas</a>
+                            <div class="text-date-grey mb-10">DEC 15, 2025</div>
+                            <div class="review-item-header">
+                                <div class="metascore metascore-large">85</div>
+                                <h4><a href="profile-critic.html" class="h3-nomargin">Hobby Consolas</a></h4>
                             </div>
-                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                            <p class="text-collapsed review-body-text">
                                 Mega Dimension does many things well, but its greatest strength is that it was designed for people who have already completed Pokémon Legends: Z-A and want more. It expands on the lore in ways that feel meaningful rather than tacked on. However, newcomers might feel lost.
                             </p>
                             <button class="btn-read-more">Read More</button>
-                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
-                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
-                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH 2</span>
+                            <div class="card-footer-flex">
+                                <a href="#" class="footer-link-bold">FULL REVIEW 🔗</a>
+                                <span class="footer-platform-tag">SWITCH 2</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="game-card review-item" data-score="60" style="margin-bottom: 20px; height: auto;">
+                    <div class="game-card review-item h-auto-imp mb-20" data-score="60">
                         <div class="card-content">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 12, 2025</div>
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="metascore" style="margin-right: 10px; width: 40px; height: 40px; line-height: 40px; font-size: 18px;">60</div>
-                                <a href="profile-critic.html"style="margin: 0;">IGN Spains</a>
+                            <div class="text-date-grey mb-10">DEC 12, 2025</div>
+                            <div class="review-item-header">
+                                <div class="metascore metascore-large">60</div>
+                                <h4><a href="profile-critic.html" class="h3-nomargin">IGN Spains</a></h4>
                             </div>
-                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                            <p class="text-collapsed review-body-text">
                                 It is okay but not great. The graphics are stunning but the gameplay loop feels repetitive after the first few hours. We expected more innovation from this studio.
                             </p>
                             <button class="btn-read-more">Read More</button>
-                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
-                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
-                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH 2</span>
+                            <div class="card-footer-flex">
+                                <a href="#" class="footer-link-bold">FULL REVIEW 🔗</a>
+                                <span class="footer-platform-tag">SWITCH 2</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="game-card review-item review-hidden" data-score="75" style="margin-bottom: 20px; height: auto;">
+                    <div class="game-card review-item review-hidden h-auto-imp mb-20" data-score="75">
                         <div class="card-content">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 10, 2025</div>
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="metascore" style="margin-right: 10px; width: 40px; height: 40px; line-height: 40px; font-size: 18px;">75</div>
-                                <a href="profile-critic.html"style="margin: 0;">GameSpot</a>
+                            <div class="text-date-grey mb-10">DEC 10, 2025</div>
+                            <div class="review-item-header">
+                                <div class="metascore metascore-large">75</div>
+                                <h4><a href="profile-critic.html" class="h3-nomargin">GameSpot</a></h4>
                             </div>
-                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                            <p class="text-collapsed review-body-text">
                                 A solid entry in the series that plays it safe.
                             </p>
                             <button class="btn-read-more">Read More</button>
-                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
-                                <a href="#" style="font-size: 10px; font-weight: bold; color: #555;">FULL REVIEW 🔗</a>
-                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH 2</span>
+                            <div class="card-footer-flex">
+                                <a href="#" class="footer-link-bold">FULL REVIEW 🔗</a>
+                                <span class="footer-platform-tag">SWITCH 2</span>
                             </div>
                         </div>
                     </div>
@@ -213,18 +213,18 @@
             </div>
 
             <div class="col-6">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px;">
-                    <h3 style="margin:0;">User Reviews</h3>
+                <div class="section-title-row">
+                    <h3 class="h3-nomargin">User Reviews</h3>
                     
-                    <div style="display: flex; gap: 10px;">
-                        <select onchange="filterReviews('user-list', this.value)" style="padding: 5px;">
+                    <div class="filter-group">
+                        <select onchange="filterReviews('user-list', this.value)" class="filter-select">
                             <option value="all">Show All</option>
                             <option value="green">Positive (Green)</option>
                             <option value="yellow">Mixed (Yellow)</option>
                             <option value="red">Negative (Red)</option>
                         </select>
 
-                        <select onchange="sortReviews('user-list', this.value)" style="padding: 5px;">
+                        <select onchange="sortReviews('user-list', this.value)" class="filter-select">
                             <option value="desc">Best Score</option>
                             <option value="asc">Worst Score</option>
                             <option value="date-desc">Newest First</option>
@@ -235,55 +235,55 @@
                 
 
                 <div id="user-list">
-                    <div class="game-card review-item" data-score="9" style="margin-bottom: 20px; height: auto;">
+                    <div class="game-card review-item h-auto-imp mb-20" data-score="9">
                         <div class="card-content">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 19, 2025</div>
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="detailmetascore" style="margin-right: 10px; width: 40px; height: 40px; line-height: 40px; font-size: 18px;">9</div>
-                                <a href="profile.html"style="margin: 0;">Kidboo05</a>
+                            <div class="text-date-grey mb-10">DEC 19, 2025</div>
+                            <div class="review-item-header">
+                                <div class="detailmetascore metascore-large">9</div>
+                                <h4><a href="profile.html" class="h3-nomargin">Kidboo05</a></h4>
                             </div>
-                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                            <p class="text-collapsed review-body-text">
                                 This DLC is not fun at all. They want to justify the price by making the content longer with a lot of grinding. The DLC is boring repetitive Side Quests are so annoying. The only positive is the new map design.
                             </p>
                             <button class="btn-read-more">Read More</button>
-                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
-                                <a href="#" class="btn-report" style="font-size: 10px; font-weight: bold; color: #555;">REPORT</a>
-                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH 2</span>
+                            <div class="card-footer-flex">
+                                <a href="#" class="btn-report footer-link-bold">REPORT</a>
+                                <span class="footer-platform-tag">SWITCH 2</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="game-card review-item" data-score="2" style="margin-bottom: 20px; height: auto;">
+                    <div class="game-card review-item h-auto-imp mb-20" data-score="2">
                         <div class="card-content">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 20, 2025</div>
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="detailmetascore" style="margin-right: 10px; width: 40px; height: 40px; line-height: 40px; font-size: 18px;">2</div>
-                                <a href="profile.html"style="margin: 0;">AngryGamer</a>
+                            <div class="text-date-grey mb-10">DEC 20, 2025</div>
+                            <div class="review-item-header">
+                                <div class="detailmetascore metascore-large">2</div>
+                                <h4><a href="profile.html" class="h3-nomargin">AngryGamer</a></h4>
                             </div>
-                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                            <p class="text-collapsed review-body-text">
                                 Terrible performance on launch. It crashes every 30 minutes. Do not buy until patched.
                             </p>
                             <button class="btn-read-more">Read More</button>
-                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
-                                <a href="#" class="btn-report" style="font-size: 10px; font-weight: bold; color: #555;">REPORT</a>
-                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH 2</span>
+                            <div class="card-footer-flex">
+                                <a href="#" class="btn-report footer-link-bold">REPORT</a>
+                                <span class="footer-platform-tag">SWITCH 2</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="game-card review-item review-hidden" data-score="10" style="margin-bottom: 20px; height: auto;">
+                    <div class="game-card review-item review-hidden h-auto-imp mb-20" data-score="10">
                         <div class="card-content">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 10px;">DEC 22, 2025</div>
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="detailmetascore" style="margin-right: 10px; width: 40px; height: 40px; line-height: 40px; font-size: 18px;">10</div>
-                                <a href="profile.html"style="margin: 0;">FanBoy99</a>
+                            <div class="text-date-grey mb-10">DEC 22, 2025</div>
+                            <div class="review-item-header">
+                                <div class="detailmetascore metascore-large">10</div>
+                                <h4><a href="profile.html" class="h3-nomargin">FanBoy99</a></h4>
                             </div>
-                            <p class="text-collapsed" style="font-size: 13px; margin-bottom: 15px;">
+                            <p class="text-collapsed review-body-text">
                                 Best game ever made!
                             </p>
-                            <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display:flex; justify-content:space-between;">
-                                <a href="#" class="btn-report" style="font-size: 10px; font-weight: bold; color: #555;">REPORT</a>
-                                <span style="font-size: 10px; font-weight: bold; color: #999;">SWITCH 2</span>
+                            <div class="card-footer-flex">
+                                <a href="#" class="btn-report footer-link-bold">REPORT</a>
+                                <span class="footer-platform-tag">SWITCH 2</span>
                             </div>
                         </div>
                     </div>
@@ -298,15 +298,15 @@
             
             <h3>Write a Review</h3>
             
-            <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <div class="mb-15" style="display: flex; align-items: center; gap: 10px;">
                 <span>Your Score:</span>
                 <div id="modal-score-circle" class="detailmetascore">?</div>
             </div>
 
             <textarea placeholder="Tell us what you loved or hated..." class="review-textarea" rows="5"></textarea>
             
-            <div style="text-align: right; margin-top: 10px;">
-                <button id="cancel-modal-btn" class="btn-cancel" style="margin-right: 10px;">Cancel</button>
+            <div class="text-right mt-10">
+                <button id="cancel-modal-btn" class="btn-cancel mr-10">Cancel</button>
                 <button class="submit-review-btn" style="width: auto; padding: 10px 20px;">Post</button>
             </div>
         </div>
@@ -314,48 +314,48 @@
 
     <div id="report-modal" class="modal-overlay">
         <div class="modal-content">
-            <span class="close-report-btn" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <span class="close-report-btn modal-close-right">&times;</span>
             
-            <h3 style="margin-top: 0;">Report Review</h3>
-            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Select all that apply:</p>
+            <h3 class="mt-0">Report Review</h3>
+            <p class="text-sub-grey mb-15" style="font-size: 14px;">Select all that apply:</p>
 
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; cursor: pointer;">
-                    <input type="checkbox" value="spam" style="margin-right: 10px;">Spam or Advertising
+            <div class="text-left mb-20">
+                <label class="modal-label-block">
+                    <input type="checkbox" value="spam" class="modal-checkbox">Spam or Advertising
                 </label>
-                <label style="display: block; margin-bottom: 8px; cursor: pointer;">
-                    <input type="checkbox" value="abuse" style="margin-right: 10px;">Abusive or Harassing
+                <label class="modal-label-block">
+                    <input type="checkbox" value="abuse" class="modal-checkbox">Abusive or Harassing
                 </label>
-                <label style="display: block; margin-bottom: 8px; cursor: pointer;">
-                    <input type="checkbox" value="irrelevant" style="margin-right: 10px;">Off-topic / Irrelevant
+                <label class="modal-label-block">
+                    <input type="checkbox" value="irrelevant" class="modal-checkbox">Off-topic / Irrelevant
                 </label>
-                <label style="display: block; margin-bottom: 8px; cursor: pointer;">
-                    <input type="checkbox" value="spoiler" style="margin-right: 10px;">Contains Spoilers
+                <label class="modal-label-block">
+                    <input type="checkbox" value="spoiler" class="modal-checkbox">Contains Spoilers
                 </label>
             </div>
             
-            <div style="text-align: right;">
+            <div class="text-right">
                 <button id="cancel-report-btn" class="btn-cancel">Cancel</button>
-                <button class="btn-submit" style="border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer;">Submit Report</button>
+                <button class="btn-submit modal-submit-btn">Submit Report</button>
             </div>
         </div>
     </div>
 </div>
 
     <div id="full-review-modal" class="modal-overlay">
-        <div class="modal-content" style="text-align: left; max-width: 600px; width: 90%;">
-            <span class="close-full-review-btn" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+        <div class="modal-content text-left modal-width-limited">
+            <span class="close-full-review-btn modal-close-right">&times;</span>
             
-            <div style="display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <div id="modal-review-score" class="detailmetascore" style="margin-right: 15px;"></div>
-                <h3 id="modal-review-author" style="margin: 0;">Author Name</h3>
+            <div class="modal-review-header">
+                <div id="modal-review-score" class="detailmetascore mr-15"></div>
+                <h3 id="modal-review-author" class="h3-nomargin">Author Name</h3>
             </div>
 
-            <p id="modal-review-text" style="line-height: 1.6; color: #333; font-size: 15px;">
+            <p id="modal-review-text" class="modal-text-content">
                 Review text goes here...
             </p>
             
-            <div style="text-align: right; margin-top: 20px;">
+            <div class="text-right mt-20">
                 <button id="close-full-review-btn" class="btn-cancel" style="background: #333;">Close</button>
             </div>
         </div>

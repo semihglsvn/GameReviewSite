@@ -332,42 +332,70 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function initReadMoreButtons() {
+function initReadMoreButtons() {
         const readMoreBtns = document.querySelectorAll('.btn-read-more');
 
-        readMoreBtns.forEach(btn => {
-            btn.onclick = null; 
-            btn.onclick = function(e) {
-                e.preventDefault();
-                const card = btn.closest('.game-card');
-                if(!card) return;
-
-                const author = card.querySelector('h4').textContent;
-                const scoreBox = card.querySelector('.metascore') || card.querySelector('.detailmetascore');
-                const fullText = btn.previousElementSibling.textContent.trim();
-
-                modalAuthor.textContent = author;
-                modalText.textContent = fullText;
+        // 1. Define the logic to check heights
+        const updateVisibility = () => {
+            readMoreBtns.forEach(btn => {
+                const textElement = btn.previousElementSibling;
+                const card = btn.closest('.game-card, .review-item');
                 
-                modalScore.className = scoreBox.className; 
-                modalScore.textContent = scoreBox.textContent;
-                modalScore.style.width = "50px";
-                modalScore.style.height = "50px";
-                modalScore.style.lineHeight = "50px";
-                modalScore.style.fontSize = "22px";
+                if (!textElement || !card) return;
 
-                fullReviewModal.style.display = 'flex';
-            };
-            
-            const textElement = btn.previousElementSibling;
-            if(textElement && textElement.scrollHeight > textElement.clientHeight + 2) {
-                btn.style.display = 'inline-block';
-            } else {
-                btn.style.display = 'none';
-            }
-        });
+                // --- LOGIC: HEIGHT CHECK ---
+                // We compare the total height of the text (scrollHeight) 
+                // vs the visible height allowed by CSS (clientHeight).
+                // We add a 5px buffer to account for font-smoothing/sub-pixel differences.
+                if (textElement.scrollHeight > textElement.clientHeight + 5) {
+                    btn.style.display = 'inline-block';
+                } else {
+                    btn.style.display = 'none';
+                }
+                
+                // --- CLICK HANDLER (Same as before) ---
+                // Only attach if we haven't already (to avoid duplicate listeners)
+                if (!btn.hasAttribute('data-init')) {
+                    btn.setAttribute('data-init', 'true');
+                    
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+
+                        const authorEl = card.querySelector('h4') || card.querySelector('.author') || card.querySelector('a');
+                        const author = authorEl ? authorEl.textContent.trim() : "Unknown";
+                        const scoreBox = card.querySelector('.metascore') || card.querySelector('.detailmetascore');
+                        
+                        // Get full text
+                        let fullText = textElement.textContent.trim();
+
+                        // Populate Modal
+                        if(modalAuthor) modalAuthor.textContent = author;
+                        if(modalText) modalText.textContent = fullText;
+                        
+                        if (modalScore && scoreBox) {
+                            modalScore.className = scoreBox.className; 
+                            modalScore.textContent = scoreBox.textContent;
+                            modalScore.style.width = "50px";
+                            modalScore.style.height = "50px";
+                            modalScore.style.lineHeight = "50px";
+                            modalScore.style.fontSize = "22px";
+                        }
+
+                        if(fullReviewModal) fullReviewModal.style.display = 'flex';
+                    };
+                }
+            });
+        };
+
+        // 2. Run the check immediately
+        updateVisibility();
+
+        // 3. Run the check again after a slight delay to ensure fonts/layout are loaded
+        setTimeout(updateVisibility, 100);
+
+        // 4. Update on window resize (in case text wraps differently)
+        window.addEventListener('resize', updateVisibility);
     }
-
     initReadMoreButtons();
     window.initReadMoreButtons = initReadMoreButtons;
 

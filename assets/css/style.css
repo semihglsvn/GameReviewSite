@@ -680,3 +680,272 @@ footer {
 .review-filtered-hide {
     display: none !important;
 }
+
+/* --- EXTRACTED INLINE STYLES (Refactor) --- */
+
+/* Utility Spacing & Display */
+.d-inline-block { display: inline-block; }
+.display-block { display: block; }
+.mr-10 { margin-right: 10px; }
+.ml-10 { margin-left: 10px; }
+.mr-15 { margin-right: 15px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-0 { margin-top: 0 !important; }
+.mt-5 { margin-top: 5px; }
+.mt-15 { margin-top: 15px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.p-0 { padding: 0 !important; }
+
+/* Text Utilities */
+.text-meta-small { font-size: 12px; color: #666; }
+.text-sub-grey { font-size: 11px; color: #666; }
+.text-date-grey { font-size: 10px; color: #999; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.font-bold { font-weight: bold; }
+.pointer { cursor: pointer; }
+
+/* Component: Dividers */
+.divider-light { 
+    border: 0; 
+    border-top: 1px solid #eee; 
+    margin: 15px 0; 
+}
+
+/* Component: Rating/Score Area */
+.rate-header-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+.rate-msg-text { 
+    font-weight: bold; 
+    color: #333; 
+}
+#review-input-container {
+    display: none; 
+    margin-top: 15px;
+}
+
+/* Component: List Headers & Filters */
+.section-title-row {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 3px solid #333; 
+    margin-bottom: 15px; 
+    padding-bottom: 10px;
+}
+.h3-nomargin { margin: 0; }
+
+.filter-group { display: flex; gap: 10px; }
+.filter-select { padding: 5px; }
+
+/* Component: Review Cards in List */
+/* Override the ID rule that enforces 250px height when needed */
+.h-auto-imp { height: auto !important; } 
+
+.review-item-header { 
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.metascore-large {
+    margin-right: 10px; 
+    width: 40px; 
+    height: 40px; 
+    line-height: 40px; 
+    font-size: 18px;
+}
+
+.review-body-text { 
+    font-size: 13px; 
+    margin-bottom: 15px; 
+}
+
+.card-footer-flex {
+    border-top: 1px solid #eee; 
+    margin-top: 5px; 
+    padding-top: 10px; 
+    display: flex; 
+    justify-content: space-between;
+}
+
+/* Component: Modals */
+.modal-close-right { 
+    float: right; 
+    font-size: 28px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+.modal-label-block { display: block; margin-bottom: 8px; cursor: pointer; }
+.modal-checkbox { margin-right: 10px; }
+.modal-submit-btn { border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+.modal-width-limited { max-width: 600px; width: 90%; }
+.modal-review-header { display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.modal-text-content { line-height: 1.6; color: #333; font-size: 15px; }
+
+/* --- PROFILE & OVERVIEW STYLES (New) --- */
+
+/* Overview Card Container */
+.overview-card {
+    display: flex; 
+    flex-wrap: wrap; 
+    padding: 0; 
+    overflow: hidden; 
+    border: 1px solid #ddd;
+}
+
+/* Overview: Left Side (Dark Box) */
+.overview-left {
+    background-color: #333; 
+    color: white; 
+    padding: 40px; 
+    text-align: center; 
+    flex: 1; 
+    min-width: 200px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+}
+
+.overview-score-large {
+    font-size: 80px; 
+    font-weight: bold; 
+    line-height: 1;
+}
+
+.overview-label {
+    font-size: 12px; 
+    text-transform: uppercase; 
+    margin-top: 10px; 
+    letter-spacing: 1px;
+}
+
+/* Overview: Right Side (White Box) */
+.overview-right {
+    flex: 3; 
+    padding: 25px; 
+    background-color: white; 
+    min-width: 300px;
+}
+
+.overview-title {
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 13px; 
+    margin-top: 0;
+}
+
+/* Distribution Bars */
+.dist-row {
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 8px;
+}
+
+.dist-label {
+    width: 70px; 
+    font-size: 12px;
+}
+
+.dist-track {
+    flex-grow: 1; 
+    height: 10px; 
+    background-color: #eee; 
+    margin: 0 15px;
+}
+
+.dist-fill {
+    height: 100%;
+}
+.bg-pos { background-color: #66cc33; }
+.bg-mix { background-color: #ffcc33; }
+.bg-neg { background-color: #ff4d4d; }
+
+.dist-count {
+    font-size: 12px; 
+    font-weight: bold;
+}
+
+/* High/Low Score Section */
+.high-low-label {
+    font-size: 11px; 
+    text-transform: uppercase; 
+    color: #777;
+}
+
+.high-low-row {
+    display: flex; 
+    align-items: center; 
+    margin-top: 5px;
+}
+
+.metascore-mini {
+    width: 30px !important; 
+    height: 30px !important; 
+    line-height: 30px !important; 
+    font-size: 14px !important;
+    margin-right: 0.5rem;
+}
+
+.game-name-small {
+    font-size: 13px;
+}
+
+/* Review List Items (Profile Specific) */
+.review-item-auto {
+    margin-bottom: 20px; 
+    height: auto !important; /* Overrides fixed height if present */
+}
+
+.review-date-small {
+    font-size: 10px; 
+    color: #999; 
+    margin-bottom: 10px;
+}
+
+.review-title-large {
+    font-weight: bold; 
+    font-size: 18px; 
+    color: #2a2a2a; 
+    text-decoration: underline;
+}
+
+.card-footer-profile {
+    border-top: 1px solid #eee; 
+    margin-top: 5px; 
+    padding-top: 10px; 
+    display: flex; 
+    justify-content: space-between;
+}
+
+.footer-link-small {
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #555;
+}
+
+.footer-tag-small {
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #999;
+}
+
+/* Logout Link */
+.nav-logout {
+    color: #ff6b6b !important;
+}
+
+/* Modal Specifics */
+.modal-content-profile {
+    text-align: left; 
+    max-width: 600px; 
+    width: 90%;
+}
