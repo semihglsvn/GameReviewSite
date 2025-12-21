@@ -206,7 +206,7 @@ header nav {
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-    border-top: 10px solid #eee;
+    border-top: 1px solid #eee;
     padding-top: 10px;
 }
 
@@ -227,14 +227,20 @@ header nav {
     text-align: center;
     line-height: 35px;
     border-radius: 4px;
+    display: inline-block;
 }
 
-/* JS will apply these classes */
-.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
-.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
-.score-green { background-color: #66cc33; }      /* Good: 75-89 */
-.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
-.score-none { background-color: #ccc; }          /* No Score */
+.detailmetascore {
+    width: 35px;
+    height: 35px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 50%;
+    display: inline-block;
+}
 
 footer {
     background-color: #000000; /* CHANGED TO BLACK */
@@ -275,35 +281,245 @@ footer {
     .game-card {
         margin-bottom: 15px;
     }
+}
 
-    /* Turn the square input box into a circle */
-.my-score-input {
-    width: 50px;       /* Fixed width */
-    height: 50px;      /* Fixed height */
-    border-radius: 50%; /* 50% radius makes it a perfect circle */
-    
-    border: 2px solid #ccc; /* Gray border */
-    text-align: center;     /* Number goes in the middle */
-    font-size: 20px;
-    font-weight: bold;
+/* --- GAME DETAILS PAGE STYLES --- */
+
+.inline-tag {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.release-date {
+    font-size: 12px;
+    color: #666;
+}
+
+.video-card {
+    padding: 0; /* Remove padding for video container so it fits edge-to-edge */
+    background-color: black; /* Black background for video player look */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.responsive-video {
+    width: 100%;
+    height: auto;
     display: block;
-    margin: 0 auto 10px auto; /* Center it in the sidebar */
-    outline: none;     /* Removes the default blue glow */
-    transition: all 0.3s ease;
 }
 
-/* When you click inside it to type */
-.my-score-input:focus {
-    border-color: #4CAF50; /* Turns green */
-    color: #4CAF50;        /* Text becomes green */
-    background-color: #f9fff9; /* Very light green background */
+.no-border {
+    border: none !important;
 }
 
-/* Hide the little up/down arrows on number inputs (optional, makes it cleaner) */
-.my-score-input::-webkit-inner-spin-button, 
-.my-score-input::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+.no-margin-top {
+    margin-top: 0 !important;
 }
 
+.score-subtitle {
+    font-size: 11px;
+    color: #666;
+    margin-top: 5px;
 }
+
+.divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+
+.section-divider {
+    margin: 30px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.review-header {
+    border-top: none;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.review-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* --- SLIDER STYLES (Metacritic Style) --- */
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Hides the cards that are off-screen */
+    padding: 10px 0; /* Space for shadows */
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth sliding animation */
+    width: 100%;
+}
+
+.slide {
+    min-width: 100%; /* Each slide takes up the full container width */
+    flex-shrink: 0;
+}
+
+/* UPDATED SLIDER NAVIGATION BUTTONS (Header Positioned) */
+.slider-nav-btn {
+    position: static; /* Removed absolute positioning */
+    transform: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    width: 30px; /* Adjusted size */
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    margin-left: 5px; /* Spacing between buttons */
+}
+
+.slider-nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.slider-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+/* Ensure Row inside slide behaves correctly */
+.slide .row {
+    margin: 0; /* Remove default row margins if any */
+}
+
+/* Header Flex Utility for Title + Buttons */
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- USER REVIEW STYLES --- */
+.interactive-bar {
+    display: flex;
+    gap: 4px;
+    cursor: pointer;
+    height: 15px;
+    margin-bottom: 5px;
+}
+
+.bar-seg {
+    flex: 1;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+}
+
+/* Review Form */
+.review-textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.submit-review-btn {
+    background-color: #44aa00;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.submit-review-btn:hover {
+    background-color: #66cc33;
+}
+/* --- POPUP MODAL STYLES --- */
+
+/* The dark background overlay */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stays in place when scrolling */
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    z-index: 9999; /* Sit on top of everything */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+/* The actual white box */
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 400px; /* Width of the popup */
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.modal-score-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#review-text {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Disable manual resizing */
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-cancel {
+    background-color: #5a6268;
+    color: white;
+    margin-right: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-cancel:hover { background-color: #6c757d; }
+.btn-submit:hover { background-color: #0056b3; }
+
+/* JS will apply these classes */
+.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
+.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
+.score-green { background-color: #66cc33; }      /* Good: 75-89 */
+.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
+.score-none { background-color: #ccc; }          /* No Score */

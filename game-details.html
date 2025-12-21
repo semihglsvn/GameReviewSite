@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baldur's Gate 3 - GameJoint</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js"></script>
 </head>
 <body>
 
@@ -56,12 +57,9 @@
             
             <div class="col-8">
                 <div class="game-card">
-                    <video controls width="720" alt="Your browser does not support this video type">
-                        <source src="assets\images\Baldurs Gate 3 Launch Trailer.mp4" autoplay="false">
-                    </video>
-                    
-                    
-                </div>
+                    <img alt="Your browser does not support this image type"
+                        src="assets\images\baldursgate3.jpg" height="400px">
+                    </div>
             </div>
 
             <div class="col-4">
@@ -90,22 +88,71 @@
                             <span>RPG</span>   
                         </div>
                         
-                        <div class="card-content">
-                        
-            </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="row section-header">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="creator-tag">
+                        <h4>Developer: Larian Studios</h4>
+                        <h4>Publisher: Larian Studios</h4>
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+        
         <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
 
-        <div class="row section-header">
-            <div class="col-12">
+        <div class="row">
+            
+            <div class="row section-header">
+            <div class="col-8">
                 <h2>Critic Reviews</h2>
-            </div>
-        </div>
+                </div>
+            
+            <div class="col-4">
+                <div class="game-card">
+                    <div class="card-content">
+                        <br>
+                        
+                        <h3>Add Your Review</h3>
+                        <div class="meta-footer no-border no-margin-top" style="display:block;">
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span id="rate-msg" style="font-weight: bold; color: #333;">Rate this game</span>
+                                <div id="my-score-circle" class="detailmetascore score-none">?</div>
+                            </div>
 
+                            <div class="interactive-bar" id="score-bar">
+                                <div class="bar-seg" data-value="1"></div>
+                                <div class="bar-seg" data-value="2"></div>
+                                <div class="bar-seg" data-value="3"></div>
+                                <div class="bar-seg" data-value="4"></div>
+                                <div class="bar-seg" data-value="5"></div>
+                                <div class="bar-seg" data-value="6"></div>
+                                <div class="bar-seg" data-value="7"></div>
+                                <div class="bar-seg" data-value="8"></div>
+                                <div class="bar-seg" data-value="9"></div>
+                                <div class="bar-seg" data-value="10"></div>
+                            </div>
+
+                            <div id="review-input-container" style="display: none; margin-top: 15px;">
+                                <textarea placeholder="Write your review here..." class="review-textarea"></textarea>
+                                <button class="submit-review-btn">Post Review</button>
+                            </div>
+
+                        </div>
+                        </div>
+                </div>
+            </div>
+
+        </div>
+        
+         
         <div class="row">
             <div class="col-6">
                 <div class="game-card">
@@ -179,8 +226,25 @@
             <p>&copy; 2024 GameJoint.</p>
         </div>
     </footer>
+    
+    <div id="review-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            
+            <h3>Write a Review</h3>
+            
+            <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <span>Your Score:</span>
+                <div id="modal-score-circle" class="detailmetascore">?</div>
+            </div>
 
-    <script src="assets/js/main.js"></script>
-
+            <textarea placeholder="Tell us what you loved or hated..." class="review-textarea" rows="5"></textarea>
+            
+            <div style="text-align: right; margin-top: 10px;">
+                <button id="cancel-modal-btn" class="btn-cancel" style="margin-right: 10px;">Cancel</button>
+                <button class="submit-review-btn" style="width: auto; padding: 10px 20px;">Post</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
