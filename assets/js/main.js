@@ -259,7 +259,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // --- REVIEW SORTING LOGIC (Score & Time) ---
-    // UPDATED to include Date sorting
     window.sortReviews = function(listId, order) {
         const list = document.getElementById(listId);
         const items = Array.from(list.getElementsByClassName('review-item'));
@@ -267,11 +266,9 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // 1. Sort the items
         items.sort((a, b) => {
-            // Get Score Data
+            // Get Data
             const scoreA = parseFloat(a.getAttribute('data-score'));
             const scoreB = parseFloat(b.getAttribute('data-score'));
-            
-            // Get Date Data (Finds the date text like "DEC 15, 2025")
             const dateTextA = a.querySelector('.card-content > div:first-child').textContent.trim();
             const dateTextB = b.querySelector('.card-content > div:first-child').textContent.trim();
             
@@ -374,7 +371,7 @@ document.addEventListener("DOMContentLoaded", function() {
     initReadMoreButtons();
     window.initReadMoreButtons = initReadMoreButtons;
 
-    // --- SHOW MORE LOGIC (Incremental + No Collapse) ---
+    // --- SHOW MORE LOGIC  ---
     const showMoreBtns = document.querySelectorAll('.btn-show-more');
 
     showMoreBtns.forEach(btn => {
@@ -411,10 +408,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const items = list.querySelectorAll('.review-item');
         const showMoreBtn = document.querySelector(`button[data-target="${listId}"]`);
 
-        // If "Show All" is selected, just reset everything using the sort function
+        // Show All reset 
         if (color === 'all') {
             items.forEach(item => item.classList.remove('review-filtered-hide'));
-            // Default to Descending (Best) when resetting filters
             window.sortReviews(listId, 'desc'); 
             return;
         }

@@ -548,7 +548,6 @@ footer {
 .btn-read-more:hover { background-color: #000; }
 
 /* --- READ MORE / READ LESS STYLES --- */
-/* --- READ MORE / READ LESS STYLES --- */
 .text-collapsed {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -556,10 +555,8 @@ footer {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    
-    /* NEW ADDTIONS FOR UNIFORM SIZE */
-    min-height: 55px; /* Forces height to match ~3 lines of text */
-    line-height: 1.4; /* Ensures consistent text spacing */
+    min-height: 55px; 
+    line-height: 1.4; 
 }
 
 .text-expanded {
@@ -573,7 +570,7 @@ footer {
     min-height: 55px;
     line-height: 1.4;
 }
-/* --- SHOW MORE FUNCTIONALITY --- */
+/* --- SHOW MORE  --- */
 .review-hidden {
     display: none;
 }
@@ -595,15 +592,13 @@ footer {
     background-color: #535353;
 }
 /* --- UNIFIED TEXT SIZING --- */
-/* Apply the exact same rules to BOTH lists */
+
 #critic-list .text-collapsed,
 #user-list .text-collapsed {
     min-height: 63px;      /* Exact height for 3 lines of text */
     line-clamp: 3;         /* Limit both to 3 lines */
     -webkit-line-clamp: 3; /* For Safari/Chrome */
     margin-bottom: 10px;
-    
-    /* Ensure text behaves cleanly */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -645,7 +640,6 @@ footer {
     display: block !important; /* disables the box-clamping layout */
     height: auto !important;
 }
-/* --- FOOTER LINK ALIGNMENT --- */
 
 /* Target both the "Full Review" and "Report" links */
 #critic-list .card-content > div:last-child a,
