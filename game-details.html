@@ -26,8 +26,8 @@
                             <li><a href="index.html">Games</a></li>
                         </ul>
 
-                        <div class="search-container">
-                            <form action="#">
+                       <div class="search-container">
+                            <form action="advanced-search.html">
                                 <input type="text" placeholder="Search games..." name="search">
                                 <button type="submit">Search</button>
                             </form>
@@ -147,6 +147,8 @@
                         <select onchange="sortReviews('critic-list', this.value)" style="padding: 5px;">
                             <option value="desc">Best Score</option>
                             <option value="asc">Worst Score</option>
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
                         </select>
                     </div>
                 </div>
@@ -225,6 +227,8 @@
                         <select onchange="sortReviews('user-list', this.value)" style="padding: 5px;">
                             <option value="desc">Best Score</option>
                             <option value="asc">Worst Score</option>
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
                         </select>
                     </div>
                 </div>

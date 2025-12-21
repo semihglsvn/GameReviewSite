@@ -258,38 +258,56 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // --- REVIEW SORTING LOGIC (With Reset) ---
+    // --- REVIEW SORTING LOGIC (Score & Time) ---
+    // UPDATED to include Date sorting
     window.sortReviews = function(listId, order) {
         const list = document.getElementById(listId);
         const items = Array.from(list.getElementsByClassName('review-item'));
-        
-        // Find "Show More" button to reset it
         const showMoreBtn = document.querySelector(`button[data-target="${listId}"]`);
         
         // 1. Sort the items
         items.sort((a, b) => {
+            // Get Score Data
             const scoreA = parseFloat(a.getAttribute('data-score'));
             const scoreB = parseFloat(b.getAttribute('data-score'));
-            return (order === 'desc') ? (scoreB - scoreA) : (scoreA - scoreB);
+            
+            // Get Date Data (Finds the date text like "DEC 15, 2025")
+            const dateTextA = a.querySelector('.card-content > div:first-child').textContent.trim();
+            const dateTextB = b.querySelector('.card-content > div:first-child').textContent.trim();
+            
+            const dateA = new Date(dateTextA);
+            const dateB = new Date(dateTextB);
+
+            // LOGIC
+            if (order === 'desc') return scoreB - scoreA;       // Best Score
+            if (order === 'asc') return scoreA - scoreB;        // Worst Score
+            if (order === 'date-desc') return dateB - dateA;    // Newest
+            if (order === 'date-asc') return dateA - dateB;     // Oldest
+            return 0;
         });
 
         const DEFAULT_VISIBLE = 2; 
 
-        // 2. Re-append items and RESET visibility (Show top 2, hide rest)
+        // 2. Re-append items and RESET visibility
         items.forEach((item, index) => {
             list.appendChild(item); 
             
-            if (index < DEFAULT_VISIBLE) {
-                item.classList.remove('review-hidden');
-            } else {
-                item.classList.add('review-hidden');
+            // Only manipulate visibility if the item isn't already hidden by a color filter
+            if (!item.classList.contains('review-filtered-hide')) {
+                if (index < DEFAULT_VISIBLE) {
+                    item.classList.remove('review-hidden');
+                } else {
+                    item.classList.add('review-hidden');
+                }
             }
         });
 
         // 3. Reset the "Show More" button visibility
         if (showMoreBtn) {
-            // Show the button only if there are actually hidden items
-            if (items.length > DEFAULT_VISIBLE) {
+            // Count how many items are actually available to be shown
+            const visibleCount = items.filter(i => !i.classList.contains('review-filtered-hide')).length;
+            
+            if (visibleCount > DEFAULT_VISIBLE) {
                 showMoreBtn.style.display = 'inline-block';
             } else {
                 showMoreBtn.style.display = 'none';
@@ -344,7 +362,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 fullReviewModal.style.display = 'flex';
             };
             
-            // Auto-hide button if text is short
             const textElement = btn.previousElementSibling;
             if(textElement && textElement.scrollHeight > textElement.clientHeight + 2) {
                 btn.style.display = 'inline-block';
@@ -367,31 +384,27 @@ document.addEventListener("DOMContentLoaded", function() {
             
             if (!container) return;
 
-            // 1. Find all currently hidden items
             const hiddenItems = Array.from(container.querySelectorAll('.review-item.review-hidden'));
             
-            // 2. Select the next 15 items (or fewer if less than 15 remain)
+            // Show next 15
             const itemsToShow = hiddenItems.slice(0, 15);
             
-            // 3. Reveal them
             itemsToShow.forEach(item => {
                 item.classList.remove('review-hidden');
             });
 
-            // 4. Activate popup buttons for new items
             if (typeof window.initReadMoreButtons === "function") {
                 window.initReadMoreButtons();
             }
 
-            // 5. Check if there are any hidden items left
+            // Hide button if no more items
             const remainingHidden = container.querySelectorAll('.review-item.review-hidden');
-
             if (remainingHidden.length === 0) {
-                // If 0 items left, hide the button completely
                 this.style.display = 'none';
             }
         });
     });
+
     // --- REVIEW FILTERING LOGIC ---
     window.filterReviews = function(listId, color) {
         const list = document.getElementById(listId);
@@ -400,11 +413,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // If "Show All" is selected, just reset everything using the sort function
         if (color === 'all') {
-            // Remove our special filter class
             items.forEach(item => item.classList.remove('review-filtered-hide'));
-            
-            // Re-run the sort logic to restore the "Top 2 visible" state
-            // (We assume default sort is Descending, or you could grab the current sort value if needed)
+            // Default to Descending (Best) when resetting filters
             window.sortReviews(listId, 'desc'); 
             return;
         }
@@ -414,8 +424,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         items.forEach(item => {
             const score = parseFloat(item.getAttribute('data-score'));
-            
-            // Normalize score (User scores 0-10 -> 0-100 scale)
             let effective = score <= 10 ? score * 10 : score;
 
             let isMatch = false;
@@ -425,28 +433,19 @@ document.addEventListener("DOMContentLoaded", function() {
             else if (color === 'red' && effective < 50) isMatch = true;
 
             if (isMatch) {
-                // Show it!
-                item.classList.remove('review-filtered-hide'); // Un-filter it
-                item.classList.remove('review-hidden');        // Reveal it from "Show More" stack
+                item.classList.remove('review-filtered-hide'); 
+                item.classList.remove('review-hidden');
                 matchCount++;
             } else {
-                // Hide it!
                 item.classList.add('review-filtered-hide');
             }
         });
 
-        // --- UPDATE SHOW MORE BUTTON ---
-        // When filtering, we show ALL matches immediately, so the "Show More" button is useless.
+        // Hide "Show More" button when filtering
         if (showMoreBtn) {
             showMoreBtn.style.display = 'none';
         }
         
-        // Optional: Message if no reviews match
-        if (matchCount === 0) {
-            // You could show a "No reviews found" message here if you wanted
-        }
-        
-        // Re-initialize read more buttons for the newly revealed items
         if (typeof window.initReadMoreButtons === "function") {
             window.initReadMoreButtons();
         }
