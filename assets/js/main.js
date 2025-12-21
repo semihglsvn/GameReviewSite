@@ -170,4 +170,131 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+     // --- USER REVIEW LOGIC ---
+    // --- USER REVIEW LOGIC ---
+    const scoreBar = document.getElementById('score-bar');
+    const segments = document.querySelectorAll('.bar-seg');
+    
+    // Inline sidebar elements (we update these for visual feedback on the sidebar)
+    const circle = document.getElementById('my-score-circle');
+    const rateMsg = document.getElementById('rate-msg');
+    
+    // Modal Elements
+    const modal = document.getElementById('review-modal');
+    const modalScoreCircle = document.getElementById('modal-score-circle');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    const closeModalX = document.querySelector('.close-modal-btn');
+    
+    // We hide the old inline input container since we are using the popup now
+    const inlineInput = document.getElementById('review-input-container');
+    if(inlineInput) inlineInput.style.display = 'none'; 
+    
+    let lockedScore = 0;
+
+    // Helper to color the bar segments based on value
+    function colorBar(value) {
+        segments.forEach(seg => {
+            const segVal = parseInt(seg.getAttribute('data-value'));
+            if (segVal <= value) {
+                seg.classList.add('active');
+            } else {
+                seg.classList.remove('active');
+            }
+        });
+    }
+
+    // Helper to update a score circle (used for both sidebar and modal)
+    function updateScoreCircle(element, value) {
+        if (!element) return;
+
+        if(value === 0) {
+            element.textContent = '?';
+            element.className = 'detailmetascore score-none';
+            return;
+        }
+
+        element.textContent = value;
+        element.className = 'detailmetascore'; // Reset base class
+        
+        // Apply color logic
+        if (value >= 8) element.classList.add('score-green');
+        else if (value >= 5) element.classList.add('score-yellow');
+        else element.classList.add('score-red');
+    }
+
+    if (scoreBar) {
+        segments.forEach(seg => {
+            // Hover Effect
+            seg.addEventListener('mouseenter', () => {
+                const val = parseInt(seg.getAttribute('data-value'));
+                colorBar(val);
+                updateScoreCircle(circle, val);
+            });
+
+            // Click Effect -> OPEN MODAL
+            seg.addEventListener('click', () => {
+                const val = parseInt(seg.getAttribute('data-value'));
+                lockedScore = val;
+                
+                // 1. Lock the sidebar visual
+                colorBar(val);
+                updateScoreCircle(circle, val);
+                rateMsg.textContent = "You rated: " + val;
+
+                // 2. Update the Modal Visuals
+                updateScoreCircle(modalScoreCircle, val);
+
+                // 3. Show the Modal (Flex is required for centering)
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            });
+        });
+
+        // Mouse Leave Effect
+        scoreBar.addEventListener('mouseleave', () => {
+            colorBar(lockedScore);
+            updateScoreCircle(circle, lockedScore);
+        });
+    }
+
+    // --- MODAL CLOSING LOGIC ---
+    function closeModal() {
+        if (modal) modal.style.display = 'none';
+    }
+
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    if (closeModalX) closeModalX.addEventListener('click', closeModal);
+
+    // Close if clicking outside the white box
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
+    // Helper to color the bar segments dynamically
+    function colorBar(value) {
+        // Determine the color class based on the score
+        let colorClass = 'score-red'; // Default to red (0-4)
+        if (value >= 8) {
+            colorClass = 'score-green';
+        } else if (value >= 5) {
+            colorClass = 'score-yellow';
+        }
+
+        segments.forEach(seg => {
+            const segVal = parseInt(seg.getAttribute('data-value'));
+            
+            // Reset all color classes first
+            seg.classList.remove('score-red', 'score-yellow', 'score-green');
+
+            if (segVal <= value) {
+                // Add the specific color class determined above
+                seg.classList.add(colorClass);
+            } 
+        });
+    }
+
 });

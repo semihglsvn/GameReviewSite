@@ -242,13 +242,6 @@ header nav {
     display: inline-block;
 }
 
-/* JS will apply these classes */
-.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
-.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
-.score-green { background-color: #66cc33; }      /* Good: 75-89 */
-.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
-.score-none { background-color: #ccc; }          /* No Score */
-
 footer {
     background-color: #000000; /* CHANGED TO BLACK */
     color: white;
@@ -412,3 +405,121 @@ footer {
     justify-content: space-between;
     align-items: center;
 }
+
+/* --- USER REVIEW STYLES --- */
+.interactive-bar {
+    display: flex;
+    gap: 4px;
+    cursor: pointer;
+    height: 15px;
+    margin-bottom: 5px;
+}
+
+.bar-seg {
+    flex: 1;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+}
+
+/* Review Form */
+.review-textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.submit-review-btn {
+    background-color: #44aa00;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.submit-review-btn:hover {
+    background-color: #66cc33;
+}
+/* --- POPUP MODAL STYLES --- */
+
+/* The dark background overlay */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stays in place when scrolling */
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    z-index: 9999; /* Sit on top of everything */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+/* The actual white box */
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 400px; /* Width of the popup */
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.modal-score-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#review-text {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Disable manual resizing */
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-cancel {
+    background-color: #5a6268;
+    color: white;
+    margin-right: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-cancel:hover { background-color: #6c757d; }
+.btn-submit:hover { background-color: #0056b3; }
+
+/* JS will apply these classes */
+.score-red { background-color: #ff4d4d; }        /* Bad: < 50 */
+.score-yellow { background-color: #ffcc33; }     /* Mixed: 50-74 */
+.score-green { background-color: #66cc33; }      /* Good: 75-89 */
+.score-dark-green { background-color: #44aa00; } /* Great: 90+ */
+.score-none { background-color: #ccc; }          /* No Score */
