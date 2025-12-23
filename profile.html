@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - GameJoint</title>
+    <title>User Profile - GameJoint</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -20,7 +20,7 @@
                 <div class="col-10">
                     <nav>
                         <ul class="nav-left">
-                            <li><a href="#">Games</a></li>
+                            <li><a href="index.html">Games</a></li>
                         </ul>
                         <div class="search-container">
                             <form action="#">
@@ -29,7 +29,7 @@
                             </form>
                         </div>
                         <ul class="nav-right">
-                            <li><a href="profile.html">My Profile (GameJoint)</a></li>
+                            <li><a href="profile.html">My Profile (Kidboo05)</a></li>
                             <li><a href="index.html" class="nav-logout">Logout</a></li>
                         </ul>
                     </nav>
@@ -42,15 +42,15 @@
         
         <div class="row">
             <div class="col-12">
-                <h1>GameJoint</h1>
-                <span class="release-date">Since March 2023</span>
+                <h1>Kidboo05</h1>
+                <span class="release-date">Member Since Dec 2023</span>
             </div>
         </div>
         <hr>
 
         <div class="row mt-30 mb-30">
             <div class="col-12">
-                <h4 class="font-weight-bold mb-15">Publication Overview in Games</h4>
+                <h4 class="font-weight-bold mb-15">My Review Stats</h4>
                 <div class="game-card overview-card">
                     <div class="overview-left">
                         <div id="avg-score" class="overview-score-large">-</div>
@@ -84,14 +84,14 @@
                         <hr class="divider-light">
                         <div class="row">
                             <div class="col-6">
-                                <span class="high-low-label">Highest Score</span>
+                                <span class="high-low-label">Highest Rated</span>
                                 <div class="high-low-row">
                                     <div id="highest-score-val" class="metascore metascore-mini">-</div>
                                     <b id="highest-game-name" class="game-name-small">-</b>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <span class="high-low-label">Lowest Score</span>
+                                <span class="high-low-label">Lowest Rated</span>
                                 <div class="high-low-row">
                                     <div id="lowest-score-val" class="metascore metascore-mini">-</div>
                                     <b id="lowest-game-name" class="game-name-small">-</b>
@@ -129,92 +129,56 @@
 
                 <div id="profile-review-list">
                     
-                    <div class="game-card review-item review-item-auto" data-score="95">
+                    <div class="game-card review-item review-item-auto" data-score="10">
                         <div class="card-content">
-                            <div class="review-date-small">DEC 12, 2023</div>
+                            <div class="review-date-small">DEC 25, 2025</div>
                             <div class="review-item-header">
-                                <div class="metascore mr-10">95</div>
-                                <span class="review-game-title review-title-large">God of War Ragnarök</span>
+                                <div class="detailmetascore metascore-large mr-10">10</div>
+                                <span class="review-game-title review-title-large">Baldur's Gate 3</span>
                             </div>
                             <p class="text-collapsed review-body-text">
-                                An absolute masterpiece of storytelling and combat. Kratos and Atreus' journey is emotional, the worlds are stunningly beautiful, and the gameplay is refined to perfection. A fitting end to the Norse saga.
+                                Simply the best RPG I have ever played. The freedom of choice is insane.
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div class="card-footer-profile">
+                                <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
+                                <span class="footer-tag-small">PC</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-card review-item review-item-auto" data-score="9">
+                        <div class="card-content">
+                            <div class="review-date-small">DEC 19, 2025</div>
+                            <div class="review-item-header">
+                                <div class="detailmetascore metascore-large mr-10">9</div>
+                                <span class="review-game-title review-title-large">Pokémon Legends: Z-A</span>
+                            </div>
+                            <p class="text-collapsed review-body-text">
+                                This DLC is not fun at all... wait, actually I loved the base game but the DLC was mixed. (Sample text)
+                            </p>
+                            <button class="btn-read-more">Read More</button>
+                            <div class="card-footer-profile">
+                                <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
+                                <span class="footer-tag-small">SWITCH 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-card review-item review-item-auto" data-score="4">
+                        <div class="card-content">
+                            <div class="review-date-small">NOV 10, 2025</div>
+                            <div class="review-item-header">
+                                <div class="detailmetascore metascore-large mr-10">4</div>
+                                <span class="review-game-title review-title-large">Broken Racer 2025</span>
+                            </div>
+                            <p class="text-collapsed review-body-text">
+                                Crashes constantly. Do not buy.
                             </p>
                             <button class="btn-read-more">Read More</button>
                             <div class="card-footer-profile">
                                 <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
                                 <span class="footer-tag-small">PS5</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="game-card review-item review-item-auto" data-score="98">
-                        <div class="card-content">
-                            <div class="review-date-small">MAY 15, 2023</div>
-                            <div class="review-item-header">
-                                <div class="metascore mr-10">98</div>
-                                <span class="review-game-title review-title-large">The Legend of Zelda: Tears of the Kingdom</span>
-                            </div>
-                            <p class="text-collapsed review-body-text">
-                                Nintendo has done it again. The freedom to build and explore is unparalleled. Every corner of Hyrule feels alive with secrets. The new Ultrahand ability changes everything we know about puzzle solving.
-                            </p>
-                            <button class="btn-read-more">Read More</button>
-                            <div class="card-footer-profile">
-                                <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
-                                <span class="footer-tag-small">SWITCH</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="game-card review-item review-item-auto" data-score="80">
-                        <div class="card-content">
-                            <div class="review-date-small">SEP 06, 2023</div>
-                            <div class="review-item-header">
-                                <div class="metascore mr-10">80</div>
-                                <span class="review-game-title review-title-large">Starfield</span>
-                            </div>
-                            <p class="text-collapsed review-body-text">
-                                Ambitious in scale but hindered by outdated mechanics and frequent loading screens. Space exploration feels disjointed. However, the ship building and faction quests are quite engaging if you have the patience.
-                            </p>
-                            <button class="btn-read-more">Read More</button>
-                            <div class="card-footer-profile">
-                                <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
-                                <span class="footer-tag-small">PC, XBOX</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="game-card review-item review-item-auto" data-score="90">
-                        <div class="card-content">
-                            <div class="review-date-small">FEB 24, 2024</div>
-                            <div class="review-item-header">
-                                <div class="metascore mr-10">90</div>
-                                <span class="review-game-title review-title-large">Hollow Knight</span>
-                            </div>
-                            <p class="text-collapsed review-body-text">
-                                A masterclass in atmosphere and level design. The combat is tight, responsive, and challenging. Hallownest is a joy to get lost in, filled with melancholic beauty and tough bosses.
-                            </p>
-                            <button class="btn-read-more">Read More</button>
-                            <div class="card-footer-profile">
-                                <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
-                                <span class="footer-tag-small">MULTI</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="game-card review-item review-item-auto" data-score="35">
-                        <div class="card-content">
-                            <div class="review-date-small">MAY 25, 2023</div>
-                            <div class="review-item-header">
-                                <div class="metascore mr-10">35</div>
-                                <span class="review-game-title review-title-large">The Lord of the Rings: Gollum</span>
-                            </div>
-                            <p class="text-collapsed review-body-text">
-                                A tragic waste of a great license. Controls are clunky, graphics look dated, and the story adds nothing meaningful to the lore. Avoid at all costs.
-                            </p>
-                            <button class="btn-read-more">Read More</button>
-                            <div class="card-footer-profile">
-                                <a href="#" class="footer-link-small">FULL REVIEW 🔗</a>
-                                <span class="footer-tag-small">PC, PS5</span>
                             </div>
                         </div>
                     </div>
@@ -232,7 +196,7 @@
         <div class="modal-content modal-content-profile">
             <span class="close-full-review-btn modal-close-right">&times;</span>
             <div class="modal-review-header">
-                <div id="modal-review-score" class="metascore mr-15"></div>
+                <div id="modal-review-score" class="detailmetascore mr-15" style="width:50px; height:50px; line-height:50px; font-size:22px;"></div>
                 <h3 id="modal-review-author" class="h3-nomargin">Game Title</h3>
             </div>
             <p id="modal-review-text" class="modal-text-content">Review text...</p>
@@ -255,12 +219,15 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Run stats update
             updateOverviewStats();
             
+            // Initial Sort
             if (typeof window.sortReviews === "function") {
                 window.sortReviews('profile-review-list', 'date-desc');
             }
             
+            // Filter Listeners
             const selects = document.querySelectorAll('select');
             selects.forEach(sel => {
                 sel.addEventListener('change', () => {
@@ -268,52 +235,75 @@
                 });
             });
             
-            initReadMoreButtons();
+            // Run Read More Init (With Delay for Safety)
+            setTimeout(initReadMoreButtons, 100);
+            
+            // Re-check read more buttons on resize
+            window.addEventListener('resize', initReadMoreButtons);
         });
 
-        // Puan Renklendirme (Overview ve Modal için)
+        // Coloring Logic
         function applyColorToEl(el, score) {
             el.classList.remove('score-none', 'score-dark-green', 'score-green', 'score-yellow', 'score-red');
-            let effective = score <= 10 ? score * 10 : score;
+            
+            // Normalize score to 1-100 scale for checking
+            let effective = score;
+            if (score <= 10) effective = score * 10;
+
             if (effective >= 90) el.classList.add('score-dark-green');
             else if (effective >= 75) el.classList.add('score-green');
             else if (effective >= 50) el.classList.add('score-yellow');
             else el.classList.add('score-red');
         }
 
-        // Overview Hesaplama (Kare puan kutuları için .metascore kullanıldı)
+        // Stats Logic
         function updateOverviewStats() {
             const reviews = document.querySelectorAll('.review-item');
             
-            let total = 0, pos = 0, mixed = 0, neg = 0, hi = -1, lo = 101, hiG = "-", loG = "-";
+            let total = 0, pos = 0, mixed = 0, neg = 0, hi = -1, lo = 1000, hiG = "-", loG = "-";
             let validCount = 0;
 
             reviews.forEach(r => {
-                const s = parseInt(r.querySelector('.metascore').innerText);
+                // Check both box (metascore) and circle (detailmetascore)
+                let sBox = r.querySelector('.metascore') || r.querySelector('.detailmetascore');
+                if(!sBox) return;
+
+                let s = parseFloat(sBox.innerText);
                 const tElement = r.querySelector('.review-game-title');
                 const t = tElement ? tElement.innerText : "-";
                 
                 if (!isNaN(s)) {
-                    total += s;
+                    // Normalize to 100 scale for stats
+                    let effectiveS = s <= 10 ? s * 10 : s;
+
+                    total += effectiveS;
                     validCount++;
-                    if (s >= 75) pos++; else if (s >= 50) mixed++; else neg++;
-                    if (s > hi) { hi = s; hiG = t; }
-                    if (s < lo) { lo = s; loG = t; }
+                    if (effectiveS >= 75) pos++; else if (effectiveS >= 50) mixed++; else neg++;
+                    
+                    if (effectiveS > hi) { hi = effectiveS; hiG = t; }
+                    if (effectiveS < lo) { lo = effectiveS; loG = t; }
                 }
             });
 
             if (validCount > 0) {
+                // Show Global Avg (normalized to 100)
                 document.getElementById('avg-score').innerText = Math.round(total / validCount);
+                
                 document.getElementById('pos-count').innerText = pos;
                 document.getElementById('mixed-count').innerText = mixed;
                 document.getElementById('neg-count').innerText = neg;
+                
                 document.getElementById('pos-bar').style.width = (pos/validCount*100)+'%';
                 document.getElementById('mixed-bar').style.width = (mixed/validCount*100)+'%';
                 document.getElementById('neg-bar').style.width = (neg/validCount*100)+'%';
                 
                 const hiEl = document.getElementById('highest-score-val');
                 const loEl = document.getElementById('lowest-score-val');
-                hiEl.innerText = hi; loEl.innerText = lo;
+                
+                // Display High/Low as they appeared (10 or 95)
+                hiEl.innerText = (hi % 10 === 0 && hi <= 100 && reviews[0].querySelector('.detailmetascore')) ? hi/10 : hi; 
+                loEl.innerText = (lo % 10 === 0 && lo <= 100 && reviews[0].querySelector('.detailmetascore')) ? lo/10 : lo;
+
                 document.getElementById('highest-game-name').innerText = hiG;
                 document.getElementById('lowest-game-name').innerText = loG;
 
@@ -330,23 +320,40 @@
 
             document.querySelectorAll('.btn-read-more').forEach(btn => {
                 const p = btn.previousElementSibling;
-                // Add check to make sure element exists
+                
+                // FIX: Add 5px buffer and check if 'p' exists
                 if (p && p.scrollHeight > p.clientHeight + 5) {
                     btn.style.display = 'inline-block';
                 } else {
                     btn.style.display = 'none';
                 }
 
+                // Remove old listener to prevent duplicates if function runs twice
+                btn.onclick = null; 
+
                 btn.onclick = function(e) {
                     e.preventDefault();
                     const card = btn.closest('.game-card');
                     const title = card.querySelector('.review-game-title').textContent;
-                    const score = card.querySelector('.metascore').textContent;
+                    
+                    const scoreBox = card.querySelector('.metascore') || card.querySelector('.detailmetascore');
+                    const score = scoreBox ? scoreBox.textContent : "-";
 
                     modalAuthor.textContent = title;
                     modalText.textContent = p.textContent.trim();
+                    
+                    // Style modal score to match (circle vs square)
+                    modalScore.className = scoreBox.className;
+                    modalScore.classList.remove('mr-10', 'metascore-large', 'mr-15'); 
                     modalScore.textContent = score;
-                    applyColorToEl(modalScore, parseInt(score));
+                    
+                    // Enforce large size for modal
+                    modalScore.style.width = "50px";
+                    modalScore.style.height = "50px";
+                    modalScore.style.lineHeight = "50px";
+                    modalScore.style.fontSize = "22px";
+                    
+                    applyColorToEl(modalScore, parseFloat(score));
                     modal.style.display = 'flex';
                 };
             });
