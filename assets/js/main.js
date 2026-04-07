@@ -1,32 +1,51 @@
 document.addEventListener("DOMContentLoaded", function() {
     
     // --- SCORE COLORING LOGIC ---
+  // --- SCORE COLORING LOGIC ---
+ // --- SCORE COLORING LOGIC ---
     const scores = document.querySelectorAll('.metascore, .detailmetascore');
 
     scores.forEach(scoreElement => {
         const scoreText = scoreElement.innerText;
         const scoreValue = parseFloat(scoreText);
+        
+        // This looks for the label span either in the top box OR the review cards
+        const container = scoreElement.closest('.meta-footer, .review-item-header');
+        const textSpan = container ? container.querySelector('.score-text-label') : null;
 
         if (!isNaN(scoreValue)) {
             let effectiveScore = scoreValue;
-            if (scoreValue <= 10) {
-                effectiveScore = scoreValue * 10;
-            }
+            if (scoreValue <= 10) { effectiveScore = scoreValue * 10; }
+
+            let textLabel = '';
 
             if (effectiveScore >= 90) {
                 scoreElement.classList.add('score-dark-green');
+                textLabel = 'Universally Acclaimed';
+                if(textSpan) textSpan.style.color = '#02ce2f'; // Matches Dark Green
             } else if (effectiveScore >= 75) {
                 scoreElement.classList.add('score-green');
+                textLabel = 'Generally Favorable';
+                if(textSpan) textSpan.style.color = '#66cc33'; 
             } else if (effectiveScore >= 50) {
                 scoreElement.classList.add('score-yellow');
+                textLabel = 'Mixed or Average';
+                if(textSpan) textSpan.style.color = '#ffcc33';
             } else {
                 scoreElement.classList.add('score-red');
+                textLabel = 'Generally Unfavorable';
+                if(textSpan) textSpan.style.color = '#ff0000';
             }
+
+            // Inject text if span exists
+            if (textSpan && textSpan.innerText.trim() === '') {
+                textSpan.innerText = textLabel;
+            }
+
         } else {
             scoreElement.classList.add('score-none');
         }
     });
-
 
     // --- SLIDER LOGIC ---
     const sliders = document.querySelectorAll('.slider-section-wrapper');
@@ -283,7 +302,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return 0;
         });
 
-        const DEFAULT_VISIBLE = 2; 
+        const DEFAULT_VISIBLE = 4; 
 
         // 2. Re-append items and RESET visibility
         items.forEach((item, index) => {
