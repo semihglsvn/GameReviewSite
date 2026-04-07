@@ -572,7 +572,7 @@ footer {
 }
 /* --- SHOW MORE  --- */
 .review-hidden {
-    display: none;
+    display: none !important;
 }
 
 .btn-show-more {
