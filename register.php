@@ -1,104 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - GameJoint</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+<?php
+session_start();
+require_once 'config/db.php';
 
-    <header>
-        <div class="container">
-            <div class="row header-content">
-                <div class="col-2">
-                    <!-- LOGO IMAGE REPLACEMENT (Acts as Home Link) -->
-                    <a href="index.html" class="logo-link">
-                        <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
-                    </a>
-                </div>
-                <div class="col-10">
-                    <nav>
-                        <!-- Nav Left is empty as requested, logo handles home -->
-                        <ul class="nav-left">
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+// If user is already logged in, redirect them to the homepage
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+}
 
-    <!-- 'main-content' class ensures sticky footer works correctly -->
-    <div class="container main-content">
-        <div class="row">
-            <div class="col-12">
-                <section style="max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
-                    <h2 style="text-align: center;">Register</h2>
-                    
-                    <!-- Added onsubmit event to trigger validation -->
-                    <form action="homepage-member.html" onsubmit="return validatePassword()">
-                        
-                        <!-- Added Username Field -->
-                        <div style="margin-bottom: 15px;">
-                            <label for="username" style="display: block; margin-bottom: 5px;">Username:</label>
-                            <input type="text" id="username" name="username" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
-                        </div>
+$error = '';
+$success = '';
 
-                        <div style="margin-bottom: 15px;">
-                            <label for="email" style="display: block; margin-bottom: 5px;">E-Mail:</label>
-                            <input type="email" id="email" name="email" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label for="dob" style="display: block; margin-bottom: 5px;">Date of Birth:</label>
-                            <input type="date" id="dob" name="dob" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
-                        </div>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 1. Sanitize Inputs (Block JS / HTML Injection)
+    $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $dob = htmlspecialchars(strip_tags(trim($_POST['dob'])));
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
-                        <div style="margin-bottom: 15px;">
-                            <label for="password" style="display: block; margin-bottom: 5px;">Password:</label>
-                            <input type="password" id="password" name="password" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label for="confirm-password" style="display: block; margin-bottom: 5px;">Confirm Password:</label>
-                            <input type="password" id="confirm-password" name="confirm-password" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
-                            <!-- Error message container -->
-                            <span id="password-error" style="color: red; font-size: 12px; display: none;">Passwords do not match!</span>
-                        </div>
-                        
-                        <button type="submit" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">Register</button>
-                    </form>
-                    
-                    <p style="text-align: center; margin-top: 15px;">
-                        Already have an account? <a href="login.html">Login</a>
-                    </p>
-                </section>
-            </div>
-        </div>
-    </div>
+    // 2. Validation
+    $dob_obj = date_create($dob);
+    $now = date_create();
+    $min_date = date_create('-120 years');
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GameJoint.</p>
-        </div>
-    </footer>
+    if (empty($username) || empty($email) || empty($password) || empty($dob)) {
+        $error = "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    } elseif ($password !== $confirm_password) {
+        $error = "Passwords do not match.";
+    } elseif (strlen($password) < 6) {
+        $error = "Password must be at least 6 characters.";
+    } elseif (!$dob_obj) {
+        $error = "Invalid date of birth format.";
+    } elseif ($dob_obj > $now) {
+        $error = "Date of birth cannot be in the future.";
+    } elseif ($dob_obj < $min_date) {
+        $error = "Please enter a realistic date of birth.";
+    } else {
+        // 3. Check if Username or Email already exists (Prepared Statement blocks SQLi)
+        $stmt_check = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+        $stmt_check->bind_param("ss", $username, $email);
+        $stmt_check->execute();
+        $stmt_check->store_result();
 
-    <!-- Inline Script for Password Validation -->
-    
-    <script>
-        function validatePassword() {
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirm-password").value;
-            var errorMsg = document.getElementById("password-error");
+        if ($stmt_check->num_rows > 0) {
+            $error = "Username or Email already exists.";
+        } else {
+            // 4. Hash Password & Insert
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $role_id = 5; // Default role for standard users
 
-            if (password !== confirmPassword) {
-                errorMsg.style.display = "block"; // Show error message
-                return false; // Prevent form submission
+            $stmt_insert = $conn->prepare("INSERT INTO users (role_id, username, email, password_hash, dob) VALUES (?, ?, ?, ?, ?)");
+            $stmt_insert->bind_param("issss", $role_id, $username, $email, $hashed_password, $dob);
+            
+            if ($stmt_insert->execute()) {
+                $success = "Registration successful! You can now login.";
             } else {
-                errorMsg.style.display = "none"; // Hide error message
-                return true; // Allow form submission
+                $error = "Something went wrong. Please try again.";
             }
+            $stmt_insert->close();
         }
-    </script>
-</body>
-</html>
+        $stmt_check->close();
+    }
+}
+
+// Now load the header after logic is done
+require_once 'includes/header.php';
+?>
+
+<div class="container main-content" style="max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Create an Account</h2>
+
+    <?php if ($error): ?>
+        <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+            <?php echo $error; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($success): ?>
+        <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+            <?php echo $success; ?> <br><br>
+            <a href="login.php" class="btn-login" style="text-decoration: none;">Go to Login</a>
+        </div>
+    <?php else: ?>
+        <form action="register.php" method="POST">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px;">Username</label>
+                <input type="text" name="username" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px;">Email Address</label>
+                <input type="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px;">Date of Birth</label>
+                <!-- Added max attribute to prevent HTML future date selection natively -->
+                <input type="date" name="dob" max="<?php echo date('Y-m-d'); ?>" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px;">Password</label>
+                <input type="password" name="password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; color: #555; margin-bottom: 5px;">Confirm Password</label>
+                <input type="password" name="confirm_password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <button type="submit" class="btn-register" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">Register Now</button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 20px; color: #666;">
+            Already have an account? <a href="login.php" style="color: #007bff; text-decoration: none;">Login here</a>
+        </p>
+    <?php endif; ?>
+</div>
+
+<?php require_once 'includes/footer.php'; ?>

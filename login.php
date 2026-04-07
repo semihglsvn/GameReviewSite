@@ -1,59 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - GameJoint</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+<?php
+session_start();
+require_once 'config/db.php';
 
-    <header>
-        <div class="container">
-            <div class="row header-content">
-                <div class="col-2">
-                    <a href="index.html" class="logo-link">
-                        <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
-                    </a>
-                </div>
-                <div class="col-10">
-                    <nav>
+// If user is already logged in, redirect them
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+}
 
-                    </nav>
-                </div>
-            </div>
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize (Block JS)
+    $login_id = htmlspecialchars(strip_tags(trim($_POST['login_id'])));
+    $password = $_POST['password'];
+    $remember_me = isset($_POST['remember_me']) ? true : false;
+
+    if (empty($login_id) || empty($password)) {
+        $error = "Please enter both username/email and password.";
+    } else {
+        // Prepared Statement (Block SQLi)
+        $stmt = $conn->prepare("SELECT id, username, password_hash, role_id FROM users WHERE username = ? OR email = ?");
+        $stmt->bind_param("ss", $login_id, $login_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            
+            // Secure Password Verification
+            if (password_verify($password, $user['password_hash'])) {
+                // Set Session Variables
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role_id'] = $user['role_id'];
+
+                // ==========================================
+                // REMEMBER ME COOKIE LOGIC
+                // ==========================================
+                if ($remember_me) {
+                    // Create a secure, unforgeable token using their DB data
+                    $secure_hash = md5($user['username'] . $user['password_hash']);
+                    $token = $user['id'] . '-' . $secure_hash;
+                    
+                    // Set cookie to expire in 30 days (86400 seconds * 30)
+                    setcookie('remember_token', $token, time() + (86400 * 30), "/");
+                }
+
+                // Success! Redirect to homepage
+                header("Location: index.php");
+                exit;
+            } else {
+                $error = "Invalid password.";
+            }
+        } else {
+            $error = "No account found with that username or email.";
+        }
+        $stmt->close();
+    }
+}
+
+// Load header after logic
+require_once 'includes/header.php';
+?>
+
+<div class="container main-content" style="max-width: 400px; margin: 80px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Welcome Back</h2>
+
+    <?php if ($error): ?>
+        <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+            <?php echo $error; ?>
         </div>
-    </header>
+    <?php endif; ?>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <section style="max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
-                    <h2 style="text-align: center;">Login</h2>
-                    <form action="homepage-member.html">
-                        <div style="margin-bottom: 15px;">
-                            <label for="username" style="display: block; margin-bottom: 5px;">Username:</label>
-                            <input type="text" id="username" name="username" style="width: 100%; padding: 8px; box-sizing: border-box;">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label for="password" style="display: block; margin-bottom: 5px;">Password:</label>
-                            <input type="password" id="password" name="password" style="width: 100%; padding: 8px; box-sizing: border-box;">
-                        </div>
-                        <button type="submit" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">Login</button>
-                    </form>
-                    <p style="text-align: center; margin-top: 15px;">
-                        Don't have an account? <a href="register.html">Register</a>
-                    </p>
-                </section>
-            </div>
+    <form action="login.php" method="POST">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; color: #555; margin-bottom: 5px;">Username or Email</label>
+            <input type="text" name="login_id" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
         </div>
-    </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GameJoint.</p>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; color: #555; margin-bottom: 5px;">Password</label>
+            <input type="password" name="password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
         </div>
-    </footer>
 
-</body>
-</html>
+        <!-- NEW: Remember Me Checkbox -->
+        <div style="margin-bottom: 25px; display: flex; align-items: center;">
+            <input type="checkbox" name="remember_me" id="remember_me" style="margin-right: 8px; cursor: pointer;">
+            <label for="remember_me" style="color: #555; cursor: pointer; user-select: none;">Remember Me</label>
+        </div>
+
+        <button type="submit" class="btn-login" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">Log In</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 20px; color: #666;">
+        Don't have an account? <a href="register.php" style="color: #007bff; text-decoration: none;">Register here</a>
+    </p>
+</div>
+
+<?php require_once 'includes/footer.php'; ?>
