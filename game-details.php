@@ -29,14 +29,21 @@ $game = $stmt->get_result()->fetch_assoc();
 if (!$game) { header("Location: index.php"); exit; }
 
 // ==========================================
-// 2. MEVCUT KULLANICININ ROLÜ
+// 2. MEVCUT KULLANICININ ROLÜ VE BAN DURUMU
 // ==========================================
 $current_user_role = null;
+$is_banned = 0;
+
 if (isset($_SESSION['user_id'])) {
-    $role_stmt = $conn->prepare("SELECT role_id FROM users WHERE id = ?");
+    $role_stmt = $conn->prepare("SELECT role_id, is_banned FROM users WHERE id = ?");
     $role_stmt->bind_param("i", $_SESSION['user_id']);
     $role_stmt->execute();
-    $current_user_role = $role_stmt->get_result()->fetch_assoc()['role_id'] ?? null;
+    $user_data = $role_stmt->get_result()->fetch_assoc();
+    
+    if ($user_data) {
+        $current_user_role = $user_data['role_id'];
+        $is_banned = $user_data['is_banned'];
+    }
 }
 $is_critic = ($current_user_role == 4);
 $is_user   = ($current_user_role == 5);
@@ -255,9 +262,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
                     </div>
                     <p class="text-sub-grey mt-5">Based on <?php echo $user_total; ?> User Ratings</p>
 
-                    <hr class="divider-light">
+                        <hr class="divider-light">
 
-                    <?php if ($is_critic || $is_user): ?>
+                    <?php if ($is_banned): ?>
+                        <h3>Add Your Review</h3>
+                        <div class="alert alert-danger" style="margin-top: 15px;">Your account has been restricted. You cannot post reviews at this time.</div>
+                    <?php elseif ($is_critic || $is_user): ?>
                         <h3>Add Your Review</h3>
                         <div class="meta-footer no-border no-margin-top display-block">
                             <div class="rate-header-row">
@@ -288,9 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row section-header"></div>
+    </div> <div class="row section-header"></div>
 
     <div class="row mt-30">
 
@@ -398,23 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-    <div id="report-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-report-btn modal-close-right">&times;</span>
-            <h3 class="mt-0">Report Review</h3>
-            <p class="text-sub-grey mb-15" style="font-size:14px;">Select all that apply:</p>
-            <div class="text-left mb-20">
-                <label class="modal-label-block"><input type="checkbox" value="spam" class="modal-checkbox">Spam or Advertising</label>
-                <label class="modal-label-block"><input type="checkbox" value="abuse" class="modal-checkbox">Abusive or Harassing</label>
-                <label class="modal-label-block"><input type="checkbox" value="irrelevant" class="modal-checkbox">Off-topic / Irrelevant</label>
-                <label class="modal-label-block"><input type="checkbox" value="spoiler" class="modal-checkbox">Contains Spoilers</label>
-            </div>
-            <div class="text-right">
-                <button type="button" id="cancel-report-btn" class="btn-cancel">Cancel</button>
-                <button class="btn-submit modal-submit-btn">Submit Report</button>
-            </div>
-        </div>
-    </div>
+    <?php require_once 'includes/report_modal.php'; ?>
 
     <div id="full-review-modal" class="modal-overlay">
         <div class="modal-content text-left modal-width-limited">

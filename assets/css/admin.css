@@ -158,3 +158,77 @@ tr:last-child td {
 .btn-delete { background-color: #e74c3c; }
 .btn-ban { background-color: #34495e; }
 .btn-edit { background-color: #f39c12; }
+
+/* ==========================================
+   ADMIN LOGIN PAGE STYLES
+   ========================================== */
+.login-body {
+    font-family: sans-serif; 
+    background: #f4f4f4; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    margin: 0;
+}
+
+.login-box {
+    background: white; 
+    padding: 30px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    width: 100%; 
+    max-width: 350px;
+}
+
+.login-box h2 {
+    margin-top: 0; 
+    text-align: center;
+    color: #2c3e50;
+}
+
+.login-form-group {
+    margin-bottom: 15px;
+}
+
+.login-form-group label {
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+    font-size: 14px;
+    color: #333;
+}
+
+.login-form-group input {
+    width: 100%; 
+    padding: 10px; 
+    box-sizing: border-box; 
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+}
+
+.btn-login {
+    width: 100%; 
+    padding: 10px; 
+    background: #2c3e50; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-login:hover {
+    background: #1a252f;
+}
+
+.login-error {
+    color: #e74c3c; 
+    font-size: 14px; 
+    margin-bottom: 15px; 
+    text-align: center;
+    background: #fadbd8;
+    padding: 10px;
+    border-radius: 4px;
+}
