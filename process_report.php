@@ -47,13 +47,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Insert report
-        $ins = $conn->prepare("INSERT INTO reports (reporter_id, review_id, reasons) VALUES (?, ?, ?)");
-        $ins->bind_param("iis", $reporter_id, $review_id, $reasons_str);
-        
-        if ($ins->execute()) {
-            echo json_encode(['success' => true]);
+// Find out if the reporter is shadowbanned OR if the review has Mod Immunity
+        $chk_shadow = $conn->query("SELECT shadowbanned_reports FROM users WHERE id = $reporter_id")->fetch_assoc();
+        $chk_review = $conn->query("SELECT mod_cleared FROM reviews WHERE id = $review_id")->fetch_assoc();
+
+        if (($chk_shadow && $chk_shadow['shadowbanned_reports'] == 1) || ($chk_review && $chk_review['mod_cleared'] == 1)) {
+            // TRAP TRIGGERED: 
+            // Either the user is a spammer, OR a mod already cleared this review.
+            // We do not insert anything into the database, keeping it perfectly clean.
+            
+            // Tell the user it worked perfectly so they don't get suspicious
+            echo json_encode(['success' => true]); 
+            exit;
         } else {
-            echo json_encode(['success' => false, 'error' => 'Database error.']);
+            // Normal user & Un-moderated review: Insert as pending
+            $ins = $conn->prepare("INSERT INTO reports (reporter_id, review_id, reasons) VALUES (?, ?, ?)");
+            $ins->bind_param("iis", $reporter_id, $review_id, $reasons_str);
+            
+            if ($ins->execute()) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Database error.']);
+            }
         }
     } else {
         echo json_encode(['success' => false, 'error' => 'Invalid review ID.']);
