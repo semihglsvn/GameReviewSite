@@ -2,7 +2,7 @@
 $currentPage = basename($_SERVER['PHP_SELF']);
 $sidebar_role = $_SESSION['role_id'] ?? 5;
 ?>
-<nav class="sidebar">
+<nav class="sidebar admin-sidebar">
     <h3>Admin Panel</h3>
     <hr>
     <a href="index.php" class="nav-link <?= ($currentPage == 'index.php') ? 'active' : '' ?>">Dashboard</a>
@@ -13,5 +13,8 @@ $sidebar_role = $_SESSION['role_id'] ?? 5;
 
     <a href="users.php" class="nav-link <?= ($currentPage == 'users.php') ? 'active' : '' ?>">Manage Users</a>
     <a href="reports.php" class="nav-link <?= ($currentPage == 'reports.php') ? 'active' : '' ?>">Reported Reviews</a>
+        <?php if ($sidebar_role == 1): ?>
+    <a href="logs.php" class="nav-link <?= ($currentPage == 'logs.php') ? 'active' : '' ?>">System Logs</a>
+        <?php endif; ?>
     <a href="../logout.php" class="logout-link">Logout</a>
 </nav>

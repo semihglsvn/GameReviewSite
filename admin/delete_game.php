@@ -3,30 +3,48 @@
 require_once 'includes/auth.php'; 
 require_once '../config/db.php'; 
 
-// 1. Strict Role Check (Super Admin ONLY)
-if ($_SESSION['role_id'] != 1) {
-    die("Unauthorized action. Only Super Admins can delete games.");
+header('Content-Type: application/json');
+
+// Only Admins and Editors can delete games
+if ($_SESSION['role_id'] == 3) {
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+    exit;
 }
 
-// 2. Ensure it's a POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['game_id'])) {
-    $game_id = (int)$_POST['game_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Depending on how your frontend sends the ID, it might be in $_POST['id'] or $_POST['game_id']
+    $game_id = isset($_POST['id']) ? (int)$_POST['id'] : (isset($_POST['game_id']) ? (int)$_POST['game_id'] : 0);
 
-    // 3. Delete the game. 
-    // Note: Because you set up Foreign Keys with ON DELETE CASCADE in your database, 
-    // deleting the game will automatically delete its reviews, genres, and platform links!
-    $stmt = $conn->prepare("DELETE FROM games WHERE id = ?");
-    $stmt->bind_param("i", $game_id);
-    
-    if ($stmt->execute()) {
-        // Redirect back to the referring page so they don't lose their search/sort state
-        $redirect_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'games.php';
-        header("Location: " . $redirect_url);
+    if ($game_id <= 0) {
+        echo json_encode(['success' => false, 'error' => 'Invalid Game ID.']);
         exit;
-    } else {
-        die("Error deleting game. Please contact support.");
+    }
+
+    try {
+        // 1. Grab the title BEFORE we delete it so we can put it in the log
+        $t_stmt = $conn->prepare("SELECT title FROM games WHERE id = ?");
+        $t_stmt->bind_param("i", $game_id);
+        $t_stmt->execute();
+        $res = $t_stmt->get_result()->fetch_assoc();
+        $game_title = $res ? $res['title'] : "Unknown Game";
+
+        // 2. Delete the game 
+        // (Because of ON DELETE CASCADE, this will also automatically wipe out 
+        // the connected platforms, genres, and reviews in the database!)
+        $stmt = $conn->prepare("DELETE FROM games WHERE id = ?");
+        $stmt->bind_param("i", $game_id);
+        $stmt->execute();
+
+        // 3. Log the successful deletion
+        logAdminAction($conn, 'DELETE_GAME', "Deleted game '$game_title' (ID: $game_id)");
+
+        echo json_encode(['success' => true]);
+
+    } catch (Exception $e) {
+        // 4. If something crashes, log the error and warn the user
+        logSystemError($conn, "Failed to delete game ID $game_id: " . $e->getMessage(), 'DATABASE_ERROR');
+        echo json_encode(['success' => false, 'error' => 'A database error occurred while deleting the game.']);
     }
 } else {
-    header("Location: games.php");
-    exit;
+    echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
 }

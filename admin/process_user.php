@@ -55,6 +55,7 @@ if ($action === 'change_role') {
     if (isset($_POST['reset_strikes']) && $_POST['reset_strikes'] == 1) {
         $conn->query("UPDATE users SET false_report_strikes = 0, shadowbanned_reports = 0 WHERE id = $target_user_id");
     }
+    logAdminAction($conn, 'CHANGE_ROLE', "Changed user ID $target_user_id to Role $new_role_id");
     echo json_encode(['success' => true]);
 
 // --- 2. BAN USER ---
@@ -76,9 +77,13 @@ if ($action === 'change_role') {
     elseif ($duration === '7d') $ban_date = "DATE_ADD(NOW(), INTERVAL 7 DAY)";
     elseif ($duration === 'perm') $ban_date = "'9999-12-31 23:59:59'";
 
-    $conn->query("UPDATE users SET is_banned = 1, ban_expires_at = $ban_date WHERE id = $target_user_id");
-    echo json_encode(['success' => true]);
+// Inside process_user.php -> --- 2. BAN USER --- block:
+$conn->query("UPDATE users SET is_banned = 1, ban_expires_at = $ban_date WHERE id = $target_user_id");
 
+// NEW LOGGING LINE:
+logAdminAction($conn, 'BAN_USER', "Banned user ID $target_user_id for duration: $duration");
+
+echo json_encode(['success' => true]);
 // --- 3. UNBAN USER ---
 } elseif ($action === 'unban') {
     if (!in_array($my_role, [1, 2, 3])) {
@@ -92,6 +97,7 @@ if ($action === 'change_role') {
     }
 
     $conn->query("UPDATE users SET is_banned = 0, ban_expires_at = NULL WHERE id = $target_user_id");
+    logAdminAction($conn, 'UNBAN_USER', "Unbanned user ID $target_user_id");
     echo json_encode(['success' => true]);
 
 // --- 4. MASS DELETE ---
@@ -113,6 +119,7 @@ if ($action === 'change_role') {
     $ids_string = implode(',', $safe_ids);
 
     $conn->query("DELETE FROM users WHERE id IN ($ids_string)");
+    logAdminAction($conn, 'MASS_DELETE_USERS', "Deleted user IDs: $ids_string");
     echo json_encode(['success' => true]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Unknown action.']);

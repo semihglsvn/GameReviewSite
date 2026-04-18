@@ -70,7 +70,8 @@ include 'includes/admin_sidebar.php';
             <button class="btn-sm btn-approve" style="font-size: 14px; padding: 10px 20px;" onclick="openGameModal()">+ Add New Game</button>
         <?php endif; ?>
     </div>
-<div style="margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between;">
+    
+    <div style="margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between;">
         <form method="GET" action="games.php" style="display: flex; gap: 10px; flex: 1;">
             <input type="text" name="search" placeholder="Search by game title..." value="<?php echo htmlspecialchars($search); ?>" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             <input type="hidden" name="sort" value="<?php echo htmlspecialchars($sort_key); ?>"> 
@@ -143,10 +144,7 @@ include 'includes/admin_sidebar.php';
                                 <button class="btn-sm btn-edit" onclick="openGameModal(<?php echo $game['id']; ?>)">Edit</button>
                                 
                                 <?php if ($user_role == 1): ?>
-                                    <form method="POST" action="delete_game.php" onsubmit="return confirm('WARNING: Delete <?php echo addslashes(htmlspecialchars($game['title'])); ?>?');" style="display:inline;">
-                                        <input type="hidden" name="game_id" value="<?php echo $game['id']; ?>">
-                                        <button type="submit" class="btn-sm btn-delete">Delete</button>
-                                    </form>
+                                    <button class="btn-sm btn-delete" onclick="deleteGame(<?php echo $game['id']; ?>)">Delete</button>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -156,7 +154,7 @@ include 'includes/admin_sidebar.php';
         </table>
     </div>
 
-<?php if ($total_pages > 1): ?>
+    <?php if ($total_pages > 1): ?>
         <div style="display: flex; justify-content: center; gap: 5px; margin-top: 20px;">
             <?php 
                 // Properly build the query string to preserve BOTH search and sort
@@ -179,10 +177,42 @@ include 'includes/admin_sidebar.php';
         </div>
     <?php endif; ?>
 
-</main> <?php 
+</main>
+
+<script>
+function deleteGame(gameId) {
+    if (!confirm("Are you sure you want to permanently delete this game and all its reviews?")) {
+        return; 
+    }
+
+    let formData = new FormData();
+    formData.append('game_id', gameId);
+
+    fetch('delete_game.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Server error or missing file.");
+        return response.json(); 
+    })
+    .then(data => {
+        if (data.success) {
+            location.reload(); 
+        } else {
+            alert("Error deleting game: " + data.error);
+        }
+    })
+    .catch(err => {
+        alert("Connection error: " + err.message);
+    });
+}
+</script>
+
+<?php 
 // 1. MUST include the modal first so the HTML and JavaScript load into the body
 require_once 'includes/game_modal.php'; 
 
 // 2. MUST include the footer last because it contains the closing </body> and </html> tags
-require_once 'includes/footer.php'; 
+require_once 'includes/admin_footer.php'; 
 ?>

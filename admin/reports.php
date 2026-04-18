@@ -132,7 +132,35 @@ function toggleAllCheckboxes(masterCheckbox) {
     let checkboxes = document.querySelectorAll('.report-checkbox');
     checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
 }
+// --- SHIFT-CLICK MASS SELECTION FOR USERS ---
+let lastCheckedUser = null;
+const userCheckboxes = document.querySelectorAll('.user-checkbox');
 
+userCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('click', function(e) {
+        let inBetween = false;
+
+        // If the Shift key is held down AND we have previously clicked a box
+        if (e.shiftKey && lastCheckedUser) {
+            userCheckboxes.forEach(cb => {
+                // If we hit either the box we just clicked OR the box we clicked last time
+                // we toggle our "inBetween" tracker on or off
+                if (cb === this || cb === lastCheckedUser) {
+                    inBetween = !inBetween;
+                }
+                
+                // If we are currently "in between" the two clicks, check/uncheck the box
+                // to match the exact state of the box we just shift-clicked
+                if (inBetween || cb === this || cb === lastCheckedUser) {
+                    cb.checked = this.checked; 
+                }
+            });
+        }
+        
+        // Remember this checkbox as the last one clicked for next time
+        lastCheckedUser = this;
+    });
+});
 // Single Report Logic
 function processReport(reportId, action, duration = null, authorId = null) {
     let formData = new FormData();

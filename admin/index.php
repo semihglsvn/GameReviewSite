@@ -129,4 +129,4 @@ include 'includes/admin_sidebar.php';
     </div>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'includes/admin_footer.php'; ?>
