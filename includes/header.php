@@ -5,16 +5,30 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // Include database connection safely
 require_once __DIR__ . '/../config/db.php';
+
+// ==========================================
+// FETCH GLOBAL SITE SETTINGS
+// ==========================================
+$settings_query = $conn->query("SELECT * FROM settings WHERE id = 1");
+$site_settings = $settings_query->fetch_assoc();
+
+// Set safe fallbacks just in case the database is empty
+$site_title = !empty($site_settings['site_title']) ? $site_settings['site_title'] : 'GameJoint';
+$site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] : 'assets/images/logo.svg';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameJoint - Homepage</title>
+    
+    <title><?php echo htmlspecialchars($site_title); ?> - Homepage</title>
+    <?php if (!empty($site_settings['site_description'])): ?>
+        <meta name="description" content="<?php echo htmlspecialchars($site_settings['site_description']); ?>">
+    <?php endif; ?>
+
     <link rel="stylesheet" href="assets/css/style.css">
     
-    <!-- CSS FOR LIVE SEARCH & ICON -->
     <style>
         /* Ensure parent containers do not clip the absolute dropdown */
         header, .header-content, nav, .col-10, .search-container {
@@ -22,12 +36,11 @@ require_once __DIR__ . '/../config/db.php';
         }
 
         .search-container {
-            position: relative; /* Allows the dropdown to attach directly */
+            position: relative; 
             width: 100%;
-            max-width: 300px; /* Keeps the search bar contained */
+            max-width: 300px; 
         }
         
-        /* Modern Search Input with integrated icon */
         #search-form {
             position: relative;
             display: flex;
@@ -37,51 +50,46 @@ require_once __DIR__ . '/../config/db.php';
         
         #search-input {
             width: 100%;
-            padding-right: 40px !important; /* Prevents text from hiding behind the icon */
+            padding-right: 40px !important; 
         }
         
-        /* THE FIX: Blended transparent button with no gaps */
         .search-icon-btn {
             position: absolute;
-            right: 0; /* Snaps to the exact right edge */
+            right: 0; 
             top: 0;
             bottom: 0;
-            height: 100%; /* Fills the vertical space of the input */
-            background: transparent !important; /* Overrides global button backgrounds */
-            border: none !important; /* Overrides global button borders */
+            height: 100%; 
+            background: transparent !important; 
+            border: none !important; 
             box-shadow: none !important;
             cursor: pointer;
             color: #888;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 12px; /* Gives a comfortable click area */
+            padding: 0 12px; 
             transition: color 0.2s;
             outline: none;
         }
         
         .search-icon-btn:hover {
-            color: #007bff !important; /* Highlights the icon when hovered */
-            background: transparent !important; /* Prevents grey background on hover */
+            color: #007bff !important; 
+            background: transparent !important; 
         }
         
-        .search-icon-btn svg {
-            width: 18px;
-            height: 18px;
-        }
+        .search-icon-btn svg { width: 18px; height: 18px; }
         
-        /* Dropdown Styles */
         #search-results {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            background: #2a2a2a; /* Dark theme to match GameJoint */
+            background: #2a2a2a; 
             color: #fff;
-            z-index: 99999; /* Extremely high z-index to stay above sliders */
+            z-index: 99999; 
             border-radius: 0 0 8px 8px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.8);
-            display: none; /* Hidden by default */
+            display: none; 
             margin-top: 5px;
             border: 1px solid #444;
             border-top: none;
@@ -97,13 +105,8 @@ require_once __DIR__ . '/../config/db.php';
             transition: background 0.2s;
         }
         
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .search-result-item:hover {
-            background: #444; /* Highlight on hover */
-        }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: #444; }
         
         .search-result-img {
             width: 40px;
@@ -130,7 +133,7 @@ require_once __DIR__ . '/../config/db.php';
                 <div class="col-2">
                     <h1>
                         <a href="index.php" class="logo-link">
-                            <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
+                            <img src="<?php echo htmlspecialchars($site_logo); ?>" alt="<?php echo htmlspecialchars($site_title); ?> Logo" class="site-logo" style="max-height: 50px;">
                         </a>
                     </h1>
                 </div>
@@ -141,11 +144,9 @@ require_once __DIR__ . '/../config/db.php';
                             <li><a href="games.php">Games</a></li>
                         </ul>
 
-                        <!-- SEARCH BAR CONTAINER -->
                         <div class="search-container">
                             <form action="advanced-search.php" method="GET" id="search-form">
                                 <input type="text" placeholder="Search games..." name="search" id="search-input" autocomplete="off">
-                                <!-- Magnifying Glass Icon Button -->
                                 <button type="submit" class="search-icon-btn" aria-label="Search">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <circle cx="11" cy="11" r="8"></circle>
@@ -153,17 +154,14 @@ require_once __DIR__ . '/../config/db.php';
                                     </svg>
                                 </button>
                             </form>
-                            <!-- This div will be filled by JavaScript -->
                             <div id="search-results"></div>
                         </div>
 
                         <ul class="nav-right">
                             <?php if (isset($_SESSION['user_id'])): ?>
-                                <!-- User is Logged In -->
                                 <li><a href="profile.php" class="btn-login">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></a></li>
                                 <li><a href="logout.php" class="btn-register" style="background-color: #dc3545;">Logout</a></li>
                             <?php else: ?>
-                                <!-- User is NOT Logged In -->
                                 <li><a href="login.php" class="btn-login">Login</a></li>
                                 <li><a href="register.php" class="btn-register">Register</a></li>
                             <?php endif; ?>
@@ -174,28 +172,24 @@ require_once __DIR__ . '/../config/db.php';
         </div>
     </header>
 
-    <!-- LIVE SEARCH JAVASCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
             const searchResults = document.getElementById('search-results');
-            let debounceTimer; // Used to prevent spamming the database on every keystroke
+            let debounceTimer; 
 
             searchInput.addEventListener('input', function() {
                 clearTimeout(debounceTimer);
                 const query = this.value.trim();
                 
-                // If the user clears the box or types only 1 letter, hide results
                 if (query.length < 2) {
                     searchResults.style.display = 'none';
                     return;
                 }
 
-                // Instantly show a Loading state so the user knows it is working
                 searchResults.innerHTML = '<div style="padding: 10px; color: #aaa; font-size: 14px;">Searching...</div>';
                 searchResults.style.display = 'block';
 
-                // Wait 300ms after the user stops typing to fetch results
                 debounceTimer = setTimeout(() => {
                     fetch(`/GameReviewSite/ajax_search.php?q=${encodeURIComponent(query)}`)
                         .then(response => response.text()) 
@@ -206,23 +200,19 @@ require_once __DIR__ . '/../config/db.php';
                                 
                                 if (data.length > 0) {
                                     data.forEach(game => {
-                                        // Create clickable wrapper linking to game details
                                         const a = document.createElement('a');
                                         a.href = `game-details.php?id=${game.id}`;
                                         a.className = 'search-result-item';
                                         
-                                        // Create image
                                         const img = document.createElement('img');
                                         img.src = game.cover_image;
                                         img.className = 'search-result-img';
                                         img.onerror = function() { this.src = 'assets/images/placeholder.png'; }; 
                                         
-                                        // Create title
                                         const title = document.createElement('div');
                                         title.className = 'search-result-title';
                                         title.textContent = game.title;
                                         
-                                        // Assemble and append
                                         a.appendChild(img);
                                         a.appendChild(title);
                                         searchResults.appendChild(a);
@@ -242,14 +232,12 @@ require_once __DIR__ . '/../config/db.php';
                 }, 300); 
             });
 
-            // Automatically hide the dropdown if the user clicks anywhere else on the page
             document.addEventListener('click', function(e) {
                 if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                     searchResults.style.display = 'none';
                 }
             });
             
-            // Re-show dropdown if user clicks back into the search bar and it has text
             searchInput.addEventListener('focus', function() {
                 if (this.value.trim().length >= 2 && searchResults.innerHTML !== '') {
                     searchResults.style.display = 'block';
