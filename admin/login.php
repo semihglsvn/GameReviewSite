@@ -3,10 +3,17 @@
 session_start();
 require_once '../config/db.php'; 
 
-// If already logged in as admin, send straight to dashboard
-if (isset($_SESSION['user_id']) && in_array($_SESSION['role_id'], [1, 2, 3])) {
-    header("Location: index.php");
-    exit;
+// --- FIX FOR THE INFINITE REDIRECT LOOP ---
+if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['role_id']) && in_array($_SESSION['role_id'], [1, 2, 3])) {
+        // They are an Admin/Editor -> Send them to the Admin Dashboard
+        header("Location: index.php"); 
+        exit;
+    } else {
+        // They are a Regular User -> Kick them back to the Public Homepage!
+        header("Location: ../index.php"); 
+        exit;
+    }
 }
 
 $error = '';
@@ -28,28 +35,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user = $result->fetch_assoc()) {
         if (password_verify($password, $user['password_hash'])) {
             
-            // ==========================================
-            // SECURITY FIX 1: Prevent Session Fixation
-            // ==========================================
+            // Prevent Session Fixation attacks
             session_regenerate_id(true);
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role_id'] = $user['role_id'];
             $_SESSION['username'] = $user['username'];
             
-            // ==========================================
-            // SECURITY FIX 2: Start Inactivity Timer
-            // ==========================================
+            // Start the inactivity timer
             $_SESSION['last_activity'] = time();
             
             header("Location: index.php");
             exit;
         } else {
-            // SECURITY FIX 3: Generic Error Message
             $error = "Invalid credentials or access denied.";
         }
     } else {
-        // SECURITY FIX 3: Generic Error Message
         $error = "Invalid credentials or access denied.";
     }
 }

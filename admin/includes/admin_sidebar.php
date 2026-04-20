@@ -18,6 +18,7 @@ $sidebar_role = $_SESSION['role_id'] ?? 5;
     <?php if ($sidebar_role == 1): ?>
         <a href="settings.php" class="nav-link <?= ($currentPage == 'settings.php') ? 'active' : '' ?>">Site Settings</a>
         <a href="logs.php" class="nav-link <?= ($currentPage == 'logs.php') ? 'active' : '' ?>">System Logs</a>
+        <a href="menus.php" class="nav-link <?= ($currentPage == 'menus.php') ? 'active' : '' ?>">Navigation Menus</a>
     <?php endif; ?>
     
     <a href="../logout.php" class="logout-link">Logout</a>

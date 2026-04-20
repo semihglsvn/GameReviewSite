@@ -182,9 +182,15 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
 
                 <div class="col-10">
                     <nav>
-                        <ul class="nav-left">
-                            <li><a href="games.php">Games</a></li>
-                        </ul>
+                <ul class="nav-left">
+    <?php
+    // Fetch only active menus, ordered correctly
+    $nav_query = $conn->query("SELECT title, url FROM menus WHERE is_active = 1 ORDER BY sort_order ASC");
+    while ($nav = $nav_query->fetch_assoc()): 
+    ?>
+        <li><a href="<?php echo htmlspecialchars($nav['url']); ?>"><?php echo htmlspecialchars($nav['title']); ?></a></li>
+    <?php endwhile; ?>
+                </ul>
 
                         <div class="search-container">
                             <form action="advanced-search.php" method="GET" id="search-form">
