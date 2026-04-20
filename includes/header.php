@@ -7,6 +7,48 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/db.php';
 
 // ==========================================
+// SECURE AUTO-LOGIN CHECK (Remember Me)
+// ==========================================
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
+    
+    // Split the cookie into User ID and the Token
+    $cookie_parts = explode('_', $_COOKIE['remember_token']);
+    
+    if (count($cookie_parts) === 2) {
+        $cookie_user_id = (int)$cookie_parts[0];
+        $cookie_token = $cookie_parts[1];
+        
+        // Lookup the user's token hash from the DB
+        $stmt = $conn->prepare("SELECT id, username, role_id, remember_token_hash FROM users WHERE id = ?");
+        $stmt->bind_param("i", $cookie_user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            
+            // Hash the cookie token and compare it to the database safely
+            if (!empty($user['remember_token_hash']) && hash_equals($user['remember_token_hash'], hash('sha256', $cookie_token))) {
+                // IT'S A MATCH! Log them in instantly.
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role_id'] = $user['role_id'];
+            } else {
+                // Forged or expired cookie! Delete it.
+                setcookie('remember_token', '', time() - 3600, "/");
+            }
+        } else {
+            // User doesn't exist anymore, delete cookie
+            setcookie('remember_token', '', time() - 3600, "/");
+        }
+        $stmt->close();
+    } else {
+        // Badly formatted cookie, delete it
+        setcookie('remember_token', '', time() - 3600, "/");
+    }
+}
+
+// ==========================================
 // FETCH GLOBAL SITE SETTINGS
 // ==========================================
 $settings_query = $conn->query("SELECT * FROM settings WHERE id = 1");

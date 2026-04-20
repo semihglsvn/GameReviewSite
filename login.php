@@ -35,16 +35,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role_id'] = $user['role_id'];
 
-                // ==========================================
-                // REMEMBER ME COOKIE LOGIC
+// ==========================================
+                // SECURE REMEMBER ME (Random Hashed Token)
                 // ==========================================
                 if ($remember_me) {
-                    // Create a secure, unforgeable token using their DB data
-                    $secure_hash = md5($user['username'] . $user['password_hash']);
-                    $token = $user['id'] . '-' . $secure_hash;
+                    // 1. Generate 32 bytes of secure, unguessable randomness
+                    $random_token = bin2hex(random_bytes(32)); 
                     
-                    // Set cookie to expire in 30 days (86400 seconds * 30)
-                    setcookie('remember_token', $token, time() + (86400 * 30), "/");
+                    // 2. Hash it for the database (so leaks are harmless)
+                    $token_hash = hash('sha256', $random_token);
+                    
+                    // 3. Save the hash to the database
+                    $update_stmt = $conn->prepare("UPDATE users SET remember_token_hash = ? WHERE id = ?");
+                    $update_stmt->bind_param("si", $token_hash, $user['id']);
+                    $update_stmt->execute();
+                    $update_stmt->close();
+                    
+                    // 4. Give the user the PLAIN TEXT token + their ID in the cookie
+                    // Format: "UserID_RandomToken"
+// 4. Give the user the PLAIN TEXT token + their ID in the cookie
+            $cookie_value = $user['id'] . '_' . $random_token;
+
+// THE IRONCLAD COOKIE SETTINGS
+            $cookie_options = [
+                 'expires' => time() + (86400 * 30), // 30 days
+                'path' => '/',
+                'secure' => true,     // DEFENSE 1: Network Sniffing
+                 'httponly' => true,   // DEFENSE 2: XSS Attacks
+                 'samesite' => 'Lax'   // DEFENSE 3: CSRF Attacks
+];
+
+setcookie('remember_token', $cookie_value, $cookie_options);                    setcookie('remember_token', $cookie_value, time() + (86400 * 30), "/", "", false, true); 
+                    // Note: The final 'true' makes the cookie HttpOnly (blocks Javascript from stealing it)
                 }
 
                 // Success! Redirect to homepage

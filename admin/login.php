@@ -1,6 +1,5 @@
 <?php
 // admin/login.php
-
 session_start();
 require_once '../config/db.php'; 
 
@@ -12,30 +11,46 @@ if (isset($_SESSION['user_id']) && in_array($_SESSION['role_id'], [1, 2, 3])) {
 
 $error = '';
 
+// Check if they were kicked out for inactivity
+if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
+    $error = "Your session expired due to inactivity. Please log in again.";
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // We now accept either username or email in this single field
     $login_id = trim($_POST['login_id']);
     $password = trim($_POST['password']);
 
-    // Check for email OR username, ensuring they are an admin role (1, 2, or 3)
-    $stmt = $conn->prepare("SELECT id, username, password_hash, role_id FROM users WHERE (email = ? OR username = ?) AND role_id IN (1, 2, 3)");    // We bind $login_id twice because of the two '?' in the query
+    $stmt = $conn->prepare("SELECT id, username, password_hash, role_id FROM users WHERE (email = ? OR username = ?) AND role_id IN (1, 2, 3)");
     $stmt->bind_param("ss", $login_id, $login_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($user = $result->fetch_assoc()) {
-        if (password_verify($password, $user['password_hash'])) {            // Password is correct, set sessions
+        if (password_verify($password, $user['password_hash'])) {
+            
+            // ==========================================
+            // SECURITY FIX 1: Prevent Session Fixation
+            // ==========================================
+            session_regenerate_id(true);
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role_id'] = $user['role_id'];
             $_SESSION['username'] = $user['username'];
             
+            // ==========================================
+            // SECURITY FIX 2: Start Inactivity Timer
+            // ==========================================
+            $_SESSION['last_activity'] = time();
+            
             header("Location: index.php");
             exit;
         } else {
-            $error = "Invalid password.";
+            // SECURITY FIX 3: Generic Error Message
+            $error = "Invalid credentials or access denied.";
         }
     } else {
-        $error = "Admin account not found or access denied.";
+        // SECURITY FIX 3: Generic Error Message
+        $error = "Invalid credentials or access denied.";
     }
 }
 ?>
@@ -51,7 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Admin Portal</h2>
         
         <?php if ($error): ?>
-            <div class="login-error"><?php echo htmlspecialchars($error); ?></div>
+            <div class="login-error" style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center;">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
         <?php endif; ?>
         
         <form method="POST" action="login.php">
