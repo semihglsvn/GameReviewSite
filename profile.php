@@ -8,7 +8,6 @@ require_once __DIR__ . '/config/db.php';
 // ==========================================
 // 1. GET PROFILE USER ID
 // ==========================================
-// If an ID is in the URL, view that profile. Otherwise, view your own profile.
 $profile_id = isset($_GET['id']) ? (int)$_GET['id'] : (isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0);
 
 if ($profile_id <= 0) { 
@@ -45,12 +44,9 @@ $is_staff = in_array($viewer_role, [1, 2, 3]);
 // 4. FETCH REVIEWS
 // ==========================================
 $rev_stmt = $conn->prepare("
-    SELECT r.*, g.title as game_title,
-           GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as platform_names
+    SELECT r.*, g.title as game_title
     FROM reviews r
     JOIN games g ON r.game_id = g.id
-    LEFT JOIN game_platforms gp ON g.id = gp.game_id
-    LEFT JOIN platforms p ON gp.platform_id = p.id
     WHERE r.user_id = ? AND r.status = 'approved'
     GROUP BY r.id
     ORDER BY r.created_at DESC
@@ -109,7 +105,7 @@ require_once 'includes/header.php';
             <?php endif; ?>
         </div>
         <div class="col-4 text-right">
-            <?php if ($is_staff && $profile_role > 3): // Don't let staff ban other staff easily here ?>
+            <?php if ($is_staff && $profile_role > 3): ?>
                 <button type="button" onclick="openBanModal(<?php echo $profile_user['id']; ?>, '<?php echo addslashes(htmlspecialchars($profile_user['username'])); ?>')" class="btn-cancel" style="background:#c0392b; padding:8px 15px; border:none; color:white; border-radius:4px; cursor:pointer; font-weight:bold;">BAN USER</button>
             <?php endif; ?>
         </div>
@@ -121,12 +117,12 @@ require_once 'includes/header.php';
             <h4 class="font-weight-bold mb-15">Review Stats</h4>
             <div class="game-card overview-card" style="display:flex; flex-wrap:wrap; padding:20px;">
                 
-                <div class="overview-left" style="flex: 0 0 150px; text-align:center; border-right:1px solid #eee; padding-right:20px;">
-                    <div id="avg-score" class="<?php echo $score_class; ?> metascore-large" style="margin:0 auto; width:70px; height:70px; line-height:70px; font-size:28px;">-</div>
-                    <div class="text-sub-grey mt-10" style="font-weight:bold;">Avg. Score</div>
+                <div id="avg-score-container" class="score-none" style="flex: 0 0 160px; height: 160px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:<?php echo $is_critic_profile ? '8px' : '50%'; ?>; margin-right:30px; color:white;">
+                    <div id="avg-score" style="font-size:48px; font-weight:bold; line-height:1;">-</div>
+                    <div style="font-size:13px; font-weight:bold; margin-top:8px; text-transform:uppercase; letter-spacing:0.5px; opacity:0.9;">Avg. Score</div>
                 </div>
                 
-                <div class="overview-right" style="flex: 1; padding-left:30px;">
+                <div class="overview-right" style="flex: 1;">
                     <h6 style="margin-top:0; color:#2c3e50;">Score Distribution</h6>
                     <div class="mb-20">
                         <div class="dist-row">
@@ -218,12 +214,8 @@ require_once 'includes/header.php';
                                     <button class="btn-read-more">Read More</button>
                                 <?php endif; ?>
                                 
-                                <div style="margin-top:auto; padding-top:15px; display:flex; justify-content:space-between; align-items:center;">
-                                    <span style="font-size:11px; font-weight:bold; color:#7f8c8d; background:#ecf0f1; padding:3px 8px; border-radius:4px;">
-                                        <?php echo !empty($review['platform_names']) ? htmlspecialchars($review['platform_names']) : 'PC'; ?>
-                                    </span>
-                                    
-                                    <?php if ($viewer_id > 0 && $viewer_id !== $profile_id): ?>
+                                <div style="margin-top:auto; padding-top:15px; display:flex; justify-content:flex-end; align-items:center;">
+                                    <?php if ($viewer_id > 0 && $viewer_id !== $profile_id && !$is_critic_profile): ?>
                                         <a href="#" class="btn-report footer-link-bold" data-review-id="<?php echo $review['id']; ?>" style="color:#e74c3c; font-size:12px; font-weight:bold; text-decoration:none;">REPORT</a>
                                     <?php endif; ?>
                                 </div>
@@ -339,7 +331,10 @@ require_once 'includes/header.php';
             
             let avgEl = document.getElementById('avg-score');
             avgEl.innerText = displayAvg;
-            applyColorToEl(avgEl, avgNorm);
+            
+            // COLOR THE WHOLE LEFT BOX
+            let avgContainer = document.getElementById('avg-score-container');
+            applyColorToEl(avgContainer, avgNorm);
             
             document.getElementById('pos-count').innerText = pos;
             document.getElementById('mixed-count').innerText = mixed;
@@ -459,7 +454,7 @@ require_once 'includes/header.php';
         btn.disabled = true;
         btn.innerText = "Banning...";
 
-        fetch('admin/process_users.php', { // Note: Verify this matches your actual DB file name!
+        fetch('admin/process_user.php', { 
             method: 'POST',
             body: formData
         })
