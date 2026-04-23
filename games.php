@@ -1,286 +1,267 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Games - GameJoint</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+<?php
+require_once 'includes/header.php';
+require_once 'config/db.php';
 
-    <header>
-        <div class="container">
-            <div class="row header-content">
-                <div class="col-2">
-                    <h1>
-                        <a href="index.html" class="logo-link">
-                            <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
-                        </a>
-                    </h1>
-                </div>
-                <div class="col-10">
-                    <nav>
-                        <ul class="nav-left">
-                            <li><a href="games.html" style="font-weight: bold; text-decoration: underline;">Games</a></li>
-                        </ul>
-                        <div class="search-container">
-                            <form action="advanced-search.html">
-                                <input type="text" placeholder="Search games..." name="search">
-                                <button type="submit">Search</button>
-                            </form>
-                        </div>
-                        <ul class="nav-right">
-                            <li><a href="login.html" class="btn-login">Login</a></li>
-                            <li><a href="register.html" class="btn-register">Register</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+// ==========================================
+// 1. DYNAMIC GENRE FETCHING
+// ==========================================
+$genres_query = "
+    SELECT g.id, g.name, COUNT(gg.game_id) as game_count
+    FROM genres g
+    JOIN game_genres gg ON g.id = gg.genre_id
+    GROUP BY g.id, g.name
+    HAVING game_count >= 4
+    ORDER BY g.name ASC
+";
+$genres = $conn->query($genres_query)->fetch_all(MYSQLI_ASSOC);
+
+$slider_sections = [];
+foreach ($genres as $g) { 
+    $slider_sections[] = ['type' => 'genre', 'id' => $g['id'], 'title' => $g['name'] . ' Games']; 
+}
+
+function padInitialArray($games) {
+    $count = count($games);
+    if ($count == 0) return array_fill(0, 4, ['is_empty' => true]);
+    $rem = $count % 4;
+    if ($rem > 0) {
+        for ($i = 0; $i < (4 - $rem); $i++) { $games[] = ['is_empty' => true]; }
+    }
+    return $games;
+}
+?>
+
+<style>
+    .responsive-slider-track { display: flex; transition: transform 0.4s ease-in-out; }
+    .responsive-slide { flex: 0 0 100%; max-width: 100%; }
+    .responsive-row { display: flex; flex-wrap: wrap; margin: 0 -10px; }
+    .responsive-col { box-sizing: border-box; padding: 0 10px; width: 100%; margin-bottom: 20px; }
+    @media (min-width: 768px) { .responsive-col { width: 50%; } }
+    @media (min-width: 1024px) { .responsive-col { width: 25%; } }
+</style>
+
+<div class="container main-content">
+    
+    <div class="row section-header">
+        <div class="col-12">
+            <h2 style="margin-top:0;">Browse by Genre</h2>
+            <p>Explore our extensive database of games across all categories.</p>
         </div>
-    </header>
-
-    <div class="container main-content">
-        
-        <div class="row section-header">
-            <div class="col-12">
-                <h2 style="margin-top:0;">Browse Games</h2>
-                <p>Explore our extensive database of games across all platforms and genres.</p>
-            </div>
-        </div>
-
-        <!-- RPG GAMES SLIDER -->
-        <div class="slider-section-wrapper">
-            <div class="row section-header">
-                <div class="col-12 header-flex">
-                    <h2>RPG Games</h2>
-                    <div class="slider-controls">
-                        <button class="slider-nav-btn prev-btn">&#10094;</button>
-                        <button class="slider-nav-btn next-btn">&#10095;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slider-container">
-                <div class="slider-wrapper">
-                    <div class="slider-track">
-                        
-                        <!-- SLIDE 1 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3">
-                                    <a href="game-details.html" style="text-decoration: none; color: inherit; display: block; height: 100%;">
-                                        <div class="game-card">
-                                            <img src="assets/images/baldursgate3.png" alt="Baldur's Gate 3" class="card-img">
-                                            <div class="card-content">
-                                                <h3>Baldur's Gate 3</h3>
-                                                <p class="platform-tag">PC, PS5</p>
-                                                <div class="meta-footer"><span>Score</span><div class="metascore">96</div></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 2</div><div class="card-content"><h3>Witcher 3</h3><p class="platform-tag">PC, PS4, Xbox</p><div class="meta-footer"><span>Score</span><div class="metascore">93</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 3</div><div class="card-content"><h3>Starfield</h3><p class="platform-tag">PC, Xbox</p><div class="meta-footer"><span>Score</span><div class="metascore">83</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 4</div><div class="card-content"><h3>Cyberpunk</h3><p class="platform-tag">PC, PS5, Xbox</p><div class="meta-footer"><span>Score</span><div class="metascore">86</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 2 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 5</div><div class="card-content"><h3>Final Fantasy</h3><p class="platform-tag">PS5</p><div class="meta-footer"><span>Score</span><div class="metascore">87</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 6</div><div class="card-content"><h3>Persona 5</h3><p class="platform-tag">PS4, Switch</p><div class="meta-footer"><span>Score</span><div class="metascore">95</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 7</div><div class="card-content"><h3>Mass Effect</h3><p class="platform-tag">PC, Xbox</p><div class="meta-footer"><span>Score</span><div class="metascore">93</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">RPG 8</div><div class="card-content"><h3>Skyrim</h3><p class="platform-tag">Multi</p><div class="meta-footer"><span>Score</span><div class="metascore">94</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
-
-        <!-- STRATEGY GAMES SLIDER -->
-        <div class="slider-section-wrapper">
-            <div class="row section-header">
-                <div class="col-12 header-flex">
-                    <h2>Strategy Games</h2>
-                    <div class="slider-controls">
-                        <button class="slider-nav-btn prev-btn">&#10094;</button>
-                        <button class="slider-nav-btn next-btn">&#10095;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slider-container">
-                <div class="slider-wrapper">
-                    <div class="slider-track">
-                        
-                        <!-- SLIDE 1 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 1</div><div class="card-content"><h3>Civ VI</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">88</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 2</div><div class="card-content"><h3>XCOM 2</h3><p class="platform-tag">PC, Console</p><div class="meta-footer"><span>Score</span><div class="metascore">88</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 3</div><div class="card-content"><h3>Stellaris</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">78</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 4</div><div class="card-content"><h3>Age of Empires</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">81</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 2 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 5</div><div class="card-content"><h3>Total War</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">85</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 6</div><div class="card-content"><h3>Company of Heroes</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">80</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 7</div><div class="card-content"><h3>Starcraft 2</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">93</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Strat 8</div><div class="card-content"><h3>Crusader Kings</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">91</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
-
-        <!-- ACTION GAMES SLIDER -->
-        <div class="slider-section-wrapper">
-            <div class="row section-header">
-                <div class="col-12 header-flex">
-                    <h2>Action Games</h2>
-                    <div class="slider-controls">
-                        <button class="slider-nav-btn prev-btn">&#10094;</button>
-                        <button class="slider-nav-btn next-btn">&#10095;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slider-container">
-                <div class="slider-wrapper">
-                    <div class="slider-track">
-                        
-                        <!-- SLIDE 1 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 1</div><div class="card-content"><h3>God of War</h3><p class="platform-tag">PS5, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">94</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 2</div><div class="card-content"><h3>Spider-Man 2</h3><p class="platform-tag">PS5</p><div class="meta-footer"><span>Score</span><div class="metascore">90</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 3</div><div class="card-content"><h3>Uncharted 4</h3><p class="platform-tag">PS4, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">93</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 4</div><div class="card-content"><h3>Devil May Cry 5</h3><p class="platform-tag">Multi</p><div class="meta-footer"><span>Score</span><div class="metascore">89</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 2 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 5</div><div class="card-content"><h3>Bayonetta</h3><p class="platform-tag">Switch, Multi</p><div class="meta-footer"><span>Score</span><div class="metascore">90</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 6</div><div class="card-content"><h3>Sekiro</h3><p class="platform-tag">Multi</p><div class="meta-footer"><span>Score</span><div class="metascore">91</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 7</div><div class="card-content"><h3>Doom Eternal</h3><p class="platform-tag">Multi</p><div class="meta-footer"><span>Score</span><div class="metascore">88</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Act 8</div><div class="card-content"><h3>Hollow Knight</h3><p class="platform-tag">Multi</p><div class="meta-footer"><span>Score</span><div class="metascore">90</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
-
-        <!-- PC GAMES SLIDER -->
-        <div class="slider-section-wrapper">
-            <div class="row section-header">
-                <div class="col-12 header-flex">
-                    <h2>Top PC Games</h2>
-                    <div class="slider-controls">
-                        <button class="slider-nav-btn prev-btn">&#10094;</button>
-                        <button class="slider-nav-btn next-btn">&#10095;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slider-container">
-                <div class="slider-wrapper">
-                    <div class="slider-track">
-                        
-                        <!-- SLIDE 1 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 1</div><div class="card-content"><h3>Half-Life 2</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">96</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 2</div><div class="card-content"><h3>Portal 2</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">95</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 3</div><div class="card-content"><h3>Dota 2</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">90</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 4</div><div class="card-content"><h3>CS:GO 2</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">85</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 2 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 5</div><div class="card-content"><h3>Valorant</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">80</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 6</div><div class="card-content"><h3>WoW</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">93</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 7</div><div class="card-content"><h3>LoL</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">78</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">PC 8</div><div class="card-content"><h3>Minecraft</h3><p class="platform-tag">PC</p><div class="meta-footer"><span>Score</span><div class="metascore">93</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
-
-        <!-- XBOX GAMES SLIDER -->
-        <div class="slider-section-wrapper">
-            <div class="row section-header">
-                <div class="col-12 header-flex">
-                    <h2>Top Xbox Games</h2>
-                    <div class="slider-controls">
-                        <button class="slider-nav-btn prev-btn">&#10094;</button>
-                        <button class="slider-nav-btn next-btn">&#10095;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slider-container">
-                <div class="slider-wrapper">
-                    <div class="slider-track">
-                        
-                        <!-- SLIDE 1 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 1</div><div class="card-content"><h3>Halo Infinite</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">87</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 2</div><div class="card-content"><h3>Forza Horizon 5</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">92</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 3</div><div class="card-content"><h3>Gears 5</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">84</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 4</div><div class="card-content"><h3>Sea of Thieves</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">69</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 2 -->
-                        <div class="slide">
-                            <div class="row">
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 5</div><div class="card-content"><h3>Ori</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">90</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 6</div><div class="card-content"><h3>Fable</h3><p class="platform-tag">Xbox</p><div class="meta-footer"><span>Score</span><div class="metascore">85</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 7</div><div class="card-content"><h3>State of Decay 2</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">66</div></div></div></div></div>
-                                <div class="col-3"><div class="game-card"><div class="card-image-placeholder">Xbox 8</div><div class="card-content"><h3>Hellblade 2</h3><p class="platform-tag">Xbox, PC</p><div class="meta-footer"><span>Score</span><div class="metascore">81</div></div></div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GameJoint.</p>
+    <?php foreach ($slider_sections as $section): ?>
+        <?php
+        $stmt = $conn->prepare("
+            SELECT g.id, g.title, g.cover_image, g.metascore, 
+                   GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as platform_names 
+            FROM games g 
+            JOIN game_genres gg ON g.id = gg.game_id 
+            LEFT JOIN game_platforms gp ON g.id = gp.game_id 
+            LEFT JOIN platforms p ON gp.platform_id = p.id 
+            WHERE gg.genre_id = ? 
+            GROUP BY g.id 
+            ORDER BY g.metascore DESC, g.id DESC 
+            LIMIT 12
+        ");
+        $stmt->bind_param("i", $section['id']);
+        $stmt->execute();
+        $games = padInitialArray($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
+        
+        if (count($games) === 4 && isset($games[0]['is_empty'])) continue; 
+        
+        $slides = array_chunk($games, 4);
+        ?>
+
+        <div class="infinite-slider-wrapper" style="margin-bottom: 40px; position:relative; overflow:hidden;">
+            <div class="row section-header">
+                <div class="col-12 header-flex" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2><?php echo htmlspecialchars($section['title']); ?></h2>
+                    <div class="slider-controls">
+                        <button class="custom-prev-btn" disabled style="background:#333; color:white; border:none; padding:5px 12px; cursor:pointer; border-radius:4px; font-size:16px;">&#10094;</button>
+                        <button class="custom-next-btn" style="background:#333; color:white; border:none; padding:5px 12px; cursor:pointer; border-radius:4px; font-size:16px; margin-left:5px;">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="infinite-container" style="overflow: hidden;">
+                <div class="responsive-slider-track dynamic-track" 
+                     data-type="<?php echo $section['type']; ?>" 
+                     data-id="<?php echo $section['id']; ?>" 
+                     data-page="1" 
+                     data-has-more="true" 
+                     data-loading="false"
+                     data-current-slide="0"
+                     style="transform: translateX(0%);">
+                    
+                    <?php foreach ($slides as $slide_games): ?>
+                        <div class="responsive-slide slide">
+                            <div class="responsive-row">
+                                <?php foreach ($slide_games as $game): ?>
+                                    <div class="responsive-col">
+                                        <?php if (isset($game['is_empty'])): ?>
+                                            <div class="game-card" style="opacity:0; pointer-events:none; height:100%;"></div>
+                                        <?php else: ?>
+                                            <a href="game-details.php?id=<?php echo $game['id']; ?>" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                                                <div class="game-card" style="height: 100%; display: flex; flex-direction: column;">
+                                                    
+                                                    <img src="<?php echo htmlspecialchars($game['cover_image']); ?>" onerror="this.src='https://placehold.co/400x300/2a2a2a/888888?text=No+Cover'" style="width: 100%; height: 180px; object-fit: cover; display: block; border-radius: 8px 8px 0 0;">
+                                                    
+                                                    <div class="card-content" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+                                                        <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo htmlspecialchars($game['title']); ?>">
+                                                            <?php echo htmlspecialchars($game['title']); ?>
+                                                        </h3>
+                                                        <div style="display: flex; gap: 6px; flex-wrap: nowrap; overflow: hidden; margin-bottom: 10px;">
+                                                            <span class="platform-tag" style="white-space: nowrap;">
+                                                                <?php echo !empty($game['platform_names']) ? htmlspecialchars($game['platform_names']) : 'N/A'; ?>
+                                                            </span>
+                                                        </div>
+                                                        <div class="meta-footer" style="margin-top: auto; flex-shrink: 0;">
+                                                            <span>Metascore</span>
+                                                            <div class="metascore"><?php echo $game['metascore'] > 0 ? $game['metascore'] : 'tbd'; ?></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
+                </div>
+            </div>
         </div>
-    </footer>
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+    <?php endforeach; ?>
 
-    <script src="assets/js/main.js"></script>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
 
-</body>
-</html>
+    function buildSlideHTML(slideGames) {
+        let html = '<div class="responsive-slide slide"><div class="responsive-row">';
+        slideGames.forEach(game => {
+            html += '<div class="responsive-col">';
+            if (game.is_empty) {
+                html += '<div class="game-card" style="opacity:0; pointer-events:none; height:100%;"></div>';
+            } else {
+                let scoreVal = parseInt(game.metascore);
+                let score = (!isNaN(scoreVal) && scoreVal > 0) ? scoreVal : 'tbd';
+                let platforms = game.platform_names ? game.platform_names : 'N/A';
+                let safeTitle = game.title ? game.title.replace(/"/g, '&quot;') : '';
+
+                // =========================================================
+                // THE FIX: Use your official CSS classes instead of inline styles!
+                // =========================================================
+                let scoreClass = 'score-none'; // Default grey for TBD
+                if (score !== 'tbd') {
+                    if (scoreVal >= 90) {
+                        scoreClass = 'score-dark-green';
+                    } else if (scoreVal >= 75) {
+                        scoreClass = 'score-green';
+                    } else if (scoreVal >= 50) {
+                        scoreClass = 'score-yellow';
+                    } else {
+                        scoreClass = 'score-red';
+                    }
+                }
+
+                html += `
+                    <a href="game-details.php?id=${game.id}" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                        <div class="game-card" style="height: 100%; display: flex; flex-direction: column;">
+                            <img src="${game.cover_image}" onerror="this.src='https://placehold.co/400x300/2a2a2a/888888?text=No+Cover'" style="width: 100%; height: 180px; object-fit: cover; display: block; border-radius: 8px 8px 0 0;">
+                            
+                            <div class="card-content" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+                                <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${safeTitle}">${game.title}</h3>
+                                <div style="display: flex; gap: 6px; flex-wrap: nowrap; overflow: hidden; margin-bottom: 10px;">
+                                    <span class="platform-tag" style="white-space: nowrap;">${platforms}</span>
+                                </div>
+                                <div class="meta-footer" style="margin-top: auto; flex-shrink: 0;">
+                                    <span>Metascore</span>
+                                    <div class="metascore ${scoreClass}">${score}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>`;
+            }
+            html += '</div>';
+        });
+        html += '</div></div>';
+        return html;
+    }
+
+    // ... (The rest of your slider wrapper code stays exactly the same) ...
+    document.querySelectorAll('.infinite-slider-wrapper').forEach(wrapper => {
+        const track = wrapper.querySelector('.dynamic-track');
+        const prevBtn = wrapper.querySelector('.custom-prev-btn');
+        const nextBtn = wrapper.querySelector('.custom-next-btn');
+        
+        function updateSliderPosition() {
+            let currentSlide = parseInt(track.dataset.currentSlide);
+            let totalSlides = track.querySelectorAll('.slide').length;
+            
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            prevBtn.disabled = currentSlide === 0;
+            
+            if (currentSlide === totalSlides - 1 && track.dataset.hasMore === 'false') {
+                nextBtn.disabled = true;
+                nextBtn.style.opacity = '0.5';
+                nextBtn.style.cursor = 'not-allowed';
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            let currentSlide = parseInt(track.dataset.currentSlide);
+            if (currentSlide > 0) {
+                track.dataset.currentSlide = currentSlide - 1;
+                updateSliderPosition();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            let currentSlide = parseInt(track.dataset.currentSlide);
+            let totalSlides = track.querySelectorAll('.slide').length;
+            
+            if (currentSlide === totalSlides - 2 && track.dataset.hasMore === 'true' && track.dataset.loading === 'false') {
+                track.dataset.loading = 'true';
+                let page = parseInt(track.dataset.page) + 1;
+                
+                let fetchUrl = `api/ajax_load_slider.php?type=${track.dataset.type}&id=${track.dataset.id}&page=${page}&t=${Date.now()}`;
+                
+                fetch(fetchUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.slides.length > 0) {
+                            data.slides.forEach(slideArray => {
+                                track.insertAdjacentHTML('beforeend', buildSlideHTML(slideArray));
+                            });
+                            track.dataset.page = page;
+                            track.dataset.hasMore = data.has_more ? 'true' : 'false';
+                        } else {
+                            track.dataset.hasMore = 'false';
+                        }
+                        track.dataset.loading = 'false';
+                        updateSliderPosition(); 
+                    })
+                    .catch(err => {
+                        console.error("Slider Fetch Error:", err);
+                        track.dataset.loading = 'false';
+                    });
+            }
+
+            if (currentSlide < totalSlides - 1) {
+                track.dataset.currentSlide = currentSlide + 1;
+                updateSliderPosition();
+            }
+        });
+    });
+});
+</script>
+
+<?php require_once 'includes/footer.php'; ?>

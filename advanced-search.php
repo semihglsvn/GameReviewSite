@@ -1,262 +1,288 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Search - GameJoint</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/search.css">
-</head>
-<body>
+<?php
+require_once 'includes/header.php';
+require_once 'config/db.php';
 
-    <header>
-        <div class="container">
-            <div class="row header-content">
-                <div class="col-2">
-                    <!-- Added h1 wrapper to match index.html height -->
-                    <h1>
-                        <a href="index.html" class="logo-link">
-                            <img src="assets/images/logo.svg" alt="GameJoint Logo" class="site-logo">
-                        </a>
-                    </h1>
-                </div>
-                <div class="col-10">
-                    <nav>
-                        <ul class="nav-left">
-                            <li><a href="games.html">Games</a></li>
-                        </ul>
-                        <div class="search-container">
-                            <form action="advanced-search.html">
-                                <input type="text" placeholder="Search games..." name="search">
-                                <button type="submit">Search</button>
-                            </form>
-                        </div>
-                        <ul class="nav-right">
-                            <li><a href="login.html" class="btn-login">Login</a></li>
-                            <li><a href="register.html" class="btn-register">Register</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+// Fetch dynamic filters from database
+$genres = $conn->query("SELECT id, name FROM genres ORDER BY name ASC")->fetch_all(MYSQLI_ASSOC);
+$platforms = $conn->query("SELECT id, name FROM platforms ORDER BY name ASC")->fetch_all(MYSQLI_ASSOC);
+?>
+
+<div class="container main-content">
+    
+    <div class="row section-header">
+        <div class="col-12">
+            <h1>Game Finder</h1>
+            <p>Select your filters and click Search to find your next favorite game.</p>
         </div>
-    </header>
-
-    <div class="container main-content">
-        
-        <div class="row section-header">
-            <div class="col-12">
-                <h1>Game Finder</h1>
-                <p>Select your filters and click Search to find your next favorite game.</p>
-            </div>
-        </div>
-
-        <div class="row">
-            
-            <!-- LEFT SIDEBAR: EXPANDED FILTERS -->
-            <div class="col-3">
-                <div class="filter-sidebar">
-                    
-                    <button id="main-search-btn" style="width:100%; margin-bottom:20px; padding:12px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size:16px;">SEARCH GAMES</button>
-
-                    <!-- ADDED SORTING OPTIONS -->
-                    <h3>Sort By</h3>
-                    <div class="filter-group">
-                        <select id="sort-select" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
-                            <option value="rating-desc">Highest Rated</option>
-                            <option value="rating-asc">Lowest Rated</option>
-                            <option value="date-desc">Newest First</option>
-                            <option value="date-asc">Oldest First</option>
-                        </select>
-                    </div>
-
-                    <h3>Genre</h3>
-                    <div class="filter-group">
-                        <label><input type="checkbox" class="filter-checkbox" value="rpg" data-filter-type="genre"> RPG</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="action" data-filter-type="genre"> Action</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="adventure" data-filter-type="genre"> Adventure</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="strategy" data-filter-type="genre"> Strategy</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="shooter" data-filter-type="genre"> Shooter (FPS/TPS)</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="simulation" data-filter-type="genre"> Simulation</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="sports" data-filter-type="genre"> Sports</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="racing" data-filter-type="genre"> Racing</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="horror" data-filter-type="genre"> Horror</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="puzzle" data-filter-type="genre"> Puzzle</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="fighting" data-filter-type="genre"> Fighting</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="platformer" data-filter-type="genre"> Platformer</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="mmo" data-filter-type="genre"> MMO</label>
-                    </div>
-
-                    <h3>Platform</h3>
-                    <div class="filter-group">
-                        <label><input type="checkbox" class="filter-checkbox" value="pc" data-filter-type="platform"> PC</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="ps5" data-filter-type="platform"> PlayStation 5</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="ps4" data-filter-type="platform"> PlayStation 4</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="xbox-series" data-filter-type="platform"> Xbox Series X/S</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="xbox-one" data-filter-type="platform"> Xbox One</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="switch" data-filter-type="platform"> Nintendo Switch</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="mobile" data-filter-type="platform"> Mobile (iOS/Android)</label>
-                    </div>
-
-                    <h3>Player Count</h3>
-                    <div class="filter-group">
-                        <label><input type="checkbox" class="filter-checkbox" value="single" data-filter-type="players"> Singleplayer</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="multi" data-filter-type="players"> Multiplayer</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="coop" data-filter-type="players"> Co-op</label>
-                    </div>
-
-                    <h3>Features</h3>
-                    <div class="filter-group">
-                        <label><input type="checkbox" class="filter-checkbox" value="open-world" data-filter-type="feature"> Open World</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="story-rich" data-filter-type="feature"> Story Rich</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="vr" data-filter-type="feature"> VR Supported</label>
-                        <label><input type="checkbox" class="filter-checkbox" value="indie" data-filter-type="feature"> Indie</label>
-                    </div>
-                    
-                    <button id="clear-filters" style="width:100%; margin-top:15px; padding:8px; background:#e74c3c; color:white; border:none; border-radius:4px; cursor:pointer;">Clear Filters</button>
-                </div>
-            </div>
-
-            <!-- RIGHT CONTENT: GAME GRID -->
-            <div class="col-9">
-                
-                <!-- Initial State Message -->
-                <div id="initial-search-message" style="text-align:center; padding:50px; background:white; border-radius:8px; border:1px solid #ddd;">
-                    <h2 style="color:#2c3e50;">Ready to find a game?</h2>
-                    <p style="color:#7f8c8d;">Select genres, platforms, or features from the sidebar and click <strong>SEARCH GAMES</strong> to see results.</p>
-                </div>
-
-                <!-- No Results Message (Hidden) -->
-                <div id="no-results" style="display:none; text-align:center; padding:50px; background:white; border-radius:8px; border:1px solid #ddd;">
-                    <h3 style="color:#e74c3c;">No matching games found.</h3>
-                    <p>Try unchecking some filters to broaden your search.</p>
-                </div>
-
-                <!-- GRID (All items hidden by default via JS) -->
-                <div class="row" id="games-grid" style="display:none;">
-                    
-                    <!-- Game 1: BG3 -->
-                    <div class="col-4 game-item" data-genre="rpg adventure strategy" data-platform="pc ps5 xbox-series" data-players="single coop" data-feature="story-rich open-world" data-rating="96" data-date="2023-08-03">
-                        <a href="game-details.html" style="text-decoration:none; color:inherit;">
-                            <div class="game-card">
-                                <img src="assets/images/baldursgate3.png" alt="BG3" class="card-img">
-                                <div class="card-content">
-                                    <h3>Baldur's Gate 3</h3>
-                                    <p class="platform-tag">PC, PS5</p>
-                                    <div class="meta-footer"><span>Score</span><div class="metascore">96</div></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- Game 2: Elden Ring -->
-                    <div class="col-4 game-item" data-genre="rpg action adventure" data-platform="pc ps5 ps4 xbox-series xbox-one" data-players="single multi" data-feature="open-world story-rich" data-rating="96" data-date="2022-02-25">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Elden</div>
-                            <div class="card-content">
-                                <h3>Elden Ring</h3>
-                                <p class="platform-tag">Multi</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">96</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 3: Civ 6 -->
-                    <div class="col-4 game-item" data-genre="strategy simulation" data-platform="pc ps4 xbox-one switch mobile" data-players="single multi" data-feature="" data-rating="88" data-date="2016-10-21">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Civ6</div>
-                            <div class="card-content">
-                                <h3>Civilization VI</h3>
-                                <p class="platform-tag">Multi</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">88</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 4: Halo Infinite -->
-                    <div class="col-4 game-item" data-genre="shooter action" data-platform="xbox-series xbox-one pc" data-players="single multi coop" data-feature="open-world" data-rating="87" data-date="2021-12-08">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Halo</div>
-                            <div class="card-content">
-                                <h3>Halo Infinite</h3>
-                                <p class="platform-tag">Xbox, PC</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">87</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 5: Hollow Knight -->
-                    <div class="col-4 game-item" data-genre="action platformer adventure" data-platform="pc ps4 xbox-one switch" data-players="single" data-feature="indie story-rich" data-rating="90" data-date="2017-02-24">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Hollow</div>
-                            <div class="card-content">
-                                <h3>Hollow Knight</h3>
-                                <p class="platform-tag">Multi</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">90</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 6: Forza Horizon 5 -->
-                    <div class="col-4 game-item" data-genre="racing simulation sports" data-platform="xbox-series xbox-one pc" data-players="single multi" data-feature="open-world" data-rating="92" data-date="2021-11-09">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Forza</div>
-                            <div class="card-content">
-                                <h3>Forza Horizon 5</h3>
-                                <p class="platform-tag">Xbox, PC</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">92</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 7: Resident Evil 4 -->
-                    <div class="col-4 game-item" data-genre="horror action adventure" data-platform="pc ps5 ps4 xbox-series" data-players="single" data-feature="story-rich" data-rating="93" data-date="2023-03-24">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">RE4</div>
-                            <div class="card-content">
-                                <h3>Resident Evil 4</h3>
-                                <p class="platform-tag">Multi</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">93</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 8: It Takes Two -->
-                    <div class="col-4 game-item" data-genre="adventure platformer" data-platform="pc ps5 ps4 xbox-series xbox-one switch" data-players="coop" data-feature="story-rich indie" data-rating="88" data-date="2021-03-26">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Takes2</div>
-                            <div class="card-content">
-                                <h3>It Takes Two</h3>
-                                <p class="platform-tag">Multi</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">88</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Game 9: Stardew Valley -->
-                    <div class="col-4 game-item" data-genre="simulation rpg" data-platform="pc ps4 xbox-one switch mobile" data-players="single coop" data-feature="indie" data-rating="89" data-date="2016-02-26">
-                        <div class="game-card">
-                            <div class="card-image-placeholder">Stardew</div>
-                            <div class="card-content">
-                                <h3>Stardew Valley</h3>
-                                <p class="platform-tag">Multi</p>
-                                <div class="meta-footer"><span>Score</span><div class="metascore">89</div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GameJoint.</p>
+    <div class="row">
+        
+        <div class="col-3">
+            <div class="filter-sidebar" style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                
+                <button id="main-search-btn" style="width:100%; margin-bottom:20px; padding:12px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size:16px;">SEARCH GAMES</button>
+
+                <h3 style="margin-top:0;">Title Search</h3>
+                <div class="filter-group" style="margin-bottom: 20px;">
+                    <input type="text" id="search-text" placeholder="Type a game name..." style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                </div>
+
+                <h3>Score Filter</h3>
+                <div class="filter-group" style="margin-bottom: 20px; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                    <label style="display:flex; align-items:center; cursor:pointer;">
+                        <input type="checkbox" id="hide-tbd-checkbox" style="margin-right: 8px;"> 
+                        <strong>Hide TBD (No Metascore)</strong>
+                    </label>
+                </div>
+
+                <h3>Filter Logic</h3>
+                <div class="filter-group" style="margin-bottom: 20px; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                    <label style="display:block; margin-bottom:5px; cursor:pointer;"><input type="radio" name="filter_logic" value="OR" checked> <strong>Match ANY (OR)</strong><br><small style="color:#7f8c8d; font-weight:normal;">Finds games that have at least one of your selected tags.</small></label>
+                    <label style="display:block; cursor:pointer;"><input type="radio" name="filter_logic" value="AND"> <strong>Match ALL (AND)</strong><br><small style="color:#7f8c8d; font-weight:normal;">Strict. Finds games that match every single tag selected.</small></label>
+                </div>
+
+                <h3>Sort By</h3>
+                <div class="filter-group" style="margin-bottom: 20px;">
+                    <select id="sort-select" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="rating-desc">Highest Rated</option>
+                        <option value="rating-asc">Lowest Rated</option>
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                    </select>
+                </div>
+
+                <h3>Genre</h3>
+                <div class="filter-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-height: 250px; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
+                    <?php foreach ($genres as $genre): ?>
+                        <div style="margin-bottom: 2px;">
+                            <label style="display: flex; align-items: center; margin: 0; cursor: pointer; font-size: 14px; width: 100%;">
+                                <input type="checkbox" class="filter-checkbox" value="<?php echo $genre['id']; ?>" data-type="genre" style="margin: 0 8px 0 0;"> 
+                                <?php echo htmlspecialchars($genre['name']); ?>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <h3>Platform</h3>
+                <div class="filter-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-height: 250px; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
+                    <?php foreach ($platforms as $platform): ?>
+                        <div style="margin-bottom: 2px;">
+                            <label style="display: flex; align-items: center; margin: 0; cursor: pointer; font-size: 14px; width: 100%;">
+                                <input type="checkbox" class="filter-checkbox" value="<?php echo $platform['id']; ?>" data-type="platform" style="margin: 0 8px 0 0;"> 
+                                <?php echo htmlspecialchars($platform['name']); ?>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <button id="clear-filters" style="width:100%; margin-top:15px; padding:8px; background:#e74c3c; color:white; border:none; border-radius:4px; cursor:pointer;">Clear Filters</button>
+            </div>
         </div>
-    </footer>
 
-    <script src="assets/js/main.js"></script>
+        <div class="col-9">
+            
+            <div id="initial-search-message" style="text-align:center; padding:50px; background:white; border-radius:8px; border:1px solid #ddd;">
+                <h2 style="color:#2c3e50;">Ready to find a game?</h2>
+                <p style="color:#7f8c8d;">Select filters from the sidebar and click <strong>SEARCH GAMES</strong> to explore the database.</p>
+            </div>
 
-</body>
-</html>
+            <div id="no-results" style="display:none; text-align:center; padding:50px; background:white; border-radius:8px; border:1px solid #ddd;">
+                <h3 style="color:#e74c3c;">No matching games found.</h3>
+                <p>Try switching the Filter Logic to "Match ANY (OR)", or clear some checkboxes.</p>
+            </div>
+
+            <div id="loading-message" style="display:none; text-align:center; padding:50px; background:white; border-radius:8px; border:1px solid #ddd;">
+                <h2 style="color:#3498db;">Searching Database...</h2>
+                <p style="color:#7f8c8d;">Please wait while we gather your games.</p>
+            </div>
+
+            <div class="row" id="games-grid" style="display:none; flex-wrap: wrap;"></div>
+            
+            <div class="text-center" style="margin-top: 30px; display:none; width: 100%;" id="load-more-container">
+                <button id="load-more-btn" style="padding: 10px 30px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Load More Results</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    let currentPage = 1;
+    let isSearching = false;
+
+    const searchBtn = document.getElementById('main-search-btn');
+    const clearBtn = document.getElementById('clear-filters');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const grid = document.getElementById('games-grid');
+    const loadMoreContainer = document.getElementById('load-more-container');
+    const searchInput = document.getElementById('search-text');
+
+    // STRICT UI STATE CONTROLLER: Prevents elements from overlapping
+// ==========================================
+    // THE NUCLEAR FIX: Strict UI State Controller
+    // Immune to duplicate HTML tags and CSS conflicts
+    // ==========================================
+    function setUIState(state) {
+        // 1. Forcefully hide EVERY possible message box on the page first
+        document.querySelectorAll('#initial-search-message, #loading-message, #no-results').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // 2. Safely turn on ONLY the specific message we want
+        if (state === 'initial') {
+            document.querySelectorAll('#initial-search-message').forEach(el => el.style.display = 'block');
+        } else if (state === 'loading') {
+            document.querySelectorAll('#loading-message').forEach(el => el.style.display = 'block');
+        } else if (state === 'empty') {
+            document.querySelectorAll('#no-results').forEach(el => el.style.display = 'block');
+        }
+        
+        // 3. Handle the Grid and Load More button
+        document.querySelectorAll('#games-grid').forEach(el => {
+            el.style.display = (state === 'grid') ? 'flex' : 'none';
+        });
+        
+        if (state !== 'grid') {
+            document.querySelectorAll('#load-more-container').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+    }
+    // AUTO-SEARCH FROM URL PARAMETERS
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialSearchQuery = urlParams.get('search');
+    
+    if (initialSearchQuery) {
+        searchInput.value = initialSearchQuery;
+        setTimeout(() => executeSearch(1), 100);
+    }
+
+    function getScoreClass(scoreVal) {
+        if (isNaN(scoreVal) || scoreVal <= 0) return 'score-none';
+        if (scoreVal >= 90) return 'score-dark-green';
+        if (scoreVal >= 75) return 'score-green';
+        if (scoreVal >= 50) return 'score-yellow';
+        return 'score-red';
+    }
+
+    function buildGameCard(game) {
+        let scoreVal = parseInt(game.metascore);
+        let score = (!isNaN(scoreVal) && scoreVal > 0) ? scoreVal : 'tbd';
+        let scoreClass = getScoreClass(scoreVal);
+        let platforms = game.platform_names ? game.platform_names : 'N/A';
+        let safeTitle = game.title ? game.title.replace(/"/g, '&quot;') : '';
+
+        return `
+            <div class="col-4" style="margin-bottom: 20px;">
+                <a href="game-details.php?id=${game.id}" style="text-decoration:none; color:inherit; display:block; height:100%;">
+                    <div class="game-card" style="height: 100%; display: flex; flex-direction: column;">
+                        <img src="${game.cover_image}" onerror="this.src='https://placehold.co/400x300/2a2a2a/888888?text=No+Cover'" style="width: 100%; height: 180px; object-fit: cover; display: block; border-radius: 8px 8px 0 0;">
+                        <div class="card-content" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+                            <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${safeTitle}">${game.title}</h3>
+                            <div style="display: flex; gap: 6px; flex-wrap: nowrap; overflow: hidden; margin-bottom: 10px;">
+                                <span class="platform-tag" style="white-space: nowrap;">${platforms}</span>
+                            </div>
+                            <div class="meta-footer" style="margin-top: auto; flex-shrink: 0;">
+                                <span>Metascore</span>
+                                <div class="metascore ${scoreClass}">${score}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>`;
+    }
+
+    function executeSearch(page = 1) {
+        if (isSearching) return;
+        isSearching = true;
+
+        if (page === 1) {
+            searchBtn.innerText = "SEARCHING...";
+            grid.innerHTML = '';
+            setUIState('loading'); // Safely lock to Loading
+        } else {
+            loadMoreBtn.innerText = "Loading...";
+        }
+
+        const searchText = searchInput.value.trim();
+        const logic = document.querySelector('input[name="filter_logic"]:checked').value;
+        const sort = document.getElementById('sort-select').value;
+        const hideTbd = document.getElementById('hide-tbd-checkbox').checked;
+        
+        const genres = Array.from(document.querySelectorAll('.filter-checkbox[data-type="genre"]:checked')).map(cb => cb.value);
+        const platforms = Array.from(document.querySelectorAll('.filter-checkbox[data-type="platform"]:checked')).map(cb => cb.value);
+
+        const payload = {
+            search_text: searchText,
+            logic: logic,
+            sort: sort,
+            hide_tbd: hideTbd,
+            genres: genres,
+            platforms: platforms,
+            page: page
+        };
+
+        fetch('api/ajax_advanced_search.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (data.games.length === 0 && page === 1) {
+                    setUIState('empty'); // Safely lock to Empty
+                } else {
+                    setUIState('grid'); // Safely lock to Grid
+                    
+                    data.games.forEach(game => {
+                        grid.insertAdjacentHTML('beforeend', buildGameCard(game));
+                    });
+                    
+                    if (data.has_more) {
+                        loadMoreContainer.style.display = 'block';
+                    } else {
+                        loadMoreContainer.style.display = 'none';
+                    }
+                }
+            } else {
+                setUIState('initial');
+                alert("Search Error: " + data.error);
+            }
+        })
+        .catch(err => {
+            console.error("Search failed", err);
+            setUIState('initial');
+        })
+        .finally(() => {
+            isSearching = false;
+            searchBtn.innerText = "SEARCH GAMES";
+            loadMoreBtn.innerText = "Load More Results";
+            currentPage = page;
+        });
+    }
+
+    searchBtn.addEventListener('click', () => executeSearch(1));
+    loadMoreBtn.addEventListener('click', () => executeSearch(currentPage + 1));
+
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        document.getElementById('hide-tbd-checkbox').checked = false;
+        document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
+        document.querySelector('input[name="filter_logic"][value="OR"]').checked = true;
+        document.getElementById('sort-select').value = 'rating-desc';
+        
+        setUIState('initial'); // Safely return to start
+        window.history.replaceState({}, document.title, window.location.pathname);
+    });
+    
+    searchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') executeSearch(1);
+    });
+});
+</script>
+
+<?php require_once 'includes/footer.php'; ?>
