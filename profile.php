@@ -92,13 +92,69 @@ require_once 'includes/header.php';
     .dist-row { display: flex; align-items: center; margin-bottom: 5px; font-size: 13px; }
     .dist-label { width: 60px; font-weight: bold; }
     .dist-count { width: 30px; text-align: right; color: #7f8c8d; }
+
+    /* =========================================
+       GUARANTEED PROFILE DARK MODE OVERRIDES
+       ========================================= */
+    body.dark-mode .overview-card,
+    body.dark-mode .overview-right,
+    body.dark-mode .review-item {
+        background-color: #1e1e1e !important;
+        border-color: #333 !important;
+    }
+    
+    body.dark-mode .overview-right h6,
+    body.dark-mode .overview-right b,
+    body.dark-mode .overview-right span[style*="color:#2c3e50"],
+    body.dark-mode .dist-label,
+    body.dark-mode .review-item h4 a {
+        color: #ffffff !important;
+    }
+    
+    body.dark-mode .dist-track {
+        background-color: #333 !important;
+    }
+
+    body.dark-mode .text-sub-grey,
+    body.dark-mode .review-body-text {
+        color: #b3b3b3 !important;
+    }
+
+    body.dark-mode .btn-read-more {
+        color: #4da6ff !important;
+    }
+
+    /* Modal Dark Mode Fixes */
+    body.dark-mode .modal-content {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+    }
+    body.dark-mode #modal-review-author {
+        color: #ffffff !important;
+    }
+    body.dark-mode #modal-review-text {
+        background-color: #2a2a2a !important;
+        border-color: #444 !important;
+        color: #e0e0e0 !important;
+    }
 </style>
 
 <div class="container main-content">
     
     <div class="row" style="display:flex; justify-content:space-between; align-items:flex-end;">
         <div class="col-8">
-            <h1 style="margin-bottom: 5px;"><?php echo htmlspecialchars($profile_user['username']); ?></h1>
+            <h1 style="margin-bottom: 5px; display: flex; align-items: center; gap: 12px;">
+                <?php echo htmlspecialchars($profile_user['username']); ?>
+                
+                <?php if ($viewer_id === $profile_id): ?>
+                    <a href="settings.php" title="Account Settings" style="color: #7f8c8d; transition: color 0.2s; display: flex; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" onmouseover="this.style.color='#007bff'" onmouseout="this.style.color='currentColor'">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </a>
+                <?php endif; ?>
+            </h1>
             <span class="release-date">Member Since <?php echo date('M Y', strtotime($profile_user['created_at'])); ?></span>
             <?php if ($profile_user['is_banned']): ?>
                 <span style="background:#e74c3c; color:white; padding:3px 8px; border-radius:4px; font-size:12px; font-weight:bold; margin-left:10px;">BANNED</span>

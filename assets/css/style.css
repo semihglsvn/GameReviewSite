@@ -949,3 +949,121 @@ footer {
     max-width: 600px; 
     width: 90%;
 }
+
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Header & Nav */
+body.dark-mode header {
+    background-color: #1a1a1a !important;
+    border-bottom: 1px solid #333 !important;
+}
+body.dark-mode header a {
+    color: #e0e0e0 !important;
+}
+
+/* Containers & Sidebars */
+body.dark-mode .container.main-content > div[style*="background: #fff"],
+body.dark-mode .filter-sidebar,
+body.dark-mode #initial-search-message,
+body.dark-mode #no-results,
+body.dark-mode #loading-message {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Headers inside dark containers */
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4 {
+    color: #ffffff !important;
+}
+
+/* Form Inputs & Selects */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="date"],
+body.dark-mode select {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+/* Game Cards */
+body.dark-mode .game-card {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+}
+body.dark-mode .game-card .card-content {
+    background-color: #1e1e1e !important;
+}
+
+/* Text & Links inside containers */
+body.dark-mode p,
+body.dark-mode label,
+body.dark-mode small {
+    color: #b3b3b3 !important;
+}
+body.dark-mode a {
+    color: #4da6ff !important;
+}
+/* =========================================
+   DARK MODE: INLINE STYLE OVERRIDES (The Patch)
+   ========================================= */
+
+/* 1. Crush the Login, Register, and Profile White Boxes */
+body.dark-mode div[style*="background: #fff"],
+body.dark-mode div[style*="background:#fff"],
+body.dark-mode div[style*="background-color: #ffffff"],
+body.dark-mode div[style*="background: white"] {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important; /* Darker shadow */
+}
+
+/* 2. Crush the Advanced Search Inner Boxes (Filter Logic & Score Filter) */
+body.dark-mode div[style*="background: #f8f9fa"],
+body.dark-mode div[style*="background:#f8f9fa"] {
+    background-color: #2a2a2a !important;
+    border: 1px solid #444 !important;
+}
+
+/* Fix text colors inside those boxes */
+body.dark-mode div[style*="background: #f8f9fa"] strong,
+body.dark-mode div[style*="background: #f8f9fa"] label {
+    color: #e0e0e0 !important;
+}
+
+/* 3. Profile Score Box Backup (Just in case it uses a class instead of inline styles) */
+body.dark-mode .score-distribution, 
+body.dark-mode .stats-container, 
+body.dark-mode .review-box {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+/* =========================================
+   PROFILE PAGE DARK MODE FIXES
+   ========================================= */
+body.dark-mode .overview-card,
+body.dark-mode .overview-right {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+/* Fix the dark blue inline text colors */
+body.dark-mode .overview-right h6,
+body.dark-mode .overview-right b,
+body.dark-mode .overview-right span[style*="color:#2c3e50"],
+body.dark-mode .dist-label {
+    color: #ffffff !important;
+}
+
+/* Dim the empty distribution bar backgrounds */
+body.dark-mode .dist-track {
+    background-color: #333 !important;
+}

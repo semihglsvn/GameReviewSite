@@ -1,4 +1,5 @@
 <?php
+
 // Start the session to check if the user is logged in (if not already started)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -11,14 +12,12 @@ require_once __DIR__ . '/../config/db.php';
 // ==========================================
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     
-    // Split the cookie into User ID and the Token
     $cookie_parts = explode('_', $_COOKIE['remember_token']);
     
     if (count($cookie_parts) === 2) {
         $cookie_user_id = (int)$cookie_parts[0];
         $cookie_token = $cookie_parts[1];
         
-        // Lookup the user's token hash from the DB
         $stmt = $conn->prepare("SELECT id, username, role_id, remember_token_hash FROM users WHERE id = ?");
         $stmt->bind_param("i", $cookie_user_id);
         $stmt->execute();
@@ -27,23 +26,18 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
             
-            // Hash the cookie token and compare it to the database safely
             if (!empty($user['remember_token_hash']) && hash_equals($user['remember_token_hash'], hash('sha256', $cookie_token))) {
-                // IT'S A MATCH! Log them in instantly.
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role_id'] = $user['role_id'];
             } else {
-                // Forged or expired cookie! Delete it.
                 setcookie('remember_token', '', time() - 3600, "/");
             }
         } else {
-            // User doesn't exist anymore, delete cookie
             setcookie('remember_token', '', time() - 3600, "/");
         }
         $stmt->close();
     } else {
-        // Badly formatted cookie, delete it
         setcookie('remember_token', '', time() - 3600, "/");
     }
 }
@@ -54,7 +48,6 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 $settings_query = $conn->query("SELECT * FROM settings WHERE id = 1");
 $site_settings = $settings_query->fetch_assoc();
 
-// Set safe fallbacks just in case the database is empty
 $site_title = !empty($site_settings['site_title']) ? $site_settings['site_title'] : 'GameJoint';
 $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] : 'assets/images/logo.svg';
 ?>
@@ -69,8 +62,7 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
         <meta name="description" content="<?php echo htmlspecialchars($site_settings['site_description']); ?>">
     <?php endif; ?>
 
-    <link rel="stylesheet" href="assets/css/style.css">
-    
+<link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">    
     <style>
         /* Ensure parent containers do not clip the absolute dropdown */
         header, .header-content, nav, .col-10, .search-container {
@@ -168,6 +160,12 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
     </style>
 </head>
 <body>
+    
+    <script>
+        if (localStorage.getItem('site-theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
 
     <header>
         <div class="container">
@@ -182,15 +180,14 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
 
                 <div class="col-10">
                     <nav>
-                <ul class="nav-left">
-    <?php
-    // Fetch only active menus, ordered correctly
-    $nav_query = $conn->query("SELECT title, url FROM menus WHERE is_active = 1 ORDER BY sort_order ASC");
-    while ($nav = $nav_query->fetch_assoc()): 
-    ?>
-        <li><a href="<?php echo htmlspecialchars($nav['url']); ?>"><?php echo htmlspecialchars($nav['title']); ?></a></li>
-    <?php endwhile; ?>
-                </ul>
+                        <ul class="nav-left">
+                            <?php
+                            $nav_query = $conn->query("SELECT title, url FROM menus WHERE is_active = 1 ORDER BY sort_order ASC");
+                            while ($nav = $nav_query->fetch_assoc()): 
+                            ?>
+                                <li><a href="<?php echo htmlspecialchars($nav['url']); ?>"><?php echo htmlspecialchars($nav['title']); ?></a></li>
+                            <?php endwhile; ?>
+                        </ul>
 
                         <div class="search-container">
                             <form action="advanced-search.php" method="GET" id="search-form">
@@ -205,16 +202,42 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
                             <div id="search-results"></div>
                         </div>
 
-                        <ul class="nav-right">
-                            <?php if (isset($_SESSION['user_id'])): ?>
-                                <li><a href="profile.php" class="btn-login">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></a></li>
-                                <li><a href="logout.php" class="btn-register" style="background-color: #dc3545;">Logout</a></li>
-                            <?php else: ?>
-                                <li><a href="login.php" class="btn-login">Login</a></li>
-                                <li><a href="register.php" class="btn-register">Register</a></li>
-                            <?php endif; ?>
-                        </ul>
-                    </nav>
+<ul class="nav-right" style="position: relative; z-index: 999; display: flex; align-items: center; gap: 12px; margin: 0; padding: 0;">
+    
+<li style="position: relative; z-index: 999999; pointer-events: auto;">
+    <button id="theme-toggle-btn" 
+            onclick="forceThemeToggle(event)" 
+            style="position: relative; z-index: 999999; background: #fff; border: 2px solid #000; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 14px; color: #000; font-weight: bold; white-space: nowrap;">
+        <script>document.write(localStorage.getItem('site-theme') === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode');</script>
+        <noscript>🌙 Dark Mode</noscript>
+    </button>
+
+    <script>
+        // This function lives right next to the button so it cannot be blocked
+        function forceThemeToggle(e) {
+            e.preventDefault();
+            document.body.classList.toggle('dark-mode');
+            
+            var btn = document.getElementById('theme-toggle-btn');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('site-theme', 'dark');
+                btn.innerHTML = '☀️ Light Mode';
+            } else {
+                localStorage.setItem('site-theme', 'light');
+                btn.innerHTML = '🌙 Dark Mode';
+            }
+        }
+    </script>
+</li>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <li><a href="profile.php" class="btn-login" style="white-space: nowrap;">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></a></li>
+        <li><a href="logout.php" class="btn-register" style="background-color: #dc3545; white-space: nowrap;">Logout</a></li>
+    <?php else: ?>
+        <li><a href="login.php" class="btn-login" style="position: relative; z-index: 999;">Login</a></li>
+        <li><a href="register.php" class="btn-register" style="position: relative; z-index: 999;">Register</a></li>
+    <?php endif; ?>
+</ul>
                 </div>
             </div>
         </div>
@@ -222,74 +245,95 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- THEME TOGGLE LOGIC ---
+            const themeBtn = document.getElementById('theme-toggle-btn');
+            
+            if (themeBtn) {
+                themeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    
+                    if (document.body.classList.contains('dark-mode')) {
+                        localStorage.setItem('site-theme', 'dark');
+                        themeBtn.innerHTML = '☀️ Light Mode';
+                    } else {
+                        localStorage.setItem('site-theme', 'light');
+                        themeBtn.innerHTML = '🌙 Dark Mode';
+                    }
+                });
+            }
+
+            // --- HEADER SEARCH LOGIC ---
             const searchInput = document.getElementById('search-input');
             const searchResults = document.getElementById('search-results');
             let debounceTimer; 
 
-            searchInput.addEventListener('input', function() {
-                clearTimeout(debounceTimer);
-                const query = this.value.trim();
-                
-                if (query.length < 2) {
-                    searchResults.style.display = 'none';
-                    return;
-                }
+            if(searchInput) {
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(debounceTimer);
+                    const query = this.value.trim();
+                    
+                    if (query.length < 2) {
+                        searchResults.style.display = 'none';
+                        return;
+                    }
 
-                searchResults.innerHTML = '<div style="padding: 10px; color: #aaa; font-size: 14px;">Searching...</div>';
-                searchResults.style.display = 'block';
-
-                debounceTimer = setTimeout(() => {
-                    fetch(`/GameReviewSite/ajax_search.php?q=${encodeURIComponent(query)}`)
-                        .then(response => response.text()) 
-                        .then(text => {
-                            try {
-                                const data = JSON.parse(text); 
-                                searchResults.innerHTML = ''; 
-                                
-                                if (data.length > 0) {
-                                    data.forEach(game => {
-                                        const a = document.createElement('a');
-                                        a.href = `game-details.php?id=${game.id}`;
-                                        a.className = 'search-result-item';
-                                        
-                                        const img = document.createElement('img');
-                                        img.src = game.cover_image;
-                                        img.className = 'search-result-img';
-                                        img.onerror = function() { this.src = 'assets/images/placeholder.png'; }; 
-                                        
-                                        const title = document.createElement('div');
-                                        title.className = 'search-result-title';
-                                        title.textContent = game.title;
-                                        
-                                        a.appendChild(img);
-                                        a.appendChild(title);
-                                        searchResults.appendChild(a);
-                                    });
-                                } else {
-                                    searchResults.innerHTML = '<div style="padding: 10px; color: #aaa; font-size: 14px;">No games found.</div>';
-                                }
-                            } catch (e) {
-                                console.error("JSON Parsing Error:", text);
-                                searchResults.innerHTML = '<div style="padding: 10px; color: #ff6b6b; font-size: 14px;">Search Error.</div>';
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Fetch network error:", err);
-                            searchResults.innerHTML = '<div style="padding: 10px; color: #ff6b6b; font-size: 14px;">Connection failed.</div>';
-                        });
-                }, 300); 
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.style.display = 'none';
-                }
-            });
-            
-            searchInput.addEventListener('focus', function() {
-                if (this.value.trim().length >= 2 && searchResults.innerHTML !== '') {
+                    searchResults.innerHTML = '<div style="padding: 10px; color: #aaa; font-size: 14px;">Searching...</div>';
                     searchResults.style.display = 'block';
-                }
-            });
+
+                    debounceTimer = setTimeout(() => {
+                        fetch(`/GameReviewSite/ajax_search.php?q=${encodeURIComponent(query)}`)
+                            .then(response => response.text()) 
+                            .then(text => {
+                                try {
+                                    const data = JSON.parse(text); 
+                                    searchResults.innerHTML = ''; 
+                                    
+                                    if (data.length > 0) {
+                                        data.forEach(game => {
+                                            const a = document.createElement('a');
+                                            a.href = `game-details.php?id=${game.id}`;
+                                            a.className = 'search-result-item';
+                                            
+                                            const img = document.createElement('img');
+                                            img.src = game.cover_image;
+                                            img.className = 'search-result-img';
+                                            img.onerror = function() { this.src = 'assets/images/placeholder.png'; }; 
+                                            
+                                            const title = document.createElement('div');
+                                            title.className = 'search-result-title';
+                                            title.textContent = game.title;
+                                            
+                                            a.appendChild(img);
+                                            a.appendChild(title);
+                                            searchResults.appendChild(a);
+                                        });
+                                    } else {
+                                        searchResults.innerHTML = '<div style="padding: 10px; color: #aaa; font-size: 14px;">No games found.</div>';
+                                    }
+                                } catch (e) {
+                                    console.error("JSON Parsing Error:", text);
+                                    searchResults.innerHTML = '<div style="padding: 10px; color: #ff6b6b; font-size: 14px;">Search Error.</div>';
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Fetch network error:", err);
+                                searchResults.innerHTML = '<div style="padding: 10px; color: #ff6b6b; font-size: 14px;">Connection failed.</div>';
+                            });
+                    }, 300); 
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.style.display = 'none';
+                    }
+                });
+                
+                searchInput.addEventListener('focus', function() {
+                    if (this.value.trim().length >= 2 && searchResults.innerHTML !== '') {
+                        searchResults.style.display = 'block';
+                    }
+                });
+            }
         });
     </script>

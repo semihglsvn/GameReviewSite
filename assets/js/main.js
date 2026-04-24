@@ -1,4 +1,33 @@
+
 document.addEventListener("DOMContentLoaded", function() {
+    // --- DARK MODE LOGIC ---
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const currentTheme = localStorage.getItem('site-theme');
+
+    // 1. Check if they saved 'dark' previously and apply it instantly
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (themeToggleBtn) themeToggleBtn.innerText = "☀️ Light Mode";
+    }
+
+    // 2. Listen for the toggle click
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Toggle the class on the body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save the choice and update button text
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('site-theme', 'dark');
+                themeToggleBtn.innerText = "☀️ Light Mode";
+            } else {
+                localStorage.setItem('site-theme', 'light');
+                themeToggleBtn.innerText = "🌙 Dark Mode";
+            }
+        });
+    }
     
     // --- SCORE COLORING LOGIC ---
   // --- SCORE COLORING LOGIC ---
@@ -88,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         updateSlider();
     });
-
 
 
     // --- USER REVIEW LOGIC ---
