@@ -17,7 +17,7 @@ function sendGameJointEmail($to_email, $subject, $html_body, $image_path = null)
         $mail->Host       = 'smtp.gmail.com'; 
         $mail->SMTPAuth   = true;
         $mail->Username   = 'gamejoint.noreply@gmail.com';
-        $mail->Password   = 'tkzcdyxhjmrgxkiz'; 
+        $mail->Password   = 'svmfyusmhdetnaul'; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
