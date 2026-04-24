@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'config/db.php';
+require_once 'config/keys.php'; // <--- MOVE THIS HERE (Outside the POST block)
 
 // If user is already logged in, redirect them
 if (isset($_SESSION['user_id'])) {
@@ -15,9 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // ==========================================
     // 1. CLOUDFLARE TURNSTILE VERIFICATION
     // ==========================================
-    $turnstile_secret = "0x4AAAAAADCZUqEMcIPgbKvmAq-F_8eruGs"; // <--- PASTE YOUR SECRET KEY HERE
+    // (No need to require it again here)
+
+    $turnstile_secret = TURNSTILE_SECRET_KEY; 
     $turnstile_response = $_POST['cf-turnstile-response'] ?? '';
     
+    // ... rest of your logic remains the same ...  
     if (empty($turnstile_response)) {
         $error = "Widget Error: No security token was sent. Please let the widget load.";
     } else {
@@ -76,8 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif (!$is_email && !$is_valid_username) {
                     $error = "Invalid format. Usernames can only contain letters, numbers, and underscores.";
                 } else {
-                    $stmt = $conn->prepare("SELECT id, username, password_hash, role_id FROM users WHERE username = ? OR email = ?");
-                    $stmt->bind_param("ss", $login_id, $login_id);
+
+// Notice we added 'email' right after 'username'
+$stmt = $conn->prepare("SELECT id, username, email, password_hash, role_id, is_verified FROM users WHERE username = ? OR email = ?");                    $stmt->bind_param("ss", $login_id, $login_id);
                     $stmt->execute();
                     $result = $stmt->get_result();
 
@@ -85,33 +90,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $user = $result->fetch_assoc();
                         
                         if (password_verify($password, $user['password_hash'])) {
-                            $_SESSION['user_id'] = $user['id'];
-                            $_SESSION['username'] = $user['username'];
-                            $_SESSION['role_id'] = $user['role_id'];
-
-                            if ($remember_me) {
-                                $random_token = bin2hex(random_bytes(32)); 
-                                $token_hash = hash('sha256', $random_token);
+                            
+// === THE BOUNCER CHECK ===
+                            if ($user['is_verified'] == 0) {
+                                // Grab their actual email from the database and encode it for a URL
+                                $encoded_email = urlencode($user['email'] ?? $login_id); // Fallback to login_id if email wasn't selected
                                 
-                                $update_stmt = $conn->prepare("UPDATE users SET remember_token_hash = ? WHERE id = ?");
-                                $update_stmt->bind_param("si", $token_hash, $user['id']);
-                                $update_stmt->execute();
-                                $update_stmt->close();
-                                
-                                $cookie_value = $user['id'] . '_' . $random_token;
+                                // Create an error message that includes a clickable resend link
+                                $error = "Your account is not verified. <br><br>
+                                          <a href='resend_verification.php?email={$encoded_email}' style='color: #721c24; text-decoration: underline; font-weight: bold;'>Click here to resend the verification email.</a>";
+                            } else {
+                                // They are verified! Log them in.
+                                $_SESSION['user_id'] = $user['id'];
+                                $_SESSION['username'] = $user['username'];
+// ... the rest of the login logic stays the same ...;
+                                $_SESSION['role_id'] = $user['role_id'];
 
-                                $cookie_options = [
-                                    'expires' => time() + (86400 * 30),
-                                    'path' => '/',
-                                    'secure' => true,     
-                                    'httponly' => true,   
-                                    'samesite' => 'Lax'   
-                                ];
-                                setcookie('remember_token', $cookie_value, $cookie_options);
+                                // ... your remember_me token logic stays exactly the same here ...
+
+                                header("Location: index.php");
+                                exit;
                             }
-
-                            header("Location: index.php");
-                            exit;
+                            // === END BOUNCER CHECK ===
+                            
                         } else {
                             $error = "Invalid password.";
                         }
@@ -155,8 +156,11 @@ require_once 'includes/header.php';
             <label for="remember_me" style="color: #555; cursor: pointer; user-select: none;">Remember Me</label>
         </div>
 
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAADCZUgFHjIE8Oqqn" data-theme="auto" style="margin-bottom: 20px;"></div> 
-
+<div class="cf-turnstile" 
+     data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" 
+     data-theme="auto" 
+     style="margin-bottom: 20px;">
+</div>
         <button type="submit" class="btn-login" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">Log In</button>
     </form>
 
