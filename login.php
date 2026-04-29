@@ -156,11 +156,24 @@ require_once 'includes/header.php';
             <label for="remember_me" style="color: #555; cursor: pointer; user-select: none;">Remember Me</label>
         </div>
 
-<div class="cf-turnstile" 
-     data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" 
-     data-theme="auto" 
-     style="margin-bottom: 20px;">
-</div>
+<!-- We removed cf-turnstile and added an ID and data-sitekey -->
+<div id="turnstile-container" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" style="margin-bottom: 20px;"></div>
+
+<script>
+    // 1. Manually render the widget when Cloudflare loads
+    window.onloadTurnstileCallback = function () {
+        // Check local storage for the current theme
+        let currentTheme = localStorage.getItem('site-theme') === 'dark' ? 'dark' : 'light';
+        
+        // Draw the widget and save its ID globally
+        window.myTurnstileId = turnstile.render('#turnstile-container', {
+            sitekey: document.getElementById('turnstile-container').getAttribute('data-sitekey'),
+            theme: currentTheme
+        });
+    };
+</script>
+<!-- 2. Notice the ?onload=onloadTurnstileCallback at the end of this URL! -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" async defer></script>
         <button type="submit" class="btn-login" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">Log In</button>
     </form>
 

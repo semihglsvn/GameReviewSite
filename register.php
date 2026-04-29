@@ -126,8 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $subject = "Verify your GameJoint Account";
                             $logo_path = __DIR__ . '/assets/images/logo.png'; 
                             
-                            $verify_link = "http://localhost/GameReviewSite/verify.php?email=" . urlencode($email) . "&token=" . $verify_token;
-                            
+                            $verify_link = BASE_URL . "/verify.php?email=" . urlencode($email) . "&token=" . $verify_token;                            
 $body = "
                             <div style='background-color: #f4f4f4; padding: 40px 20px; font-family: Arial, sans-serif;'>
                                 <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);'>
@@ -231,8 +230,24 @@ require_once 'includes/header.php';
                 <input type="password" name="confirm_password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             </div>
             
-            <div class="cf-turnstile" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" data-theme="auto" style="margin-bottom: 20px;"></div>            
-            
+<!-- We removed cf-turnstile and added an ID and data-sitekey -->
+<div id="turnstile-container" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" style="margin-bottom: 20px;"></div>
+
+<script>
+    // 1. Manually render the widget when Cloudflare loads
+    window.onloadTurnstileCallback = function () {
+        // Check local storage for the current theme
+        let currentTheme = localStorage.getItem('site-theme') === 'dark' ? 'dark' : 'light';
+        
+        // Draw the widget and save its ID globally
+        window.myTurnstileId = turnstile.render('#turnstile-container', {
+            sitekey: document.getElementById('turnstile-container').getAttribute('data-sitekey'),
+            theme: currentTheme
+        });
+    };
+</script>
+<!-- 2. Notice the ?onload=onloadTurnstileCallback at the end of this URL! -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" async defer></script>            
             <button type="submit" class="btn-register" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer; background: #27ae60; color: white; border-radius: 4px;">Register Now</button>
         </form>
         

@@ -40,8 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resend_email'])) {
                 // ==========================================
                 $subject = "Verify your GameJoint Account";
                 $logo_path = __DIR__ . '/assets/images/logo.png'; 
-                $verify_link = "http://localhost/GameReviewSite/verify.php?email=" . urlencode($actual_email) . "&token=" . $verify_token;
-                
+                $verify_link = BASE_URL . "/verify.php?email=" . urlencode($actual_email) . "&token=" . $verify_token;                
 $body = "
                 <div style='background-color: #f4f4f4; padding: 40px 20px; font-family: Arial, sans-serif;'>
                     <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);'>

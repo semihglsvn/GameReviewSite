@@ -213,20 +213,39 @@ $site_logo = !empty($site_settings['site_logo']) ? $site_settings['site_logo'] :
     </button>
 
     <script>
-        // This function lives right next to the button so it cannot be blocked
-        function forceThemeToggle(e) {
-            e.preventDefault();
-            document.body.classList.toggle('dark-mode');
-            
-            var btn = document.getElementById('theme-toggle-btn');
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('site-theme', 'dark');
-                btn.innerHTML = '☀️ Light Mode';
-            } else {
-                localStorage.setItem('site-theme', 'light');
-                btn.innerHTML = '🌙 Dark Mode';
-            }
-        }
+// This function lives right next to the button so it cannot be blocked
+function forceThemeToggle(e) {
+    e.preventDefault();
+    document.body.classList.toggle('dark-mode');
+    
+    var btn = document.getElementById('theme-toggle-btn');
+    let newTheme = 'light'; // Default assumption
+    
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('site-theme', 'dark');
+        btn.innerHTML = '☀️ Light Mode';
+        newTheme = 'dark';
+    } else {
+        localStorage.setItem('site-theme', 'light');
+        btn.innerHTML = '🌙 Dark Mode';
+    }
+
+    // --- NEW CLOUDFLARE LOGIC ---
+    // Check if we are on a page that actually has a Turnstile widget (like login.php)
+    if (typeof turnstile !== 'undefined' && document.getElementById('turnstile-container')) {
+        let container = document.getElementById('turnstile-container');
+        let siteKey = container.getAttribute('data-sitekey');
+        
+        // Erase the old widget
+        container.innerHTML = ''; 
+        
+        // Force Cloudflare to redraw it with the new theme color
+        window.myTurnstileId = turnstile.render('#turnstile-container', {
+            sitekey: siteKey,
+            theme: newTheme
+        });
+    }
+}
     </script>
 </li>
 

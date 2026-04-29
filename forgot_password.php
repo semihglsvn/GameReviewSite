@@ -41,8 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $upd_stmt->close();
 
             // 4. Build the Professional Email
-            $reset_link = "http://localhost/GameReviewSite/reset_password.php?token=" . $reset_token . "&email=" . urlencode($email);
-            
+            $reset_link = BASE_URL . "/reset_password.php?token=" . $reset_token . "&email=" . urlencode($email);            
             // Get the absolute path to your PNG logo for embedding
             $logo_path = __DIR__ . '/assets/images/logo.png'; 
 
